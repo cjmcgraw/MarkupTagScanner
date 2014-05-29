@@ -33,7 +33,7 @@ import java.util.Stack;
  * @author Carl McGraw
  */
 
-public class HtmlValidator {
+public class HtmlValidatorImpl {
    /**
     * Represents indentation level to be added
     *    for each subsequent opened <code>HtmlTag</code>
@@ -44,7 +44,7 @@ public class HtmlValidator {
     * Represents all tags stored in this <code>
     *    HtmlValidator</code>
     */
-   private Queue<HtmlTag> tags;
+   private Queue<HtmlTagImpl> tags;
    
    /**
     * Generates a new <code>HtmlValidator</code> that stores
@@ -53,8 +53,8 @@ public class HtmlValidator {
     * This empty constructor generates an <code>HtmlValidator</code>
     *    that contains 0 <code>HtmlTag</code>s.
     */
-   public HtmlValidator() {
-      this(new LinkedList<HtmlTag>());
+   public HtmlValidatorImpl() {
+      this(new LinkedList<HtmlTagImpl>());
    }
    
    /**
@@ -72,11 +72,11 @@ public class HtmlValidator {
     * evaluated by the <code>HtmlValidator</code>
     * @throws IllegalArgumentException if <code>tags</code> is null.
     */
-   public HtmlValidator(Queue<HtmlTag> tags) {
+   public HtmlValidatorImpl(Queue<HtmlTagImpl> tags) {
       checkValue(tags);
-      this.tags = new LinkedList<HtmlTag>();
+      this.tags = new LinkedList<HtmlTagImpl>();
       for(int i = tags.size(); i > 0; i--) {
-         HtmlTag curr = tags.remove();
+         HtmlTagImpl curr = tags.remove();
          this.tags.add(curr);
          tags.add(curr);
       }
@@ -103,7 +103,7 @@ public class HtmlValidator {
     * 
     * @throws IllegalArgumentException if given <code>HtmlTag</code> is null
     */
-   public void addTag(HtmlTag tag) {
+   public void addTag(HtmlTagImpl tag) {
       checkValue(tag);
       tags.add(tag);
    }
@@ -121,7 +121,7 @@ public class HtmlValidator {
     * @return  Queue&#60HtmlTag&#62 that is a representation of the storage
     *  of this <code>HtmlValidator</code>
     */
-   public Queue<HtmlTag> getTags() {
+   public Queue<HtmlTagImpl> getTags() {
       return tags;
    }
    
@@ -146,7 +146,7 @@ public class HtmlValidator {
    public void removeAll(String element) {
       checkValue(element);
       for(int i = tags.size(); i > 0; i--) {
-         HtmlTag curr = tags.remove();
+         HtmlTagImpl curr = tags.remove();
          if(!element.equals(curr.getElement()))
             tags.add(curr);
       }
@@ -204,10 +204,10 @@ public class HtmlValidator {
     *    method are made to the <code>System.out</code>
     */
    public void validate() {
-      Stack<HtmlTag> s = new Stack<HtmlTag>();
+      Stack<HtmlTagImpl> s = new Stack<HtmlTagImpl>();
       for(int i = tags.size(); i > 0; i--) {
          String temp = getTabs(s.size());
-         HtmlTag curr = tags.remove();
+         HtmlTagImpl curr = tags.remove();
          tags.add(curr);
          if(!curr.isOpenTag()) {
             if(s.size() == 0 || !s.peek().matches(curr)) 

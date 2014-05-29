@@ -6,14 +6,14 @@ import java.util.LinkedList;
 import java.util.Set;
 
 /** An HtmlTag object represents an HTML tag, such as <b> or </table>. */
-public class HtmlTag {
+public class HtmlTagImpl {
     // fields
     private final String element;
     private final boolean isOpenTag;
     
     /** Constructs an HTML "opening" tag with the given element (e.g. "table").
       * Throws a NullPointerException if element is null. */
-    public HtmlTag(String element) {
+    public HtmlTagImpl(String element) {
         this(element, true);
     }
     
@@ -21,15 +21,15 @@ public class HtmlTag {
       * Self-closing tags like <br /> are considered to be "opening" tags,
       * and return true from the isOpenTag method.
       * Throws a NullPointerException if element is null. */
-    public HtmlTag(String element, boolean isOpenTag) {
+    public HtmlTagImpl(String element, boolean isOpenTag) {
         this.element = element.toLowerCase();
         this.isOpenTag = isOpenTag;
     }
     
     /** Returns true if this tag has the same element and type as the given other tag. */
     public boolean equals(Object o) {
-        if (o instanceof HtmlTag) {
-            HtmlTag other = (HtmlTag) o;
+        if (o instanceof HtmlTagImpl) {
+            HtmlTagImpl other = (HtmlTagImpl) o;
             return element.equals(other.element) && isOpenTag == other.isOpenTag;
         } else {
             return false;
@@ -51,7 +51,7 @@ public class HtmlTag {
     /** Returns true if the given other tag is non-null and matches this tag;
       * that is, if they have the same element but opposite types,
       * such as <body> and </body>. */
-    public boolean matches(HtmlTag other) {
+    public boolean matches(HtmlTagImpl other) {
         return other != null && element.equalsIgnoreCase(other.element) && isOpenTag != other.isOpenTag;
     }
     
@@ -81,26 +81,26 @@ public class HtmlTag {
     /** Reads a string such as "<table>" or "</p>" and converts it into an HtmlTag,
       * which is returned.
       * Throws a NullPointerException if tagText is null. */
-    public static HtmlTag parse(String tagText) {
+    public static HtmlTagImpl parse(String tagText) {
         tagText = tagText.trim();
         boolean isOpenTag = !tagText.contains("</");
         String element = tagText.replaceAll("[^a-zA-Z!-?]+", "");
         if (element.contains("!--")) {
             element = "!--";  // HTML comments
         }
-        return new HtmlTag(element, isOpenTag);
+        return new HtmlTagImpl(element, isOpenTag);
     }
     
     /** Reads the file or URL given, and tokenizes the text in that file,
       * placing the tokens into the given Queue.
       * You don't need to call this method in your homework code.
       * Precondition: text != null */
-    public static LinkedList<HtmlTag> tokenize(String text) {
+    public static LinkedList<HtmlTagImpl> tokenize(String text) {
         StringBuffer buf = new StringBuffer(text);
-        LinkedList<HtmlTag> queue = new LinkedList<HtmlTag>();
+        LinkedList<HtmlTagImpl> queue = new LinkedList<HtmlTagImpl>();
 
         while (true) {
-            HtmlTag nextTag = nextTag(buf);
+            HtmlTagImpl nextTag = nextTag(buf);
             if (nextTag == null) {
                 break;
             } else {
@@ -113,7 +113,7 @@ public class HtmlTag {
 
     // advances to next tag in input;
     // probably not a perfect HTML tag tokenizer, but it will do for this HW
-    private static HtmlTag nextTag(StringBuffer buf) {
+    private static HtmlTagImpl nextTag(StringBuffer buf) {
         int index1 = buf.indexOf("<");
         int index2 = buf.indexOf(">");
         
@@ -149,7 +149,7 @@ public class HtmlTag {
             element = element.replaceAll("[^a-zA-Z0-9!-]+", "");
             
             buf.delete(0, index2 + 1);
-            return new HtmlTag(element, isOpenTag);
+            return new HtmlTagImpl(element, isOpenTag);
         } else {
             return null;
         }
