@@ -157,8 +157,7 @@ public class HtmlTagTest {
         assertEquals(expData, data);
     }
     
-    @Test
-    public void testEqualsHtmlTag_WithDiffElementSameTag() {
+    @Test    public void testEqualsHtmlTag_WithDiffElementSameTag() {
         // Arrange
         boolean data;
         boolean expData = false;
