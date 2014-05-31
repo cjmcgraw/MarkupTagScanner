@@ -19,10 +19,7 @@ public class HtmlTagImpl implements HtmlTag{
     public HtmlTagImpl(String element, boolean isClosing){
         this.element = element;
         this.selfClosing = selfClosingTags.contains(element);
-        
-        if (!this.selfClosing) {
-            this.isClosing = isClosing;
-        }
+        this.isClosing = selfClosing || isClosing;
     }
 
     @Override
