@@ -3,7 +3,6 @@ package com.mycompany.htmlvalidator;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.regex.Matcher.*;
 
 import com.mycompany.htmlvalidator.interfaces.HtmlTag;
 
@@ -17,8 +16,13 @@ public class HtmlTagImpl implements HtmlTag{
     private boolean isClosing;
     private boolean selfClosing;
     
-    public HtmlTagImpl(String tagData){
-        // TODO set up constructor
+    public HtmlTagImpl(String element, boolean isClosing){
+        this.element = element;
+        this.selfClosing = selfClosingTags.contains(element);
+        
+        if (!this.selfClosing) {
+            this.isClosing = isClosing;
+        }
     }
 
     @Override
@@ -38,22 +42,25 @@ public class HtmlTagImpl implements HtmlTag{
 
     @Override
     public boolean equals(HtmlTag other) {
-        return this.elementsMatch(other) && this.tagsMatch(other);
+        return this.elementsEqual(other) && this.tagsEqual(other);
     }
 
     @Override
     public boolean matches(HtmlTag other) {
-        return false;
+        return this.elementsEqual(other) && this.oppositeTag(other);
     }
     
-    private boolean elementsMatch(HtmlTag other) {
-        return this.element == other.getElement();
+    private boolean elementsEqual(HtmlTag other) {
+        return this.getElement() == other.getElement();
     }
     
-    private boolean tagsMatch(HtmlTag other) {
-        if (this.isSelfClosing()) {
-            return this.isSelfClosing() == other.isSelfClosing();
-        }
+    private boolean tagsEqual(HtmlTag other) {
+        if(this.isSelfClosing())
+            return other.isSelfClosing();
+        return this.isOpenTag() == other.isOpenTag();
+    }
+    
+    private boolean oppositeTag(HtmlTag other) {
         return this.isOpenTag() && !other.isOpenTag();
     }
     
