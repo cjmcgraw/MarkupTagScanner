@@ -12,11 +12,8 @@ import com.mycompany.htmlvalidator.HtmlTagImpl;
 public class HtmlTagTest {
     private final String elementName = "someElement";
     private final String otherElementName = "otherElement";
-    
-    private final String openTag = "<" + elementName + ">";
-    private final String otherOpenTag = "<" + otherElementName + ">";
-    private final String closeTag = "</" + elementName + ">";
-    private final String otherCloseTag = "</" + otherElementName + ">";
+    private final boolean openFlag = false;
+    private final boolean closeFlag = !openFlag;
     
     private HtmlTag tag;
     
@@ -31,24 +28,10 @@ public class HtmlTagTest {
     }
     
     @Test
-    public void testGetElement_WithNonEmptyElement() {
+    public void testGetElement() {
         // Arrange
         String data;
         String expData = this.elementName;
-        
-        // Apply
-        data = this.tag.getElement();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testGetElement_WithEmptyElement() {
-        // Arrange
-        String data;
-        String expData = "";
-        this.setState("<>");
         
         // Apply
         data = this.tag.getElement();
@@ -76,6 +59,8 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
+        this.setState(this.elementName, !this.openFlag);
+        
         // Apply
         data = this.tag.isOpenTag();
         
@@ -89,7 +74,7 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = true;
         
-        this.setState("<br />");
+        this.setState("br");
         
         // Apply
         data = this.tag.isSelfClosing();
@@ -117,7 +102,7 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = true;
         
-        HtmlTag other = this.createTag(this.openTag);
+        HtmlTag other = this.createHtmlTag(this.elementName, this.openFlag);
         
         // Apply
         data = this.tag.equals(other);
@@ -132,7 +117,7 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        HtmlTag other = this.createTag(this.closeTag);
+        HtmlTag other = this.createHtmlTag(this.elementName, this.closeFlag);
         
         // Apply
         data = this.tag.equals(other);
@@ -147,7 +132,7 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        HtmlTag other = this.createTag(this.otherOpenTag);
+        HtmlTag other = this.createHtmlTag(this.otherElementName, this.openFlag);
         
         // Apply
         data = this.tag.equals(other);
@@ -162,7 +147,7 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        HtmlTag other = this.createTag(this.otherCloseTag);
+        HtmlTag other = this.createHtmlTag(this.otherElementName, this.closeFlag);
         
         // Apply
         data = this.tag.equals(other);
@@ -177,10 +162,10 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        HtmlTag other = this.createTag(this.openTag);
+        HtmlTag other = this.createHtmlTag(this.elementName, this.openFlag);
         
         // Apply
-        data = this.tag.equals(other);
+        data = this.tag.matches(other);
         
         // Assert
         assertEquals(expData, data);
@@ -192,10 +177,10 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = true;
         
-        HtmlTag other = this.createTag(this.closeTag);
+        HtmlTag other = this.createHtmlTag(this.elementName, this.closeFlag);
         
         // Apply
-        data = this.tag.equals(other);
+        data = this.tag.matches(other);
         
         // Assert
         assertEquals(expData, data);
@@ -207,10 +192,10 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        HtmlTag other = this.createTag(this.otherOpenTag);
+        HtmlTag other = this.createHtmlTag(this.otherElementName, this.openFlag);
         
         // Apply
-        data = this.tag.equals(other);
+        data = this.tag.matches(other);
         
         // Assert
         assertEquals(expData, data);
@@ -222,25 +207,29 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        HtmlTag other = this.createTag(this.otherCloseTag);
+        HtmlTag other = this.createHtmlTag(this.otherElementName, this.closeFlag);
         
         // Apply
-        data = this.tag.equals(other);
+        data = this.tag.matches(other);
         
         // Assert
         assertEquals(expData, data);
     }
     
     private void setState() {
-        this.setState(openTag);
+        this.setState(this.elementName);
     }
     
-    private void setState(String tagData) {
-        this.tag = this.createTag(tagData);
+    private void setState(String element) {
+        this.setState(element, this.openFlag);
     }
     
-    private HtmlTag createTag(String tagData) {
-        return new HtmlTagImpl(tagData);
+    private void setState(String element, boolean openFlag) {
+        this.tag = this.createHtmlTag(element, openFlag);
+    }
+    
+    private HtmlTag createHtmlTag(String element, boolean openFlag) {
+        return new HtmlTagImpl(element, openFlag);
     }
     
     private void clearState() {
