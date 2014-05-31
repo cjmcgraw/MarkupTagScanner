@@ -12,6 +12,7 @@ import com.mycompany.htmlvalidator.HtmlTagImpl;
 public class HtmlTagTest {
     private final String elementName = "someElement";
     private final String otherElementName = "otherElement";
+    private final String selfClosingElementName = "br";
     private final boolean openFlag = false;
     private final boolean closeFlag = !openFlag;
     
@@ -69,12 +70,42 @@ public class HtmlTagTest {
     }
     
     @Test
+    public void testIsOpenTag_WithSelfClosingTagAndOpenTag() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        
+        this.setState(this.selfClosingElementName, this.openFlag);
+        
+        // Apply
+        data = this.tag.isOpenTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsOpenTag_WithSelfClosingTagAndCloseTag() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        
+        this.setState(this.selfClosingElementName, this.closeFlag);
+        
+        // Apply
+        data = this.tag.isOpenTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testIsSelfClosing_WithSelfClosingTag() {
         // Arrange
         boolean data;
         boolean expData = true;
         
-        this.setState("br");
+        this.setState(selfClosingElementName);
         
         // Apply
         data = this.tag.isSelfClosing();
@@ -265,13 +296,77 @@ public class HtmlTagTest {
     }
     
     @Test
-    public void testMatches_MaintagCloseNonSelfClosing_WithDiffElementDiffTag() {
+    public void testMatches_MainTagCloseNonSelfClosing_WithDiffElementDiffTag() {
         // Arrange
         boolean data;
         boolean expData = false;
         this.setState(this.elementName, this.closeFlag);
         
         HtmlTag other = this.createHtmlTag(this.otherElementName, this.openFlag);
+        
+        // Apply
+        data = this.tag.matches(other);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testMatches_MainTagSelfClosing_WithSameElementDiffTag() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        this.setState(this.selfClosingElementName, this.openFlag);
+        
+        HtmlTag other = this.createHtmlTag(this.selfClosingElementName, this.closeFlag);
+        
+        // Apply
+        data = this.tag.matches(other);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testMatches_MainTagSelfClosing_WithSameElementSameTag() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        this.setState(this.selfClosingElementName, this.openFlag);
+        
+        HtmlTag other = this.createHtmlTag(this.selfClosingElementName, this.openFlag);
+        
+        // Apply
+        data = this.tag.matches(other);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testMatches_MainTagSelfClosing_WithDiffElementSameTag() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        this.setState(this.selfClosingElementName, this.openFlag);
+        
+        HtmlTag other = this.createHtmlTag(this.otherElementName, this.openFlag);
+        
+        // Apply
+        data = this.tag.matches(other);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testMatches_MainTagSelfClosing_WithDiffElementDiffTag() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        this.setState(this.selfClosingElementName, this.openFlag);
+        
+        HtmlTag other = this.createHtmlTag(this.otherElementName, this.closeFlag);
         
         // Apply
         data = this.tag.matches(other);
