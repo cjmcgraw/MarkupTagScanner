@@ -5,38 +5,40 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.BeforeClass;
 
-import java.util.Map;
-import java.util.HashMap;
-
 import com.mycompany.htmlvalidator.interfaces.MutableHtmlTag;
 import com.mycompany.htmlvalidator.parsers.utilities.MutableHtmlTagFactory;
 
 public class MutableHtmlTagFactoryTest {
     private static MutableHtmlTagFactory factory;
-    private static Map<String, String> nameData;
     
     @BeforeClass
     public static void setUp() {
         factory = new MutableHtmlTagFactory();
-        nameData = new HashMap<String, String>();
-        
-        nameData.put("MutableHtmlTag", "MutableHtmlTag");
     }
     
     @Test
-    public void testMakeTag() {
+    public void testMakeTag_StandardMutableHtmlTag() {
         // Arrange
         boolean data;
         boolean expData = true;
         
-        String name = "MutableHtmlTag";
+        String name = "standard";
         
         // Apply
-        MutableHtmlTag tag = factory.makeTag(nameData.get(name));
+        MutableHtmlTag tag = factory.makeTag(name);
         data = tag instanceof MutableHtmlTag;
         
         // Assert
         assertEquals(expData, data);
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testMakeTag_UnknownArgument() {
+        // Arrange
+        String name = "Some unknown name. Should cause exception";
+        
+        // Apply + Assert
+        factory.makeTag(name);
     }
     
 }
