@@ -6,6 +6,10 @@ import com.mycompany.htmlvalidator.MutableHtmlTagImpl;
 public class MutableHtmlTagFactory {
     
     public MutableHtmlTag makeTag(String name) {
-        return new MutableHtmlTagImpl();
+        switch (name.toLowerCase()) {
+        case "standard": return new MutableHtmlTagImpl();
+        }
+        
+        throw new IllegalArgumentException("The given MutableHtmlTag name is unrecognized");
     }
 }
