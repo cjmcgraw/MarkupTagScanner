@@ -17,12 +17,44 @@ public class MutableHtmlTagFactoryTest {
     }
     
     @Test
-    public void testMakeTag_StandardMutableHtmlTag() {
+    public void testMakeTag_StandardMutableHtmlTag_LowerCase() {
         // Arrange
         boolean data;
         boolean expData = true;
         
         String name = "standard";
+        
+        // Apply
+        MutableHtmlTag tag = factory.makeTag(name);
+        data = tag instanceof MutableHtmlTag;
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testMakeTag_StandardMutableHtmlTag_UpperCase() {
+        // Arrange
+        boolean data;
+        boolean expData = true;
+        
+        String name = "STANDARD";
+        
+        // Apply
+        MutableHtmlTag tag = factory.makeTag(name);
+        data = tag instanceof MutableHtmlTag;
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testMakeTag_StandardMutableHtmlTag_MixedCase() {
+        // Arrange
+        boolean data;
+        boolean expData = true;
+        
+        String name = "sTaNdArD";
         
         // Apply
         MutableHtmlTag tag = factory.makeTag(name);
