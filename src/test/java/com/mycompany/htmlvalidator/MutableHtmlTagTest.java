@@ -7,13 +7,14 @@ import org.junit.Before;
 import org.junit.After;
 
 import com.mycompany.htmlvalidator.interfaces.HtmlTag;
-import com.mycompany.htmlvalidator.HtmlTagImpl;
+import com.mycompany.htmlvalidator.MutableHtmlTagImpl;
+import com.mycompany.htmlvalidator.interfaces.MutableHtmlTag;
 
-public class HtmlTagTest {
+public class MutableHtmlTagTest {
     private final String elementName = "someElement";
     private final String otherElementName = "otherElement";
     private final String selfClosingElementName = "br";
-    private final boolean openFlag = false;
+    private final boolean openFlag = true;
     private final boolean closeFlag = !openFlag;
     
     private HtmlTag tag;
@@ -60,7 +61,7 @@ public class HtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        this.setState(this.elementName, !this.openFlag);
+        this.setState(this.elementName, this.closeFlag);
         
         // Apply
         data = this.tag.isOpenTag();
@@ -387,7 +388,10 @@ public class HtmlTagTest {
     }
     
     private HtmlTag createHtmlTag(String element, boolean openFlag) {
-        return new HtmlTagImpl(element, openFlag);
+        MutableHtmlTag tag = new MutableHtmlTagImpl();
+        tag.setElement(element);
+        tag.setIsOpenTag(openFlag);
+        return tag;
     }
     
     private void clearState() {
