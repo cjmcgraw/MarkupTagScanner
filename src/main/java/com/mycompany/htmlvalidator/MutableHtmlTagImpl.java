@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import com.mycompany.htmlvalidator.interfaces.HtmlTag;
-import com.mycompany.htmlvalidator.interfaces.MutuableHtmlTag;
+import com.mycompany.htmlvalidator.interfaces.MutableHtmlTag;
 
-public class MutuableHtmlTagImpl implements MutuableHtmlTag{
+public class MutableHtmlTagImpl implements MutableHtmlTag{
     public final static Set<String> selfClosingTags = new HashSet<String>(
             Arrays.asList("area","base", "br", "col", "command", "hr", "img",
                           "input", "keygen","link", "meta", "param", "source", 

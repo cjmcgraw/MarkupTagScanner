@@ -1,6 +1,6 @@
 package com.mycompany.htmlvalidator.interfaces;
 
-public interface MutuableHtmlTag extends HtmlTag{
+public interface MutableHtmlTag extends HtmlTag{
     
     public void setElement(String element);
     
