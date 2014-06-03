@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.BeforeClass;
 
-import com.mycompany.htmlvalidator.exceptions.IllegalHtmlTagException;
+
 import com.mycompany.htmlvalidator.parsers.HtmlTagDataParser;
 import com.mycompany.htmlvalidator.parsers.utilities.HtmlData;
 import com.mycompany.htmlvalidator.parsers.HtmlTagDataParserImpl;
-
+import com.mycompany.htmlvalidator.exceptions.IllegalHtmlTagException;
 
 public class HtmlTagDataParserTest {
     public static HtmlTagDataParser parser;
