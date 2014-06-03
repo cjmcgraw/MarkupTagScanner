@@ -100,6 +100,22 @@ public class HtmlTagDataParserTest {
         assertEquals(expData, data);
     }
     
+    @Test
+    public void testParse_ElementData_ValidTag_WithExtrenousWhiteSpace() throws IllegalHtmlTagException {
+        // Arrange
+        String data;
+        String expData = "someElementData";
+        
+        String tag = "    \t  <" + expData + "   \t> \t\t    ";
+        
+        // Apply
+        HtmlData htmlData = parser.parse(tag);
+        data = htmlData.getElementData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
     @Test(expected=IllegalHtmlTagException.class)
     public void testParse_InvalidTag_EmptyElementName() throws IllegalHtmlTagException {
         // Arrange
