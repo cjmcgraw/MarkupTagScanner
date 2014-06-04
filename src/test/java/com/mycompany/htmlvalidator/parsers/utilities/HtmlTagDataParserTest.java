@@ -1,14 +1,13 @@
-package com.mycompany.htmlvalidator.parsers;
+package com.mycompany.htmlvalidator.parsers.utilities;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.BeforeClass;
 
-
-import com.mycompany.htmlvalidator.parsers.HtmlTagDataParser;
 import com.mycompany.htmlvalidator.parsers.utilities.HtmlData;
-import com.mycompany.htmlvalidator.parsers.HtmlTagDataParserImpl;
+import com.mycompany.htmlvalidator.parsers.utilities.HtmlTagDataParser;
+import com.mycompany.htmlvalidator.parsers.utilities.HtmlTagDataParserImpl;
 import com.mycompany.htmlvalidator.exceptions.IllegalHtmlTagException;
 
 public class HtmlTagDataParserTest {

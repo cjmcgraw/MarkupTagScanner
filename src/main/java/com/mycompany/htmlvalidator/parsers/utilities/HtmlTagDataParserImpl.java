@@ -1,11 +1,10 @@
-package com.mycompany.htmlvalidator.parsers;
+package com.mycompany.htmlvalidator.parsers.utilities;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.mycompany.htmlvalidator.exceptions.IllegalHtmlTagException;
-import com.mycompany.htmlvalidator.parsers.utilities.HtmlData;
 
 public class HtmlTagDataParserImpl implements HtmlTagDataParser {
     private final Pattern expectedPattern = Pattern.compile("^<.*>$");

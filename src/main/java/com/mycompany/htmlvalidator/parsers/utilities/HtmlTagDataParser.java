@@ -1,7 +1,6 @@
-package com.mycompany.htmlvalidator.parsers;
+package com.mycompany.htmlvalidator.parsers.utilities;
 
 import com.mycompany.htmlvalidator.exceptions.IllegalHtmlTagException;
-import com.mycompany.htmlvalidator.parsers.utilities.HtmlData;
 
 public interface HtmlTagDataParser {
     
