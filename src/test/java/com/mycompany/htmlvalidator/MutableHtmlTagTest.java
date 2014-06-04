@@ -9,6 +9,7 @@ import org.junit.After;
 import com.mycompany.htmlvalidator.interfaces.HtmlTag;
 import com.mycompany.htmlvalidator.MutableHtmlTagImpl;
 import com.mycompany.htmlvalidator.interfaces.MutableHtmlTag;
+import com.mycompany.htmlvalidator.parsers.utilities.HtmlData;
 
 public class MutableHtmlTagTest {
     private final String elementName = "someElement";
@@ -21,7 +22,7 @@ public class MutableHtmlTagTest {
     
     @Before
     public void setUp() {
-        this.setState();
+        this.newState();
     }
     
     @After
@@ -61,7 +62,7 @@ public class MutableHtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        this.setState(this.elementName, this.closeFlag);
+        this.newState(this.elementName, this.closeFlag);
         
         // Apply
         data = this.tag.isOpenTag();
@@ -76,7 +77,7 @@ public class MutableHtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        this.setState(this.selfClosingElementName, this.openFlag);
+        this.newState(this.selfClosingElementName, this.openFlag);
         
         // Apply
         data = this.tag.isOpenTag();
@@ -91,7 +92,7 @@ public class MutableHtmlTagTest {
         boolean data;
         boolean expData = false;
         
-        this.setState(this.selfClosingElementName, this.closeFlag);
+        this.newState(this.selfClosingElementName, this.closeFlag);
         
         // Apply
         data = this.tag.isOpenTag();
@@ -106,7 +107,7 @@ public class MutableHtmlTagTest {
         boolean data;
         boolean expData = true;
         
-        this.setState(selfClosingElementName);
+        this.newState(selfClosingElementName);
         
         // Apply
         data = this.tag.isSelfClosing();
@@ -253,7 +254,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.elementName, this.closeFlag);
+        this.newState(this.elementName, this.closeFlag);
         
         HtmlTag other = this.createHtmlTag(this.elementName, this.closeFlag);
         
@@ -269,7 +270,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.elementName, this.closeFlag);
+        this.newState(this.elementName, this.closeFlag);
         
         HtmlTag other = this.createHtmlTag(this.elementName, this.openFlag);
         
@@ -285,7 +286,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.elementName, this.closeFlag);
+        this.newState(this.elementName, this.closeFlag);
         
         HtmlTag other = this.createHtmlTag(this.otherElementName, this.closeFlag);
         
@@ -301,7 +302,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.elementName, this.closeFlag);
+        this.newState(this.elementName, this.closeFlag);
         
         HtmlTag other = this.createHtmlTag(this.otherElementName, this.openFlag);
         
@@ -317,7 +318,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.selfClosingElementName, this.openFlag);
+        this.newState(this.selfClosingElementName, this.openFlag);
         
         HtmlTag other = this.createHtmlTag(this.selfClosingElementName, this.closeFlag);
         
@@ -333,7 +334,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.selfClosingElementName, this.openFlag);
+        this.newState(this.selfClosingElementName, this.openFlag);
         
         HtmlTag other = this.createHtmlTag(this.selfClosingElementName, this.openFlag);
         
@@ -349,7 +350,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.selfClosingElementName, this.openFlag);
+        this.newState(this.selfClosingElementName, this.openFlag);
         
         HtmlTag other = this.createHtmlTag(this.otherElementName, this.openFlag);
         
@@ -365,7 +366,7 @@ public class MutableHtmlTagTest {
         // Arrange
         boolean data;
         boolean expData = false;
-        this.setState(this.selfClosingElementName, this.openFlag);
+        this.newState(this.selfClosingElementName, this.openFlag);
         
         HtmlTag other = this.createHtmlTag(this.otherElementName, this.closeFlag);
         
@@ -376,22 +377,181 @@ public class MutableHtmlTagTest {
         assertEquals(expData, data);
     }
     
-    private void setState() {
-        this.setState(this.elementName);
+    @Test
+    public void testSetData_MainTag_SetStandardElement() {
+        // Arrange
+        String data;
+        String expData = "someElement that has been changed";
+        
+        // Apply
+        this.setState(expData);
+        data = this.tag.getElement();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testSetData_MainTag_SetElementWithTrailingWhiteSpace() {
+        // Arrange
+        String data;
+        String expData = "someElement with no trailing whitespace";
+        String trailingWhiteSpace = "  \t \n";
+        
+        // Apply
+        this.setState(trailingWhiteSpace + expData + trailingWhiteSpace);
+        data = this.tag.getElement();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testSetData_MainTag_SetInvalidElement_Null() {
+        // Arrange
+        String expData = null;
+        
+        // Apply + Assert
+        this.setState(expData);
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testSetData_MainTag_SetInvalidElement_EmptyString() {
+        // Arrange
+        String expData = "";
+        
+        // Apply + Assert
+        this.setState(expData);
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testSetData_MainTag_SetInvalidElement_WhiteSpaceOnly() {
+        // Arrange
+        String expData = "    \t \n";
+        
+        // Apply + Assert
+        this.setState(expData);
+    }
+    
+    @Test
+    public void testSetData_MainTag_SetSelfClosing_SelfClosingElement() {
+        // Arrange
+       boolean data;
+       boolean expData = true;
+       String selfClosingElement = "br";
+       
+       // Apply
+       this.setState(selfClosingElement);
+       data = this.tag.isSelfClosing();
+       
+       // Assert
+       assertEquals(data, expData);
+    }
+    
+    @Test
+    public void testSetData_MainTag_SetSelfClosing_NonSelfClosingElement() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        String nonSelfClosingElement = "someNonSelfClosingElement";
+        
+        // Apply
+        this.setState(nonSelfClosingElement);
+        data = this.tag.isSelfClosing();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testSetData_MainTag_SetSelfClosing_UnaffectedByBooleanArgumentTrue () {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        boolean isOpenTag = true;
+        
+        // Apply
+        this.setState(isOpenTag);
+        data = this.tag.isSelfClosing();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testSetData_MainTag_SetSelfClosing_UnaffectedByBooleanArgumentFalse() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        boolean isOpenTag = false;
+        
+        // Apply
+        this.setState(isOpenTag);
+        data = this.tag.isSelfClosing();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testSetData_MainTag_SetIsOpen_ToTrue() {
+        //Arrange
+        boolean data;
+        boolean expData = true;
+        
+        // Apply
+        this.setState(expData);
+        data = this.tag.isOpenTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testSetData_MainTag_SetIsOpen_ToFalse() {
+        // Arrange
+        boolean data;
+        boolean expData = false;
+        
+        // Apply
+        this.setState(expData);
+        data = this.tag.isOpenTag();
+        
+        // Assert
+        assertEquals(expData, data);
     }
     
     private void setState(String element) {
-        this.setState(element, this.openFlag);
+        this.setState(element, this.tag.isOpenTag());
+    }
+    
+    private void setState(boolean openFlag) {
+        this.setState(this.tag.getElement(), openFlag);
     }
     
     private void setState(String element, boolean openFlag) {
+        HtmlData data = new HtmlData(element, openFlag);
+        MutableHtmlTag tag = (MutableHtmlTag) this.tag;
+        tag.setData(data);
+    }
+    
+    private void newState() {
+        this.newState(this.elementName);
+    }
+    
+    private void newState(String element) {
+        this.newState(element, this.openFlag);
+    }
+    
+    private void newState(String element, boolean openFlag) {
         this.tag = this.createHtmlTag(element, openFlag);
     }
     
     private HtmlTag createHtmlTag(String element, boolean openFlag) {
-        MutableHtmlTag tag = new MutableHtmlTagImpl();
-        tag.setElement(element);
-        tag.setIsOpenTag(openFlag);
+        HtmlData data = new HtmlData(element, openFlag);
+        
+        MutableHtmlTag tag = new MutableHtmlTagImpl(data);
+        
         return tag;
     }
     
