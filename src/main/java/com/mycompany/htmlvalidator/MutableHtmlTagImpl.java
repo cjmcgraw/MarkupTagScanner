@@ -6,6 +6,7 @@ import java.util.HashSet;
 
 import com.mycompany.htmlvalidator.interfaces.HtmlTag;
 import com.mycompany.htmlvalidator.interfaces.MutableHtmlTag;
+import com.mycompany.htmlvalidator.parsers.utilities.HtmlData;
 
 public class MutableHtmlTagImpl implements MutableHtmlTag{
     public final static Set<String> selfClosingTags = new HashSet<String>(
@@ -14,8 +15,18 @@ public class MutableHtmlTagImpl implements MutableHtmlTag{
                           "track", "wbr")
             );
     private boolean selfClosing;
-    private boolean isClosing;
+    private boolean isOpen;
     private String element;
+    
+    public MutableHtmlTagImpl() {
+        this.element = null;
+        this.selfClosing = false;
+        this.isOpen = false;
+    }
+    
+    public MutableHtmlTagImpl(HtmlData data) {
+        this.setData(data);
+    }
     
     @Override
     public String getElement() {
@@ -24,7 +35,7 @@ public class MutableHtmlTagImpl implements MutableHtmlTag{
 
     @Override
     public boolean isOpenTag() {
-        return !this.isClosing;
+        return this.isOpen;
     }
 
     @Override
@@ -42,18 +53,29 @@ public class MutableHtmlTagImpl implements MutableHtmlTag{
         return this.elementsEqual(other) && this.oppositeTag(other);
     }
     
-    public void setIsOpenTag(boolean openTag) {
-        this.setState(this.element, !openTag);
+    public void setData(HtmlData data) {
+        this.setState(data.getElementData(), data.isOpenTag());
     }
     
-    public void setElement(String element) {
-        this.setState(element, this.isClosing);
+    private void setState(String element, boolean isOpen) {
+        this.setElement(element);
+        this.setIsOpen(isOpen);
     }
     
-    private void setState(String element, boolean isClosing) {
+    private void setElement(String element) {
+        element = this.validateElement(element);
         this.element = element;
         this.selfClosing = selfClosingTags.contains(element);
-        this.isClosing = this.selfClosing || isClosing;
+    }
+    
+    private String validateElement(String element) {
+        if(element == null || (element = element.trim()).length() <= 0)
+            throw new IllegalArgumentException("Invalid element given!");
+        return element;
+    }
+    
+    private void setIsOpen(boolean isOpen) {
+        this.isOpen = !this.selfClosing && isOpen;
     }
     
     private boolean elementsEqual(HtmlTag other) {
