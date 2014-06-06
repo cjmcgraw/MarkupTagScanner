@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import com.mycompany.htmlvalidator.MutableHtmlTagImpl;
 import com.mycompany.htmlvalidator.exceptions.IllegalHtmlTagException;
@@ -23,7 +24,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class HtmlScannerTest {
+public class HtmlTagScannerTest {
     private final List<String> defaultData = Arrays.asList("tag1", "tag2", "tag3");
     
     private HtmlBufferedReaderMock reader;
@@ -109,7 +110,7 @@ public class HtmlScannerTest {
         this.cycleScanner(0);
         
         expData = this.getDefaultValueAt(0);
-        data = this.scanner.next();
+        data = this.getNextValue();
         
         // Assert
         assertEquals(expData, data);
@@ -125,7 +126,7 @@ public class HtmlScannerTest {
         this.cycleScanner(1);
         
         expData = this.getDefaultValueAt(1);
-        data = this.scanner.next();
+        data = this.getNextValue();
         
         // Assert
         assertEquals(expData, data);
@@ -141,19 +142,28 @@ public class HtmlScannerTest {
         this.cycleScanner(this.defaultData.size() - 1);
         
         expData = this.getDefaultValueAt(this.defaultData.size() - 1);
-        data = this.scanner.next();
+        data = this.getNextValue();
         
         // Assert
         assertEquals(expData, data);
     }
     
-    @Test(expected=UnsupportedOperationException.class)
-    public void testRemove() {
+    @Test(expected=IllegalHtmlTagException.class)
+    public void testNext_ExceptionState_InvalidParserValue() throws IllegalHtmlTagException {
         // Arrange
-        this.scanner.next();
+        this.parser.setOutputException(true);
         
         // Apply + Assert
-        this.scanner.remove();
+        this.scanner.next();
+    }
+    
+    @Test(expected=NoSuchElementException.class)
+    public void testNext_ExceptionState_NoMoreValidValuesToIterateOver() {
+        // Arrange
+        this.cycleScanner(this.defaultData.size());
+        
+        // Apply + Assert;
+        this.getNextValue();
     }
     
     @Test
@@ -172,7 +182,15 @@ public class HtmlScannerTest {
     
     private void cycleScanner(int numOfCycles) {
         for(; numOfCycles > 0; numOfCycles--) {
-            scanner.next();
+            this.getNextValue();
+        }
+    }
+    
+    private HtmlTag getNextValue() {
+        try {
+            return this.scanner.next();
+        } catch (IllegalHtmlTagException e) {
+            throw new IllegalArgumentException();
         }
     }
     
@@ -195,7 +213,7 @@ public class HtmlScannerTest {
         this.reader = new HtmlBufferedReaderMock(readerData);
         this.parser = new HtmlTagDataParserMock(parserData);
         
-        this.scanner = new HtmlScanner(this.reader, this.parser);
+        this.scanner = new HtmlTagScanner(this.reader, this.parser);
     }
     
     private void clearState() throws IOException {
