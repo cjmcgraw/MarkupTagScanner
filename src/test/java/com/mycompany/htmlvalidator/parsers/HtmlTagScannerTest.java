@@ -1,7 +1,6 @@
 package com.mycompany.htmlvalidator.parsers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,8 +12,6 @@ import com.mycompany.htmlvalidator.MutableHtmlTagImpl;
 import com.mycompany.htmlvalidator.exceptions.IllegalHtmlTagException;
 import com.mycompany.htmlvalidator.interfaces.HtmlTag;
 import com.mycompany.htmlvalidator.parsers.utilities.HtmlData;
-import com.mycompany.htmlvalidator.parsers.utilities.HtmlTagDataParser;
-import com.mycompany.htmlvalidator.parsers.utilities.HtmlReader;
 import com.mycompany.htmlvalidator.parsers.utilities.mock.HtmlTagDataParserMock;
 import com.mycompany.htmlvalidator.parsers.utilities.mock.HtmlBufferedReaderMock;
 
