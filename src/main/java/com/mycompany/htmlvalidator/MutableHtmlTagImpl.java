@@ -44,6 +44,14 @@ public class MutableHtmlTagImpl implements MutableHtmlTag{
     }
 
     @Override
+    public boolean equals(Object other) {
+        if (other instanceof HtmlTag)
+            return this.equals((HtmlTag) other);
+        else
+            return super.equals(other);
+    }
+    
+    @Override
     public boolean equals(HtmlTag other) {
         return this.elementsEqual(other) && this.tagsEqual(other);
     }
