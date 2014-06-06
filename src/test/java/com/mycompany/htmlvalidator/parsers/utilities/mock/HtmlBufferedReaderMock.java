@@ -2,11 +2,13 @@ package com.mycompany.htmlvalidator.parsers.utilities.mock;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import com.mycompany.htmlvalidator.parsers.utilities.HtmlReader;
 
 public class HtmlBufferedReaderMock implements HtmlReader {
     private Iterator<String> data;
+    private boolean outputException;
     private boolean closed;
     
     public HtmlBufferedReaderMock(Collection<String> readerData) {
@@ -17,7 +19,11 @@ public class HtmlBufferedReaderMock implements HtmlReader {
     public void close() {this.closed = true;}
     
     public boolean isClosed() {return this.closed;}
-
+    
+    public void setOutputException(boolean causesException) {
+        this.outputException = causesException;
+    }
+    
     @Override
     public boolean hasNext() {
         return data.hasNext();
@@ -25,7 +31,16 @@ public class HtmlBufferedReaderMock implements HtmlReader {
 
     @Override
     public String next() {
+        if(outputException)
+            this.exceptionOutput();
+        return this.getNext();
+    }
+    public String getNext() {
        return this.data.next();
+    }
+    
+    public void exceptionOutput() {
+        throw new NoSuchElementException();
     }
 
     @Override

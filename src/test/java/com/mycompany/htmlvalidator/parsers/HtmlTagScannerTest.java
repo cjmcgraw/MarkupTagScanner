@@ -155,12 +155,12 @@ public class HtmlTagScannerTest {
     }
     
     @Test(expected=NoSuchElementException.class)
-    public void testNext_ExceptionState_NoMoreValidValuesToIterateOver() {
+    public void testNext_ExceptionState_NoMoreValidValuesToIterateOver() throws IllegalHtmlTagException {
         // Arrange
-        this.cycleScanner(this.defaultData.size());
+        this.reader.setOutputException(true);
         
         // Apply + Assert;
-        this.getNextValue();
+        this.scanner.next();
     }
     
     @Test
