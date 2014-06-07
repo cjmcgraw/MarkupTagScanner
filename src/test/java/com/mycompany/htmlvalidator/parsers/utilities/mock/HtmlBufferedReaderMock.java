@@ -45,4 +45,10 @@ public class HtmlBufferedReaderMock implements HtmlReader {
 
     @Override
     public void remove() {throw new UnsupportedOperationException();}
+
+    @Override
+    public int getCurrentLineNumber() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }
