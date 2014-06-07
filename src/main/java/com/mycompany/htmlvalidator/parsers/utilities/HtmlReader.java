@@ -5,4 +5,5 @@ import java.util.Iterator;
 
 public interface HtmlReader extends Iterator<String>, Closeable{
     
+    public int getCurrentLineNumber();
 }
