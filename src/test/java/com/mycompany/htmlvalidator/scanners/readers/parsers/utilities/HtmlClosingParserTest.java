@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.CloseTagEncounteredParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingParserTest {
@@ -103,7 +104,7 @@ public class HtmlClosingParserTest {
         this.parser.parse(this.input);
     }
     
-    @Test(expected=CloseTagEncounteredParsingException.class)
+    @Test(expected=UnclosedTagParsingException.class)
     public void testParse_WithOpeningAngleBracket() throws IOException {
         // Arrange
         this.setState(Arrays.asList('<'));
