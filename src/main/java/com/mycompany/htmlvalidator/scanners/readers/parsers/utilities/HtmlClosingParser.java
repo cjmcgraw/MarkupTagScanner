@@ -6,6 +6,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlDataParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.CloseTagEncounteredParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlClosingParser implements HtmlParser<Boolean> {
@@ -40,8 +41,10 @@ public class HtmlClosingParser implements HtmlParser<Boolean> {
     }
     
     private void validateChar() {
-        if (HtmlDataParser.isTagEnclosure(this.currChar))
-            throw new CloseTagEncounteredParsingException(this.input.getPosition(), ""); 
+        if (HtmlDataParser.isCloseTagEnclosure(this.currChar))
+            throw new CloseTagEncounteredParsingException(this.input.getPosition(), "");
+        else if (HtmlDataParser.isOpenTagEnclosure(this.currChar))
+            throw new UnclosedTagParsingException(this.input.getPosition(), "");
     }
     
     private void checkChar() throws IOException {
