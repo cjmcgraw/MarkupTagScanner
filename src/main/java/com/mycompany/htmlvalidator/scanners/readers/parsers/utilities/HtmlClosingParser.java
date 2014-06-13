@@ -41,11 +41,21 @@ public class HtmlClosingParser extends HtmlParser {
             throw new EndOfInputParsingException(this.input.getPosition(), this.result);
     }
     
-    private void validateChar() {
-        if (HtmlParser.isCloseTagEnclosure(this.currChar))
-            throw new UnexpectedCloseTagParsingException(this.input.getPosition(), this.result);
+    private void validateChar() throws IOException {
+        if (HtmlParser.isCloseTagEnclosure(this.currChar)) 
+            this.closeTagRead();
         else if (HtmlParser.isOpenTagEnclosure(this.currChar))
-            throw new UnclosedTagParsingException(this.input.getPosition(), this.result);
+            this.openTagRead();
+    }
+    
+    private void closeTagRead() throws IOException {
+        this.input.unread(this.currChar);
+        throw new UnexpectedCloseTagParsingException(this.input.getPosition(), this.result);
+    }
+    
+    private void openTagRead() throws IOException {
+        this.input.unread(this.currChar);
+        throw new UnclosedTagParsingException(this.input.getPosition(), this.result);
     }
     
     private void confirmClosingTag() throws IOException {
