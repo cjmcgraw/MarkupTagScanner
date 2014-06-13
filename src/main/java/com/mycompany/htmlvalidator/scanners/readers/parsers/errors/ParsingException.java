@@ -1,24 +1,97 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.errors;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ParsingException extends RuntimeException {
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
+
+public class ParsingException extends RuntimeException implements HtmlData{
     private static final long serialVersionUID = 7976665383247960546L;
+    private static final String errorMsg = "-----> PARSING ERROR  at [%s, %s] input=%s : %s at %s";
+    private static final int numOfMsgArgs = 5;
     
     private Point position;
-    private char data;
+    private char errorChar;
     
-    public ParsingException(Point position, char data, String msg) {
-        super(msg);
+    private HtmlData htmlData;
+    private String msg;
+    
+    public ParsingException(Point position, HtmlData htmlData, char errorChar, String msg) {
+        super();
         this.position = position;
-        this.data = data;
+        this.htmlData = htmlData;
+        this.errorChar = errorChar;
+        this.msg = msg;
     }
     
     public Point getPosition() {
         return this.position;
     }
     
-    public char getData() {
-        return this.data;
+    public void setHtmlData(HtmlData htmlData) {
+        this.htmlData = htmlData;
+    }
+    
+    public HtmlData getHtmlData() {
+        return this.htmlData;
+    }
+    
+    public char getErrorCharacter() {
+        return this.errorChar;
+    }
+
+    @Override
+    public String getName() {
+        return "EXCEPTION: " + this.getNameHelper();
+    }
+    
+    private String getNameHelper() {
+        return (this.validHtmlData()) ? this.htmlData.getName() : "";
+    }
+
+    @Override
+    public List<String> getData() {
+        return this.getDataHelper();
+    }
+    
+    private List<String> getDataHelper() {
+        return (this.validHtmlData()) ? this.htmlData.getData() : new ArrayList<String>();
+    }
+
+    @Override
+    public boolean isClosing() {
+        return this.isClosingHelper();
+    }
+    
+    private boolean isClosingHelper() {
+        return this.validHtmlData() && this.htmlData.isClosing();
+    }
+    
+    public boolean validHtmlData() {
+        return this.htmlData != null;
+    }
+    
+    public String toString() {
+        String errorMsg = ParsingException.errorMsg;
+        Object[] msgArgs = this.parseMsgArgs();
+        return String.format(errorMsg, msgArgs);
+    }
+    
+    private Object[] parseMsgArgs() {
+        Object[] result = new String[numOfMsgArgs];
+        
+        result[0] = this.position.x;
+        result[1] = this.position.y;
+        result[2] = this.getHtmlDataToString();
+        result[3] = this.msg;
+        result[4] = this.errorChar;
+        
+        return result;
+    }
+    
+    private String getHtmlDataToString() {
+        String missingMsg = "**MISSING**";
+        return (this.validHtmlData()) ? this.htmlData.toString() : missingMsg;
     }
 }
