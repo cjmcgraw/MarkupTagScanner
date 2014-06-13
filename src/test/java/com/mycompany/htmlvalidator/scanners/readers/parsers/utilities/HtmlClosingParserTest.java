@@ -12,18 +12,20 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.CloseTagEncounteredParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingParserTest {
-    private static final List<Character> defaultData = Arrays.asList('/', 'A');
+    private static final List<Character> defaultData = Arrays.asList(HtmlClosingParser.closingChar, 'A');
     private static final List<Character> additionalData = Arrays.asList('A', 'B');
     
     private HtmlClosingParser parser = new HtmlClosingParser();
     private PushbackAndPositionReaderMock input;
     private LinkedList<Character> inputData;
+    private MutableHtmlData result;
     
     @Before
     public void setUp() {
@@ -37,7 +39,7 @@ public class HtmlClosingParserTest {
         boolean data;
         
         // Apply
-        data = this.parser.parse(this.input);
+        data = this.parser.parse(this.input, this.result).isClosing();
         
         // Assert 
         assertEquals(expData, data);
@@ -50,7 +52,7 @@ public class HtmlClosingParserTest {
         char data; 
         
         // Apply
-        this.parser.parse(this.input);
+        this.parser.parse(this.input, this.result);
         data = this.inputData.remove();
         
         // Assert
@@ -65,7 +67,7 @@ public class HtmlClosingParserTest {
         this.setState(additionalData);
         
         // Apply
-        data = this.parser.parse(this.input);
+        data = this.parser.parse(this.input, this.result).isClosing();
         
         // Assert
         assertEquals(expData, data);
@@ -79,7 +81,7 @@ public class HtmlClosingParserTest {
         this.setState(additionalData);
         
         // Apply
-        this.parser.parse(this.input);
+        this.parser.parse(this.input, this.result);
         data = this.inputData.remove();
         
         // Assert
@@ -92,16 +94,16 @@ public class HtmlClosingParserTest {
         this.setState(new ArrayList<Character>());
         
         // Apply + Assert
-        this.parser.parse(this.input);
+        this.parser.parse(this.input, this.result);
     }
     
-    @Test(expected=CloseTagEncounteredParsingException.class)
+    @Test(expected=UnexpectedCloseTagParsingException.class)
     public void testParse_WithClosingAngleBracket() throws IOException {
         // Arrange
         this.setState(Arrays.asList('>'));
         
         // Apply + Assert
-        this.parser.parse(this.input);
+        this.parser.parse(this.input, this.result);
     }
     
     @Test(expected=UnclosedTagParsingException.class)
@@ -110,18 +112,20 @@ public class HtmlClosingParserTest {
         this.setState(Arrays.asList('<'));
         
         // Apply + Assert
-        this.parser.parse(this.input);
+        this.parser.parse(this.input, this.result);
     }
     
     private void setState(List<Character> data) {
         this.inputData = new LinkedList<>(data);
         this.input = new PushbackAndPositionReaderMock(this.inputData);
+        this.result = new MutableHtmlData();
     }
     
     @After
     public void clearState() {
         this.inputData = null;
         this.input = null;
+        this.result = null;
     }
     
 }

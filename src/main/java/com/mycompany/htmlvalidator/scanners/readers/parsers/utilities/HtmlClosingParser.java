@@ -2,30 +2,31 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
 import java.io.IOException;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlDataParser;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.CloseTagEncounteredParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlClosingParser implements HtmlParser<Boolean> {
+public class HtmlClosingParser extends HtmlParser {
     public static final char closingChar = '/';
     
     private PushbackAndPositionReader input;
-    private boolean isClosing;
+    private MutableHtmlData result;
+    
     private char currChar;
     private int value;
     
     @Override
-    public Boolean parse(PushbackAndPositionReader input) throws IOException {
-        this.setState(input);
+    public HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException {
+        this.setState(input, result);
         this.readClosingCharLocation();
-        this.checkChar();
-        boolean value = this.isClosing;
+        this.confirmClosingTag();
         this.clearState();
         
-        return value;
+        return result;
     }
     
     private void readClosingCharLocation() throws IOException {
@@ -37,32 +38,32 @@ public class HtmlClosingParser implements HtmlParser<Boolean> {
     
     private void validateValue() {
         if ( this.value == -1)
-            throw new EndOfInputParsingException(this.input.getPosition(), "");
+            throw new EndOfInputParsingException(this.input.getPosition(), this.result);
     }
     
     private void validateChar() {
-        if (HtmlDataParser.isCloseTagEnclosure(this.currChar))
-            throw new CloseTagEncounteredParsingException(this.input.getPosition(), "");
-        else if (HtmlDataParser.isOpenTagEnclosure(this.currChar))
-            throw new UnclosedTagParsingException(this.input.getPosition(), "");
+        if (HtmlParser.isCloseTagEnclosure(this.currChar))
+            throw new UnexpectedCloseTagParsingException(this.input.getPosition(), this.result);
+        else if (HtmlParser.isOpenTagEnclosure(this.currChar))
+            throw new UnclosedTagParsingException(this.input.getPosition(), this.result);
     }
     
-    private void checkChar() throws IOException {
+    private void confirmClosingTag() throws IOException {
         boolean isClosing = (this.currChar == closingChar);
         if (!isClosing) 
             this.input.unread(this.currChar);
-        
-        this.isClosing = isClosing;
+        this.result.setIsClosing(isClosing);
     }
     
-    private void setState(PushbackAndPositionReader input) {
+    private void setState(PushbackAndPositionReader input, MutableHtmlData result) {
         this.input = input;
-        this.isClosing = false;
+        this.result = result;
+        
         this.currChar = Character.UNASSIGNED;
         this.value = 0;
     }
     
     private void clearState() {
-        setState(null);
+        setState(null, null);
     }
 }
