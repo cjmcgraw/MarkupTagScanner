@@ -3,6 +3,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.CloseTagEncounteredParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingParserTest {
@@ -80,6 +83,33 @@ public class HtmlClosingParserTest {
         
         // Assert
         assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputParsingException.class)
+    public void testParse_WithEmptyData() throws IOException {
+        // Arrange
+        this.setState(new ArrayList<Character>());
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test(expected=CloseTagEncounteredParsingException.class)
+    public void testParse_WithClosingAngleBracket() throws IOException {
+        // Arrange
+        this.setState(Arrays.asList('>'));
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test(expected=CloseTagEncounteredParsingException.class)
+    public void testParse_WithOpeningAngleBracket() throws IOException {
+        // Arrange
+        this.setState(Arrays.asList('<'));
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
     }
     
     private void setState(List<Character> data) {
