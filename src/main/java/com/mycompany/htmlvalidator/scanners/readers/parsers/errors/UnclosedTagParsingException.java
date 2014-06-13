@@ -2,16 +2,15 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.errors;
 
 import java.awt.Point;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlDataParser;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
 
 public class UnclosedTagParsingException extends ParsingException {
-    
-    /**
-     * 
-     */
     private static final long serialVersionUID = -8194616683282825723L;
-
-    public UnclosedTagParsingException(Point position, String msg) {
-        super(position, HtmlDataParser.OPEN_TAG_ENCLOSURE, msg);
+    private static final String defaultMsg = "UNEXPECTED OPEN TAG. Found open tag before current tag was closed";
+    private static final char openTag = HtmlParser.OPEN_TAG_ENCLOSURE;
+    
+    public UnclosedTagParsingException(Point position, HtmlData result) {
+        super(position, result, openTag, defaultMsg);
     }
 }
