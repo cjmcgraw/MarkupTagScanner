@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
@@ -97,22 +98,120 @@ public class HtmlClosingParserTest {
         this.parser.parse(this.input, this.result);
     }
     
+    @Test
+    public void testParse_WithEmptyData_ExceptionHtmlDataMatchesInitialData() throws IOException {
+        // Arrange
+        this.setState(new ArrayList<Character>());
+        
+        HtmlData expData = this.result;
+        HtmlData data = null;
+        
+        // Apply
+        try {
+            this.parser.parse(this.input, this.result);
+        } catch (EndOfInputParsingException e) {
+            data = e.getHtmlData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
     @Test(expected=UnexpectedCloseTagParsingException.class)
     public void testParse_WithClosingAngleBracket() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('>'));
+        this.setState(Arrays.asList('>', 'A', 'B', 'C'));
         
         // Apply + Assert
         this.parser.parse(this.input, this.result);
     }
     
+    @Test
+    public void testParse_WithClosingAngleBracket_ExceptionHtmlDataMatchesInitialData() throws IOException {
+        // Arrange
+        this.setState(Arrays.asList('>', 'A', 'B', 'C'));
+        
+        HtmlData expData = this.result;
+        HtmlData data = null;
+        
+        
+        // Apply
+        try {
+            this.parser.parse(this.input, this.result);
+        } catch (UnexpectedCloseTagParsingException e) {
+            data = e.getHtmlData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_WithClosingAngleBracket_ConsumesNoElementsAndUnreadsClosingAngleBracket() throws IOException {
+        // Arrange
+        this.setState(Arrays.asList('>', 'A', 'B', 'C'));
+        
+        String expData = ">ABC";
+        String data = "";
+        
+        // Apply
+        try {
+            this.parser.parse(this.input, this.result);
+        } catch (UnexpectedCloseTagParsingException e) {}
+        
+        for (char c : this.inputData)
+            data += c;
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
     @Test(expected=UnclosedTagParsingException.class)
     public void testParse_WithOpeningAngleBracket() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('<'));
+        this.setState(Arrays.asList('<', 'A', 'B', 'C'));
         
         // Apply + Assert
         this.parser.parse(this.input, this.result);
+    }
+    
+    @Test
+    public void testParse_WithOpeningAngleBracket_ExceptionHtmlDataMatchesInitialData() throws IOException {
+        // Arrange
+        this.setState(Arrays.asList('<', 'A', 'B', 'C'));
+        
+        HtmlData expData = this.result;
+        HtmlData data = null;
+        
+        // Apply
+        try {
+            this.parser.parse(this.input, this.result);
+        } catch (UnclosedTagParsingException e) {
+            data = e.getHtmlData();
+        }
+        
+        // Apply
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_WithOpeningAngleBracket_ConsumesNoElementsAndUnreadsOpeningAngleBracket() throws IOException {
+        // Arrange
+        this.setState(Arrays.asList('<' , 'A', 'B', 'C'));
+        
+        String expData = "<ABC";
+        String data = "";
+        
+        // Apply
+        try {
+            this.parser.parse(this.input, this.result);
+        } catch (UnclosedTagParsingException e) {}
+        
+        for (char c : this.inputData)
+            data += c;
+        
+        // Assert
+        assertEquals(expData, data);
     }
     
     private void setState(List<Character> data) {
