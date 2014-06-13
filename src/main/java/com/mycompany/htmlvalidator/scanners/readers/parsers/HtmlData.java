@@ -1,30 +1,15 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public class HtmlData {
-    private List<String> data;
-    private boolean isClosing;
-    private String name;
+public interface HtmlData {
     
-    public HtmlData(String name, Collection<String> data, boolean isClosing) {
-        this.name = name;
-        this.isClosing = isClosing;
-        this.data = new ArrayList<String>();
-        this.data.addAll(data);
-    }
+    public String getName();
     
-    public String getName() {
-        return this.name;
-    }
+    public List<String> getData();
     
-    public List<String> getData() {
-        return this.data;
-    }
+    public boolean isClosing();
     
-    public boolean isClosing() {
-        return this.isClosing;
-    }
+    @Override
+    public String toString();
 }
