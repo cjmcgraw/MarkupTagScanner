@@ -14,10 +14,10 @@ public class MutableHtmlData implements HtmlData{
     private boolean hasClosingTag;
     private List<String> data;
     private boolean isClosing;
-    private String name;
+    private StringBuilder name;
     
     public MutableHtmlData() {
-        this.name = "";
+        this.name = new StringBuilder();
         this.isClosing = false;
         
         this.hasOpeningTag = false;
@@ -27,7 +27,7 @@ public class MutableHtmlData implements HtmlData{
     }
     
     public String getName() {
-        return this.name;
+        return this.name.toString();
     }
     
     public void confirmOpeningTag() {
@@ -39,7 +39,15 @@ public class MutableHtmlData implements HtmlData{
     }
     
     public void setName(String name) {
-        this.name = name;
+        this.name = new StringBuilder(name);
+    }
+    
+    public void updateName(char c) {
+        this.name.append(c);
+    }
+    
+    public void updateName(String s) {
+        this.name.append(s);
     }
     
     public List<String> getData() {
@@ -72,5 +80,32 @@ public class MutableHtmlData implements HtmlData{
             return result.trim() + ((this.hasClosingTag) ? closeTag : ' ');
         else
             return result.substring(0, maxLengthOfData).trim() + "...";
+    }
+    
+    public boolean equals(Object obj) {
+        if (obj instanceof MutableHtmlData) {
+            return equals((MutableHtmlData) obj);
+        } else if (obj instanceof HtmlData) {
+            return equals((HtmlData) obj);
+        }
+        return false;
+    }
+    
+    public boolean equals(HtmlData other) {
+        boolean result = (
+                this.getName().equals(other.getName()) &&
+                this.getData().equals(other.getData()) &&
+                this.isClosing == other.isClosing()
+                );
+        
+        return result;
+    }
+    
+    public boolean equals(MutableHtmlData other) {
+        boolean result = (
+                this.hasClosingTag == other.hasClosingTag &&
+                this.hasOpeningTag == other.hasOpeningTag &&
+                this.equals((HtmlData) other));
+        return result;
     }
 }
