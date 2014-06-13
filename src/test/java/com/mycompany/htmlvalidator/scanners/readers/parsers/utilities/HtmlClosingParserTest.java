@@ -152,15 +152,14 @@ public class HtmlClosingParserTest {
         this.setState(Arrays.asList('>', 'A', 'B', 'C'));
         
         String expData = ">ABC";
-        String data = "";
+        String data;
         
         // Apply
         try {
             this.parser.parse(this.input, this.result);
         } catch (UnexpectedCloseTagParsingException e) {}
         
-        for (char c : this.inputData)
-            data += c;
+        data = this.input.getRemainingData();
         
         // Assert
         assertEquals(expData, data);
@@ -200,15 +199,14 @@ public class HtmlClosingParserTest {
         this.setState(Arrays.asList('<' , 'A', 'B', 'C'));
         
         String expData = "<ABC";
-        String data = "";
+        String data;
         
         // Apply
         try {
             this.parser.parse(this.input, this.result);
         } catch (UnclosedTagParsingException e) {}
         
-        for (char c : this.inputData)
-            data += c;
+        data = this.input.getRemainingData();
         
         // Assert
         assertEquals(expData, data);
