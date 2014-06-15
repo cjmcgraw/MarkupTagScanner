@@ -6,7 +6,7 @@ public interface HtmlData {
     
     public String getName();
     
-    public List<String> getData();
+    public List<HtmlAttribute> getAttributes();
     
     public boolean isClosing();
     

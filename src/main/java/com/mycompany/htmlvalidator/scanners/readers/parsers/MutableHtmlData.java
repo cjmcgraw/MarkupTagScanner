@@ -12,7 +12,7 @@ public class MutableHtmlData implements HtmlData{
     
     private boolean hasOpeningTag;
     private boolean hasClosingTag;
-    private List<String> data;
+    private List<HtmlAttribute> attributes;
     private boolean isClosing;
     private StringBuilder name;
     
@@ -23,7 +23,7 @@ public class MutableHtmlData implements HtmlData{
         this.hasOpeningTag = false;
         this.hasOpeningTag = false;
         
-        this.data = new ArrayList<String>();
+        this.attributes = new ArrayList<>();
     }
     
     public String getName() {
@@ -50,12 +50,21 @@ public class MutableHtmlData implements HtmlData{
         this.name.append(s);
     }
     
-    public List<String> getData() {
-        return this.data;
+    public List<HtmlAttribute> getAttributes() {
+        return this.attributes;
     }
     
-    public void setData(Collection<String> data) {
-        this.data.addAll(data);
+    public void setAttributes(Collection<HtmlAttribute> data) {
+        this.attributes = new ArrayList<>();
+        this.updateAttributes(data);
+    }
+    
+    public void updateAttributes(Collection<HtmlAttribute> data) {
+        this.attributes.addAll(data);
+    }
+    
+    public void updateAttributes(HtmlAttribute data) {
+        this.attributes.add(data);
     }
     
     public boolean isClosing() {
@@ -73,8 +82,8 @@ public class MutableHtmlData implements HtmlData{
         result += this.getName();
         result += " ";
         
-        for (int i = 0; (i < this.data.size()) && (result.length() < maxLengthOfData); i++)
-            result += data.get(i);
+        for (int i = 0; (i < this.attributes.size()) && (result.length() < maxLengthOfData); i++)
+            result += attributes.get(i);
         
         if(result.length() < maxLengthOfData)
             return result.trim() + ((this.hasClosingTag) ? closeTag : ' ');
@@ -94,7 +103,7 @@ public class MutableHtmlData implements HtmlData{
     public boolean equals(HtmlData other) {
         boolean result = (
                 this.getName().equals(other.getName()) &&
-                this.getData().equals(other.getData()) &&
+                this.getAttributes().equals(other.getAttributes()) &&
                 this.isClosing == other.isClosing()
                 );
         
