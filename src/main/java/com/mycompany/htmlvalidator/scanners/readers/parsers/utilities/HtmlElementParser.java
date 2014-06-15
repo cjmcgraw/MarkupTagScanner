@@ -31,10 +31,10 @@ public class HtmlElementParser extends AbstractHtmlParser {
     }
     
     private boolean checkChar(char c) throws IOException {
-        if(AbstractHtmlParser.isCloseTagEnclosure(c)) {
+        if(isCloseTagEnclosure(c)) {
             this.unread(c);
             throw new UnexpectedCloseTagParsingException(this.input.getPosition(), this.result);
-        }else if (AbstractHtmlParser.isOpenTagEnclosure(c)) {
+        }else if (isOpenTagEnclosure(c)) {
             this.unread(c);
             throw new UnclosedTagParsingException(this.input.getPosition(), this.result);
         }
