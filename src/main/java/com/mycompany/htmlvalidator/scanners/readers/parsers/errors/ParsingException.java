@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 
 public class ParsingException extends RuntimeException implements HtmlData{
@@ -51,12 +52,12 @@ public class ParsingException extends RuntimeException implements HtmlData{
     }
 
     @Override
-    public List<String> getData() {
+    public List<HtmlAttribute> getAttributes() {
         return this.getDataHelper();
     }
     
-    private List<String> getDataHelper() {
-        return (this.validHtmlData()) ? this.htmlData.getData() : new ArrayList<String>();
+    private List<HtmlAttribute> getDataHelper() {
+        return (this.validHtmlData()) ? this.htmlData.getAttributes() : new ArrayList<HtmlAttribute>();
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ParsingException extends RuntimeException implements HtmlData{
     }
     
     private Object[] parseMsgArgs() {
-        Object[] result = new String[numOfMsgArgs];
+        Object[] result = new Object[numOfMsgArgs];
         
         result[0] = this.position.x;
         result[1] = this.position.y;
