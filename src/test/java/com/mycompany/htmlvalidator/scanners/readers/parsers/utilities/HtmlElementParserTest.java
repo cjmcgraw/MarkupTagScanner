@@ -235,5 +235,6 @@ public class HtmlElementParserTest {
     public void clearState() {
         this.inputData = null;
         this.input = null;
+        this.result = null;
     }
 }
