@@ -1,6 +1,14 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 public class HtmlAttribute {
+    public static final String ignoreAttributesName = "Script";
+    public static final char attributeSeparator = ' ';
+    public static final char attributeSplitter = '=';
+    
+    public static final String CLOSING_TAG = "" + HtmlParser.CLOSING_TAG;
+    public static final String DEFAULT_CLOSING_NAME = "self-closing";
+    public static final String DEFAULT_CLOSING_VALUE = "";
+    
     private String attributeName;
     private String attributeValue;
     
@@ -20,7 +28,10 @@ public class HtmlAttribute {
     }
     
     public void setName(String name) {
-        this.attributeName = name;
+        if (name.equals(CLOSING_TAG))
+            this.attributeName = DEFAULT_CLOSING_NAME;
+        else
+            this.attributeName = name;
     }
     
     public String getValue() {
@@ -28,10 +39,30 @@ public class HtmlAttribute {
     }
     
     public void setValue(String value) {
-        this.attributeValue = value;
+        if (this.attributeName.equals(DEFAULT_CLOSING_NAME))
+            this.attributeValue = DEFAULT_CLOSING_VALUE;
+        else
+            this.attributeValue = value;
     }
     
     public boolean isFlag() {
         return this.attributeName != null && this.attributeValue == null;
+    }
+    
+    public boolean equals(Object other) {
+        if (other instanceof HtmlAttribute)
+            return equals( (HtmlAttribute) other);
+        else
+            return super.equals(other);
+    }
+    
+    public boolean equals(HtmlAttribute other) {
+        boolean result = (this.attributeName.equals(other.attributeName) && 
+                          this.attributeValue.equals(other.attributeValue));
+        return result;
+    }
+    
+    public String toString() {
+        return this.attributeName + attributeSplitter + this.attributeValue;
     }
 }
