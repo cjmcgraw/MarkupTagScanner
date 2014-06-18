@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class MutableHtmlData implements HtmlData{
-    private final static char closeTag = AbstractHtmlParser.CLOSE_TAG_ENCLOSURE;
-    private final static char openTag = AbstractHtmlParser.OPEN_TAG_ENCLOSURE;
+    private final static char closeTag = HtmlParser.CLOSE_TAG_ENCLOSURE;
+    private final static char openTag = HtmlParser.OPEN_TAG_ENCLOSURE;
    
     private final static int maxLengthOfData = 30;
     
