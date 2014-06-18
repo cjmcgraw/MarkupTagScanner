@@ -3,13 +3,11 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.AbstractHtmlParser;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlElementParser extends AbstractHtmlParser {
+public class HtmlElementParser extends HtmlParser {
     public static final char elementTerminator = ' ';
     
     @Override
@@ -26,18 +24,11 @@ public class HtmlElementParser extends AbstractHtmlParser {
     
     private void parseElementName() throws IOException {
         char c;
-        while(this.checkChar(c = readNext()))
+        while(this.validateChar(c = readNext()))
             this.result.updateName(c);
     }
     
-    private boolean checkChar(char c) throws IOException {
-        if(isCloseTagEnclosure(c)) {
-            this.unread(c);
-            throw new UnexpectedCloseTagParsingException(this.input.getPosition(), this.result);
-        }else if (isOpenTagEnclosure(c)) {
-            this.unread(c);
-            throw new UnclosedTagParsingException(this.input.getPosition(), this.result);
-        }
-        return c != elementTerminator;
+    protected boolean validateChar(char c) throws IOException {
+        return super.validateChar(c) && c != elementTerminator;
     }
 }

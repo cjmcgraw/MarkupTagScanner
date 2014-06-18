@@ -4,12 +4,10 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.AbstractHtmlParser;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlClosingParser extends AbstractHtmlParser {
+public class HtmlClosingParser extends HtmlParser {
     public static final char closingChar = '/';
     
     private char currChar;
@@ -28,21 +26,8 @@ public class HtmlClosingParser extends AbstractHtmlParser {
         this.validateChar();
     }
     
-    private void validateChar() throws IOException {
-        if (isCloseTagEnclosure(this.currChar)) 
-            this.closeTagRead();
-        else if (isOpenTagEnclosure(this.currChar))
-            this.openTagRead();
-    }
-    
-    private void closeTagRead() throws IOException {
-        this.unread(this.currChar);
-        throw new UnexpectedCloseTagParsingException(this.input.getPosition(), this.result);
-    }
-    
-    private void openTagRead() throws IOException {
-        this.unread(this.currChar);
-        throw new UnclosedTagParsingException(this.input.getPosition(), this.result);
+    protected boolean validateChar() throws IOException {
+        return super.validateChar(this.currChar);
     }
     
     private void confirmClosingTag() throws IOException {
