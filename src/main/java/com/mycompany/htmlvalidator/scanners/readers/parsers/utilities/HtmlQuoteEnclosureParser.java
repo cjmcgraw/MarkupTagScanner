@@ -3,12 +3,11 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.MissingEnclosureParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlQuoteEnclosureParser extends HtmlParser {
+public class HtmlQuoteEnclosureParser extends HtmlUtilityParser {
     private StringBuilder quoteData;
     
     public String getQuoteData () {

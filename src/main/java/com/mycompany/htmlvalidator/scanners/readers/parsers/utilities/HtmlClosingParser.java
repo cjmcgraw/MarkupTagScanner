@@ -4,10 +4,9 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlClosingParser extends HtmlParser {
+public class HtmlClosingParser extends HtmlUtilityParser {
     public static final char closingChar = '/';
     
     private char currChar;

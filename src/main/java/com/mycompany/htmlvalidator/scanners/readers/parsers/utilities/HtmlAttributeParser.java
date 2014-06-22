@@ -7,7 +7,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.MissingEnclos
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlAttributeParser extends HtmlParser {
+public class HtmlAttributeParser extends HtmlUtilityParser {
     public static final String ignoreAttributesName = HtmlAttribute.ignoreAttributesName;
     public static final char attributeSeparator = HtmlAttribute.attributeSeparator;
     public static final char attributeSplitter = HtmlAttribute.attributeSplitter;

@@ -3,11 +3,10 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlElementParser extends HtmlParser {
+public class HtmlElementParser extends HtmlUtilityParser {
     public static final char elementTerminator = ' ';
     
     @Override

@@ -50,7 +50,7 @@ public abstract class HtmlParser{
         return (char) value;
     }
     
-    public abstract HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException;
+    public abstract HtmlData parse(PushbackAndPositionReader input) throws IOException;
     
     protected void unread(char c) throws IOException {
         this.input.unread(c);
