@@ -44,7 +44,7 @@ public class ParsingException extends RuntimeException implements HtmlData{
 
     @Override
     public String getName() {
-        return "EXCEPTION: " + this.getNameHelper();
+        return this.getNameHelper();
     }
     
     private String getNameHelper() {
