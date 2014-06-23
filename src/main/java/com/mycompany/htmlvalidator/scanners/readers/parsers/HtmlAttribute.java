@@ -42,7 +42,7 @@ public class HtmlAttribute {
         if (this.attributeName.equals(DEFAULT_CLOSING_NAME))
             this.attributeValue = DEFAULT_CLOSING_VALUE;
         else
-            this.attributeValue = value;
+            this.attributeValue = value.trim();
     }
     
     public boolean isFlag() {
@@ -63,6 +63,10 @@ public class HtmlAttribute {
     }
     
     public String toString() {
-        return this.attributeName + attributeSplitter + this.attributeValue;
+        return this.attributeName + ((this.hasAttributeValue()) ? attributeSplitter + this.attributeValue : "");
+    }
+    
+    private boolean hasAttributeValue() {
+        return this.attributeValue != "";
     }
 }
