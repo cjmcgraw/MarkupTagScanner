@@ -10,6 +10,10 @@ public interface HtmlData {
     
     public boolean isClosing();
     
+    public boolean hasOpeningTag();
+    
+    public boolean hasClosingTag();
+    
     @Override
     public String toString();
 }

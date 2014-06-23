@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 public class MutableHtmlData implements HtmlData{
-    private final static char closeTag = HtmlParser.CLOSE_TAG_ENCLOSURE;
-    private final static char openTag = HtmlParser.OPEN_TAG_ENCLOSURE;
-   
-    private final static int maxLengthOfData = 30;
+    public final static char closeTag = HtmlParser.CLOSE_TAG_ENCLOSURE;
+    public final static char openTag = HtmlParser.OPEN_TAG_ENCLOSURE;
+    public final static String ELIPSIS = "...";
+    public final int MAX_NUM_ATTR_IN_STRING = 2;
     
     private boolean hasOpeningTag;
     private boolean hasClosingTag;
@@ -34,8 +34,16 @@ public class MutableHtmlData implements HtmlData{
         this.hasOpeningTag = true;
     }
     
+    public boolean hasOpeningTag() {
+        return this.hasOpeningTag;
+    }
+    
     public void confirmClosingTag() {
         this.hasClosingTag = true;
+    }
+    
+    public boolean hasClosingTag() {
+        return this.hasClosingTag;
     }
     
     public void setName(String name) {
@@ -76,45 +84,57 @@ public class MutableHtmlData implements HtmlData{
     }
     
     public String toString() {
-        String result = (this.hasOpeningTag) ? "" + openTag : "";  
+        String result = this.hasOpeningTag ? "" + openTag : "[" + openTag + "]";  
                 
         result += (this.isClosing) ? "/" : "";
         result += this.getName();
         result += " ";
+        result += getAttributeString();
+        result += this.hasClosingTag ? closeTag : "[" + closeTag + "]";
         
-        for (int i = 0; (i < this.attributes.size()) && (result.length() < maxLengthOfData); i++)
-            result += attributes.get(i);
-        
-        if(result.length() < maxLengthOfData)
-            return result.trim() + ((this.hasClosingTag) ? closeTag : ' ');
-        else
-            return result.substring(0, maxLengthOfData).trim() + "...";
+        return result;
     }
     
+    private String getAttributeString() {
+        if(this.attributes.size() > MAX_NUM_ATTR_IN_STRING)
+            return ELIPSIS;
+        
+        String result = "";
+        for (HtmlAttribute data : this.attributes)
+            result += data.toString() + " ";
+        return result.trim();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + MAX_NUM_ATTR_IN_STRING;
+        result = prime * result + ((attributes == null) ? 0 : attributes.hashCode());
+        result = prime * result + (hasClosingTag ? 1231 : 1237);
+        result = prime * result + (hasOpeningTag ? 1231 : 1237);
+        result = prime * result + (isClosing ? 1231 : 1237);
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
+
     public boolean equals(Object obj) {
-        if (obj instanceof MutableHtmlData) {
-            return equals((MutableHtmlData) obj);
-        } else if (obj instanceof HtmlData) {
+        if (obj instanceof HtmlData)
             return equals((HtmlData) obj);
-        }
-        return false;
+        else
+            return super.equals(obj);
+      
     }
     
     public boolean equals(HtmlData other) {
         boolean result = (
                 this.getName().equals(other.getName()) &&
                 this.getAttributes().equals(other.getAttributes()) &&
-                this.isClosing == other.isClosing()
+                this.isClosing == other.isClosing() && 
+                this.hasClosingTag == other.hasClosingTag() &&
+                this.hasOpeningTag == other.hasOpeningTag()
                 );
         
-        return result;
-    }
-    
-    public boolean equals(MutableHtmlData other) {
-        boolean result = (
-                this.hasClosingTag == other.hasClosingTag &&
-                this.hasOpeningTag == other.hasOpeningTag &&
-                this.equals((HtmlData) other));
         return result;
     }
 }
