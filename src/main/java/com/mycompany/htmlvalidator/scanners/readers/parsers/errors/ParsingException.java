@@ -65,6 +65,16 @@ public class ParsingException extends RuntimeException implements HtmlData{
         return this.isClosingHelper();
     }
     
+    @Override
+    public boolean hasOpeningTag() {
+        return this.htmlData.hasOpeningTag();
+    }
+
+    @Override
+    public boolean hasClosingTag() {
+        return this.htmlData.hasClosingTag();
+    }
+    
     private boolean isClosingHelper() {
         return this.validHtmlData() && this.htmlData.isClosing();
     }
