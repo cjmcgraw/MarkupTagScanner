@@ -1,7 +1,7 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 public class HtmlAttribute {
-    public static final String ignoreAttributesName = "Script";
+    public static final String scriptAttributesName = "Script";
     public static final char attributeSeparator = ' ';
     public static final char attributeSplitter = '=';
     
