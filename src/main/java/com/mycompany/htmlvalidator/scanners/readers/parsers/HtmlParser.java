@@ -15,7 +15,7 @@ public abstract class HtmlParser{
     public static final char CLOSE_TAG_ENCLOSURE = '>';
     public static final char QUOTE_TAG_ENCLOSURE = '"';
     public static final char CLOSING_TAG = '/';
-    private static final Set<Character> TAG_ENCLOSURES = 
+    public static final Set<Character> TAG_ENCLOSURES = 
             new HashSet<Character>(Arrays.asList(OPEN_TAG_ENCLOSURE, CLOSE_TAG_ENCLOSURE));
     
     public static boolean isOpenTagEnclosure(char c) {
