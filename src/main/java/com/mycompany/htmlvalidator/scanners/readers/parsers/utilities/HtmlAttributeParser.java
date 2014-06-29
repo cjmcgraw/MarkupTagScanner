@@ -8,7 +8,8 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedClo
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlAttributeParser extends HtmlUtilityParser {
-    public static final String ignoreAttributesName = HtmlAttribute.scriptAttributesName;
+    public static final String scriptAttributesName = HtmlAttribute.scriptAttributesName;
+    public static final String commentAttributesName = HtmlAttribute.commentAttributesName;
     public static final char attributeSeparator = HtmlAttribute.attributeSeparator;
     public static final char attributeSplitter = HtmlAttribute.attributeSplitter;
     
@@ -29,10 +30,35 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
     }
     
     private void parseAttributes() throws IOException {
-        if(result.getName().equals(ignoreAttributesName))
+        if(result.getName().equals(scriptAttributesName))
             this.cycleScriptData();
+        else if(result.getName().equals(commentAttributesName))
+            this.parseCommentData();
         else
             this.parseAttributesData();
+    }
+    
+    private void cycleScriptData() throws IOException {
+        this.readRemainingDataUntilClosingTag();
+    }
+    
+    private void parseCommentData() throws IOException {
+        String commentData = this.readRemainingDataUntilClosingTag();
+        HtmlAttribute attribute = new HtmlAttribute();
+        attribute.setName(commentData);
+        
+        this.result.updateAttributes(attribute);
+    }
+    
+    private String readRemainingDataUntilClosingTag() throws IOException {
+        StringBuilder result = new StringBuilder();
+        
+        while (this.validateChar()) {
+            result.append(this.currChar);
+            this.readNext();
+        }
+        
+        return result.toString().trim();
     }
     
     private void parseAttributesData() throws IOException {
@@ -114,12 +140,6 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
         this.readNext();
         this.validateChar();
         return this.parser.getQuoteData();
-    }
-    
-    private void cycleScriptData() throws IOException {
-        while(this.validateChar()) {
-            this.readNext();
-        }
     }
     
     @Override
