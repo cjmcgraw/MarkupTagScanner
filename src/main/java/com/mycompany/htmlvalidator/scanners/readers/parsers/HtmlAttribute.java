@@ -2,6 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 public class HtmlAttribute {
     public static final String scriptAttributesName = "Script";
+    public static final String commentAttributesName = "!--";
     public static final char attributeSeparator = ' ';
     public static final char attributeSplitter = '=';
     
@@ -12,10 +13,13 @@ public class HtmlAttribute {
     private String attributeName;
     private String attributeValue;
     
-    public HtmlAttribute() {}
+    public HtmlAttribute() {
+        this.attributeName = "";
+        this.attributeValue = "";
+    }
     
     public HtmlAttribute(String name) {
-        this(name, null);
+        this(name, "");
     }
     
     public HtmlAttribute(String name, String value) {
