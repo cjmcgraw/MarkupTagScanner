@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.List;
+
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
@@ -438,7 +439,7 @@ public class HtmlAttributeParserTest {
         int data;
         
         this.setState("some data that represent scripting = data $ with @ some values present>");
-        this.result.setName(HtmlAttributeParser.ignoreAttributesName);
+        this.result.setName(HtmlAttributeParser.scriptAttributesName);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -455,11 +456,68 @@ public class HtmlAttributeParserTest {
         String data;
         
         this.setState("some data that represnts scripting = data $ with @ some values present>");
-        this.result.setName(HtmlAttributeParser.ignoreAttributesName);
+        this.result.setName(HtmlAttributeParser.scriptAttributesName);
         
         // Apply
         this.parser.parse(this.input, this.result);
         data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_CommentTag_FormsAttributeWithInnerString_FirstAttributeNameIsString() throws IOException {
+        // Arrange
+        String expData = "some inner data in this comment --";
+        String data;
+        
+        this.setState(expData + ">");
+        this.result.setName(HtmlAttribute.commentAttributesName);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        HtmlAttribute attribute = this.result.getAttributes().get(0);
+        data = attribute.getName();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_CommentTag_FormsSingleAttributeWithInnerString_FirstAttributeIsFlagIsTrue() throws IOException {
+        // Arrange
+        String commentData = "some inner data in this comment --";
+        
+        boolean expData = false;
+        boolean data;
+        
+        this.setState(commentData + ">");
+        this.result.setName(HtmlAttribute.commentAttributesName);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        HtmlAttribute attribute = this.result.getAttributes().get(0);
+        data = attribute.isFlag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_CommentTag_FormsSingleAttributeWithInnerString_AttributesListOnlyContainsSingleValue() throws IOException {
+        // Arrange
+        String commentData = "some inner data in this comment --";
+        
+        int expData = 1;
+        int data;
+        
+        this.setState(commentData + ">");
+        this.result.setName(HtmlAttribute.commentAttributesName);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        data = this.result.getAttributes().size();
         
         // Assert
         assertEquals(expData, data);
@@ -582,5 +640,4 @@ public class HtmlAttributeParserTest {
         this.input = null;
         this.result = null;
     }
-    
 }
