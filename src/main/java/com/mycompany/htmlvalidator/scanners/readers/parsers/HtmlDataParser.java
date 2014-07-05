@@ -2,16 +2,11 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import java.io.IOException;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.MissingEnclosureParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.ParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlAttributeParser;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlClosingParser;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlElementParser;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlUtilityParser;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.*;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlDataParser extends HtmlParser{
+public class HtmlDataParser extends DataParser{
     private HtmlUtilityParser closingParser;
     private HtmlUtilityParser elementParser;
     private HtmlUtilityParser attributeParser;
@@ -22,7 +17,9 @@ public class HtmlDataParser extends HtmlParser{
              new HtmlAttributeParser());
         }
     
-    public HtmlDataParser(HtmlUtilityParser closingParser,  HtmlUtilityParser elementParser, HtmlUtilityParser attributeParser) {
+    public HtmlDataParser(HtmlUtilityParser closingParser, 
+                          HtmlUtilityParser elementParser, 
+                          HtmlUtilityParser attributeParser) {
         this.closingParser = closingParser;
         this.elementParser = elementParser;
         this.attributeParser = attributeParser;
@@ -62,10 +59,10 @@ public class HtmlDataParser extends HtmlParser{
     private void readOpenTag() throws IOException {
         char c = this.readNext();
         
-        if (!HtmlParser.isOpenTagEnclosure(c)) {
+        if (!DataParser.isOpenTagEnclosure(c)) {
             this.unread(c);
             throw new MissingEnclosureParsingException(input.getPosition(), 
-                                                       HtmlParser.OPEN_TAG_ENCLOSURE,
+                                                       DataParser.OPEN_TAG_ENCLOSURE,
                                                        this.result);
         }
         this.result.confirmOpeningTag();
@@ -90,9 +87,5 @@ public class HtmlDataParser extends HtmlParser{
             this.openTagRead(c);
         }
         this.result.confirmClosingTag();
-    }
-    
-    private void setState(PushbackAndPositionReader input) {
-        this.setState(input, new MutableHtmlData());
     }
 }

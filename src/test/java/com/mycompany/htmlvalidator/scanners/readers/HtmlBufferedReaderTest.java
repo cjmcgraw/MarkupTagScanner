@@ -94,7 +94,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Standard_FirstValue_ParserRecievesOpeningTag() {
         // Arrange
-        char expData = HtmlParser.OPEN_TAG_ENCLOSURE;
+        char expData = DataParser.OPEN_TAG_ENCLOSURE;
         char data;
         
         // Apply
@@ -122,7 +122,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Standard_FirstValue_ParserReceivesClosingTag() {
         // Arrange
-        char expData = HtmlParser.CLOSE_TAG_ENCLOSURE;
+        char expData = DataParser.CLOSE_TAG_ENCLOSURE;
         char data;
         
         // Apply
@@ -206,7 +206,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Standard_SecondValue_ParserReceivesOpeningTag() {
         // Arrange
-        char expData = HtmlParser.OPEN_TAG_ENCLOSURE;
+        char expData = DataParser.OPEN_TAG_ENCLOSURE;
         char data;
         
         // Apply
@@ -236,7 +236,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Standard_SecondValue_ParserReceivesClosingTag() {
         // Arrange
-        char expData = HtmlParser.CLOSE_TAG_ENCLOSURE;
+        char expData = DataParser.CLOSE_TAG_ENCLOSURE;
         char data;
         
         // Apply
@@ -328,7 +328,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Standard_ThirdValue_ParserReceivesOpeningTag() {
         // Arrange
-        char expData = HtmlParser.OPEN_TAG_ENCLOSURE;
+        char expData = DataParser.OPEN_TAG_ENCLOSURE;
         char data;
         
         // Apply
@@ -344,7 +344,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Unusual_ThirdValue_ParserReceivesExpectedOpeningTag() throws IOException {
         // Arrange
-        char expData = HtmlParser.OPEN_TAG_ENCLOSURE;
+        char expData = DataParser.OPEN_TAG_ENCLOSURE;
         char data;
         
         this.setStateUnusual();
@@ -362,7 +362,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Standard_ThirdValue_ParserReceivesClosingTag() {
         // Arrange
-        char expData = HtmlParser.CLOSE_TAG_ENCLOSURE;
+        char expData = DataParser.CLOSE_TAG_ENCLOSURE;
         char data;
         
         // Apply
@@ -378,7 +378,7 @@ public class HtmlBufferedReaderTest {
     @Test
     public void testPreParse_Unusual_ThirdValue_ParserReceivesExpectedClosingTag() throws IOException {
      // Arrange
-        char expData = HtmlParser.CLOSE_TAG_ENCLOSURE;
+        char expData = DataParser.CLOSE_TAG_ENCLOSURE;
         char data;
         
         this.setStateUnusual();

@@ -7,11 +7,11 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
 public class HtmlBufferedReader implements HtmlReader{
-    private static final Set<Character> TAG_ENCLOSURES = HtmlParser.TAG_ENCLOSURES;
+    private static final Set<Character> TAG_ENCLOSURES = DataParser.TAG_ENCLOSURES;
     
     private PushbackAndPositionReader reader;
     private boolean emptyReader;
-    private HtmlParser parser;
+    private DataParser parser;
     
     private HtmlData currData;
     private boolean hasData;
@@ -24,7 +24,7 @@ public class HtmlBufferedReader implements HtmlReader{
         this.hasData = false;
     }
     
-    public HtmlBufferedReader(HtmlParser parser) throws IOException {
+    public HtmlBufferedReader(DataParser parser) throws IOException {
         this();
         this.parser = parser;
     }

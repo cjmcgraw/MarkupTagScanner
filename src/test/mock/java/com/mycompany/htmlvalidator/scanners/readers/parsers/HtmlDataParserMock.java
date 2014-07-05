@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlDataParserMock extends HtmlParser {
+public class HtmlDataParserMock extends DataParser {
     private List<HtmlData> data;
     private int currIndex;
     private char openChar;

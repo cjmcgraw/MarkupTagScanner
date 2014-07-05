@@ -6,7 +6,7 @@ public class HtmlAttribute {
     public static final char attributeSeparator = ' ';
     public static final char attributeSplitter = '=';
     
-    public static final String CLOSING_TAG = "" + HtmlParser.CLOSING_TAG;
+    public static final String CLOSING_TAG = "" + DataParser.CLOSING_TAG;
     public static final String DEFAULT_CLOSING_NAME = "self-closing";
     public static final String DEFAULT_EMPTY_VALUES = "";
     

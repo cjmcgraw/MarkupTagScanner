@@ -2,8 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
 import java.io.IOException;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.MissingEnclosureParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
@@ -54,7 +53,7 @@ public class HtmlQuoteEnclosureParser extends HtmlUtilityParser {
         if( !isQuoteTagEnclosure(c)) {
             this.unread(c);
             throw new MissingEnclosureParsingException(this.input.getPosition(),
-                                                       QUOTE_TAG_ENCLOSURE, 
+                                                       DOUBLE_QUOTE_TAG_ENCLOSURE, 
                                                        this.result);
         }
     }
