@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.*;
 
+import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
@@ -19,12 +20,13 @@ public class HtmlAttributeParserTest {
     public static final String DEFAULT_MULTIPLE = DEFAULT + " " + DEFAULT_WITH_VALUE + " " + DEFAULT_WITH_QUOTES;
     
     public static final HtmlAttribute DEFAULT_EXP_ATTR = new HtmlAttribute(DEFAULT, "");
-    public static final HtmlAttribute DEFAULT_CLOSING_ATTR = new HtmlAttribute("" + HtmlParser.CLOSING_TAG, "");
+    public static final HtmlAttribute DEFAULT_CLOSING_ATTR = new HtmlAttribute(MarkupTag.CLOSING_ATTRIBUTE.toString());
     public static final HtmlAttribute DEFAULT_WITH_VALUE_EXP_ATTR = new HtmlAttribute(DEFAULT, "someValue");
     public static final HtmlAttribute DEFAULT_WITH_QUOTES_EXP_ATTR = new HtmlAttribute(DEFAULT, "\"someValue\"");
     
-    public static final String DEFAULT_CLOSE = "" + HtmlParser.CLOSE_TAG_ENCLOSURE;
-    public static final String DEFAULT_CLOSING = HtmlParser.CLOSING_TAG + DEFAULT_CLOSE;
+    public static final String DEFAULT_CLOSE = MarkupTag.CLOSING_TAG.toString();
+    public static final String SELF_CLOSING = " " + MarkupTag.CLOSING_ATTRIBUTE.toString() + DEFAULT_CLOSE;
+    public static final String LEADING_WHITESPACE = "    " + System.lineSeparator() + System.lineSeparator() + "\t\t        ";
     
     private HtmlAttributeParser parser = new HtmlAttributeParser();
     private PushbackAndPositionReaderMock input;
@@ -38,7 +40,7 @@ public class HtmlAttributeParserTest {
     }
     
     @Test
-    public void testParse_SingleAttributeWithNoValue_StandardClose() throws IOException {
+    public void testParse_SingleAttributeWithNoValue_StandardClose_FirstElementMIsData() throws IOException {
         // Arrange
         HtmlAttribute expData = DEFAULT_EXP_ATTR;
         HtmlAttribute data;
@@ -46,6 +48,20 @@ public class HtmlAttributeParserTest {
         // Apply
         this.parser.parse(this.input, this.result);
         data = attributes.get(0);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttributeWithNovalues_StandardClose_ResultIsexpectedNumberOfAttributes() throws IOException {
+        // Arrange
+        int expData = 1;
+        int data;
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        data = attributes.size();
         
         // Assert
         assertEquals(expData, data);
@@ -66,12 +82,12 @@ public class HtmlAttributeParserTest {
     }
     
     @Test
-    public void testParse_SingleAttributeWithNoValue_SelfClosing() throws IOException {
+    public void testParse_SingleAttributeWithNoValue_StandardClose_LeadingWhitespace_FirstElementIsDefault() throws IOException {
         // Arrange
         HtmlAttribute expData = DEFAULT_EXP_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT + DEFAULT_CLOSING);
+        this.setState(LEADING_WHITESPACE + DEFAULT + DEFAULT_CLOSE);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -82,16 +98,80 @@ public class HtmlAttributeParserTest {
     }
     
     @Test
-    public void testParse_SingleAttributeWithNoValue_SelfClosing_ClosingAttribute() throws IOException {
+    public void testParse_SingleAttributeWithNoValue_StandardClose_LeadingWhitespace_ResultIsExpectedNumberOfAttributes() throws IOException {
+        // Arrange
+        int expData = 1;
+        int data;
+        
+        this.setState(LEADING_WHITESPACE + DEFAULT + DEFAULT_CLOSE);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        data = attributes.size();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttributeWithNoValue_StandardClose_LeadingWhitespace_EnclosureTagRemains() throws IOException {
+        // Arrange
+        String expData = ">";
+        String data;
+        
+        this.setState(LEADING_WHITESPACE + DEFAULT + DEFAULT_CLOSE);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        data = input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttributeWithNoValue_SelfClosing_FirstAttributeIsData() throws IOException {
+        // Arrange
+        HtmlAttribute expData = DEFAULT_EXP_ATTR;
+        HtmlAttribute data;
+        
+        this.setState(DEFAULT + SELF_CLOSING);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        data = attributes.get(0);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttributeWithNoValue_SelfClosing_SecondAttributeIsClosingAttribute() throws IOException {
         // Arrange
         HtmlAttribute expData = DEFAULT_CLOSING_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT + DEFAULT_CLOSING);
+        this.setState(DEFAULT + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
         data = attributes.get(1);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttributeWithNoValue_SelfClosing_ResultIsExpectedNumberOfAttributes() throws IOException {
+        // Arrange
+        int expData = 2;
+        int data;
+        
+        this.setState(DEFAULT + SELF_CLOSING);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        data = attributes.size();
         
         // Assert
         assertEquals(expData, data);
@@ -112,7 +192,7 @@ public class HtmlAttributeParserTest {
     }
     
     @Test
-    public void testParse_SingleAttributeWithSomeValue_StandardClose() throws IOException {
+    public void testParse_SingleAttributeWithSomeValue_StandardClose_FirstElementIsData() throws IOException {
         // Arrange
         HtmlAttribute expData = DEFAULT_WITH_VALUE_EXP_ATTR;
         HtmlAttribute data;
@@ -122,6 +202,22 @@ public class HtmlAttributeParserTest {
         // Apply
         this.parser.parse(this.input, this.result);
         data = attributes.get(0);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttributeWithSomeValue_StandardClose_ResultIsExpectedNumberOfAttributes() throws IOException {
+        // Arrange
+        int expData = 1;
+        int data;
+        
+        this.setState(DEFAULT_WITH_VALUE + DEFAULT_CLOSE);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        data = attributes.size();
         
         // Assert
         assertEquals(expData, data);
@@ -144,12 +240,12 @@ public class HtmlAttributeParserTest {
     }
     
     @Test
-    public void testParse_SingleAttributeWithSomeValue_SelfClosing() throws IOException {
+    public void testParse_SelfClosingOnly_FirstElementIsData() throws IOException {
         // Arrange
-        HtmlAttribute expData = DEFAULT_WITH_VALUE_EXP_ATTR;
+        HtmlAttribute expData = DEFAULT_CLOSING_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT_WITH_VALUE + DEFAULT_CLOSING);
+        this.setState(SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -160,28 +256,28 @@ public class HtmlAttributeParserTest {
     }
     
     @Test
-    public void testParse_SingleAttributeWithSomeValue_SelfClosing_ClosingAttribute() throws IOException {
+    public void testParse_SelfClosingOnly_ResultIsExpectedNumberOfAttributes() throws IOException {
         // Arrange
-        HtmlAttribute expData = DEFAULT_CLOSING_ATTR;
-        HtmlAttribute data;
+        int expData = 1;
+        int data;
         
-        this.setState(DEFAULT_WITH_VALUE + DEFAULT_CLOSING);
+        this.setState(SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
-        data = attributes.get(1);
+        data = attributes.size();
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_SingleAttributeWithSomeValue_SelfClosing_EnclosureTagRemains() throws IOException {
+    public void testParse_SelfClosingOnly_EnclosureTagRemains() throws IOException {
         // Arrange
         String expData = ">";
         String data;
         
-        this.setState(DEFAULT_WITH_VALUE + DEFAULT_CLOSING);
+        this.setState(SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -229,7 +325,7 @@ public class HtmlAttributeParserTest {
         HtmlAttribute expData = DEFAULT_WITH_QUOTES_EXP_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT_WITH_QUOTES + DEFAULT_CLOSING);
+        this.setState(DEFAULT_WITH_QUOTES + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -245,7 +341,7 @@ public class HtmlAttributeParserTest {
         HtmlAttribute expData = DEFAULT_CLOSING_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT_WITH_QUOTES + DEFAULT_CLOSING);
+        this.setState(DEFAULT_WITH_QUOTES + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -261,7 +357,7 @@ public class HtmlAttributeParserTest {
         String expData = ">";
         String data;
         
-        this.setState(DEFAULT_WITH_QUOTES + DEFAULT_CLOSING);
+        this.setState(DEFAULT_WITH_QUOTES + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -277,7 +373,7 @@ public class HtmlAttributeParserTest {
         HtmlAttribute expData = DEFAULT_CLOSING_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT_CLOSING);
+        this.setState(SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -373,7 +469,7 @@ public class HtmlAttributeParserTest {
         HtmlAttribute expData = DEFAULT_WITH_VALUE_EXP_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT_MULTIPLE + DEFAULT_CLOSING);
+        this.setState(DEFAULT_MULTIPLE + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -389,7 +485,7 @@ public class HtmlAttributeParserTest {
         HtmlAttribute expData = DEFAULT_WITH_QUOTES_EXP_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT_MULTIPLE + DEFAULT_CLOSING);
+        this.setState(DEFAULT_MULTIPLE + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -405,7 +501,7 @@ public class HtmlAttributeParserTest {
         HtmlAttribute expData = DEFAULT_CLOSING_ATTR;
         HtmlAttribute data;
         
-        this.setState(DEFAULT_MULTIPLE + DEFAULT_CLOSING);
+        this.setState(DEFAULT_MULTIPLE + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -422,7 +518,7 @@ public class HtmlAttributeParserTest {
         String expData = ">";
         String data;
         
-        this.setState(DEFAULT_MULTIPLE + DEFAULT_CLOSING);
+        this.setState(DEFAULT_MULTIPLE + SELF_CLOSING);
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -439,7 +535,7 @@ public class HtmlAttributeParserTest {
         int data;
         
         this.setState("some data that represent scripting = data $ with @ some values present>");
-        this.result.setName(HtmlAttributeParser.scriptAttributesName);
+        this.result.setName(MarkupTagNames.SCRIPT_TAG.toString());
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -456,7 +552,7 @@ public class HtmlAttributeParserTest {
         String data;
         
         this.setState("some data that represnts scripting = data $ with @ some values present>");
-        this.result.setName(HtmlAttributeParser.scriptAttributesName);
+        this.result.setName(MarkupTagNames.SCRIPT_TAG.toString());
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -473,7 +569,7 @@ public class HtmlAttributeParserTest {
         String data;
         
         this.setState(expData + ">");
-        this.result.setName(HtmlAttribute.commentAttributesName);
+        this.result.setName(MarkupTagNames.COMMENT_TAG.toString());
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -493,7 +589,7 @@ public class HtmlAttributeParserTest {
         boolean data;
         
         this.setState(commentData + ">");
-        this.result.setName(HtmlAttribute.commentAttributesName);
+        this.result.setName(MarkupTagNames.COMMENT_TAG.toString());
         
         // Apply
         this.parser.parse(this.input, this.result);
@@ -513,7 +609,7 @@ public class HtmlAttributeParserTest {
         int data;
         
         this.setState(commentData + ">");
-        this.result.setName(HtmlAttribute.commentAttributesName);
+        this.result.setName(MarkupTagNames.COMMENT_TAG.toString());
         
         // Apply
         this.parser.parse(this.input, this.result);

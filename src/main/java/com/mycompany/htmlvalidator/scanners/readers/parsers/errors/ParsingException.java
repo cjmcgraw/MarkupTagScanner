@@ -105,4 +105,9 @@ public class ParsingException extends RuntimeException implements HtmlData{
         String missingMsg = "**MISSING**";
         return (this.validHtmlData()) ? this.htmlData.toString() : missingMsg;
     }
+
+    @Override
+    public boolean isSelfClosing() {
+        return true;
+    }
 }

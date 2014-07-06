@@ -4,7 +4,7 @@ import java.io.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public abstract class DataParser extends HtmlParser {
+public abstract class DataParser extends HtmlParser<HtmlData> {
     protected MutableHtmlData result;
     
     protected char readNext() throws IOException {
@@ -18,9 +18,9 @@ public abstract class DataParser extends HtmlParser {
     public abstract HtmlData parse(PushbackAndPositionReader input) throws IOException;
     
     protected boolean validateChar(char c) throws IOException {
-        if(isCloseTagEnclosure(c))
+        if(isClosingTag(c))
             this.closeTagRead(c);
-        else if (isOpenTagEnclosure(c))
+        else if (isOpeningTag(c))
             this.openTagRead(c);
         
         return true;

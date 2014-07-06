@@ -2,6 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
 import java.io.IOException;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.MissingEnclosureParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
@@ -43,17 +44,18 @@ public class HtmlQuoteEnclosureParser extends HtmlUtilityParser {
     
     private void parseQuotedData() throws IOException {
         char c;
-        while (!isQuoteTagEnclosure(c = this.readNext()))
+        while (!isQuoteEnclosure(c = this.readNext()))
             this.updateQuoteData(c);
         
         this.unread(c);
     }
     
     private void validateEnclosure(char c) throws IOException {
-        if( !isQuoteTagEnclosure(c)) {
+        if( !isQuoteEnclosure(c)) {
             this.unread(c);
+            MarkupTag tag = MarkupTag.getTag(c);
             throw new MissingEnclosureParsingException(this.input.getPosition(),
-                                                       DOUBLE_QUOTE_TAG_ENCLOSURE, 
+                                                       (tag != null ? tag.toChar() : '?'), 
                                                        this.result);
         }
     }

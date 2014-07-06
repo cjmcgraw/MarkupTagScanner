@@ -1,12 +1,8 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
+
 public class HtmlAttribute {
-    public static final String scriptAttributesName = "Script";
-    public static final String commentAttributesName = "!--";
-    public static final char attributeSeparator = ' ';
-    public static final char attributeSplitter = '=';
-    
-    public static final String CLOSING_TAG = "" + DataParser.CLOSING_TAG;
     public static final String DEFAULT_CLOSING_NAME = "self-closing";
     public static final String DEFAULT_EMPTY_VALUES = "";
     
@@ -32,7 +28,7 @@ public class HtmlAttribute {
     }
     
     public void setName(String name) {
-        if (name.equals(CLOSING_TAG)) {
+        if (MarkupTag.CLOSING_ATTRIBUTE.equals(name)) {
             this.attributeName = DEFAULT_CLOSING_NAME;
             this.setValue(DEFAULT_EMPTY_VALUES);
         }else
@@ -83,8 +79,8 @@ public class HtmlAttribute {
     }
     
     public String toString() {
-        String name = (this.isClosingFlag()) ? CLOSING_TAG : this.attributeName;
-        String value = (this.hasValue()) ? attributeSplitter + this.attributeValue : "";
+        String name = (this.isClosingFlag()) ? MarkupTag.CLOSING_ATTRIBUTE.toString() : this.attributeName;
+        String value = (this.hasValue()) ? MarkupTag.ATTRIBUTE_VALUE_SEPARATOR.toString() + this.attributeValue : "";
         return name + value;
     }
     

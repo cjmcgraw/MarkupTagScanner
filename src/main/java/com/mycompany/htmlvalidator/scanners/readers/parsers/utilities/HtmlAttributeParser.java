@@ -2,17 +2,15 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
 import java.io.IOException;
 
+import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.MissingEnclosureParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.WhitespaceConsumer;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlAttributeParser extends HtmlUtilityParser {
-    public static final String scriptAttributesName = HtmlAttribute.scriptAttributesName;
-    public static final String commentAttributesName = HtmlAttribute.commentAttributesName;
-    public static final char attributeSeparator = HtmlAttribute.attributeSeparator;
-    public static final char attributeSplitter = HtmlAttribute.attributeSplitter;
-    
+    private WhitespaceConsumer consumer = new WhitespaceConsumer();
     private HtmlQuoteEnclosureParser parser = new HtmlQuoteEnclosureParser();
     private char currChar;
     
@@ -30,10 +28,14 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
     }
     
     private void parseAttributes() throws IOException {
-        if(result.getName().equals(scriptAttributesName))
+        String name = result.getName();
+        
+        if(MarkupTagNames.SCRIPT_TAG.equals(name))
             this.cycleScriptData();
-        else if(result.getName().equals(commentAttributesName))
+        
+        else if(MarkupTagNames.COMMENT_TAG.equals(name))
             this.parseCommentData();
+        
         else
             this.parseAttributesData();
     }
@@ -62,14 +64,14 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
     }
     
     private void parseAttributesData() throws IOException {
-        while(this.isSeparator() || this.isClosingTag()) {
+        while(this.isSeparator() || this.isClosingAttribute()) {
             HtmlAttribute attr = this.parseAttribute();
             this.result.updateAttributes(attr);
         }
     }
     
     private void parseCloseTag() throws IOException {
-        if (!isCloseTagEnclosure(this.currChar))
+        if (!isClosingTag(this.currChar))
             throw new MissingEnclosureParsingException(this.input.getPosition(), this.currChar, this.result);
     }
     
@@ -80,7 +82,7 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
     }
     
     private String parseAttributeName() throws IOException {
-        if(this.isClosingTag())
+        if(this.isClosingAttribute())
             return this.parseAttributeNameClosingTag();
         else
             return this.parseAttributeNameData();
@@ -89,7 +91,7 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
     private String parseAttributeNameClosingTag() throws IOException {
         this.readNext();
         this.validateChar();
-        return "" + CLOSING_TAG;
+        return MarkupTag.CLOSING_ATTRIBUTE.toString();
     }
     
     private String parseAttributeNameData() throws IOException {
@@ -156,19 +158,19 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
         return (this.validateChar() && 
                 !this.isSeparator() &&
                 !this.isSplitPoint() &&
-                !this.isClosingTag());
+                !this.isClosingAttribute());
     }
     
     private boolean isSeparator() {
-        return this.currChar == attributeSeparator;
+        return this.currChar == ' ';
     }
     
     private boolean isSplitPoint() {
-        return this.currChar == attributeSplitter;
+        return MarkupTag.ATTRIBUTE_VALUE_SEPARATOR.equals(this.currChar);
     }
     
     private boolean isQuoteEnclosure() {
-        return isQuoteTagEnclosure(this.currChar);
+        return isQuoteEnclosure(this.currChar);
     }
     
     private boolean validateChar() throws IOException {
@@ -181,13 +183,13 @@ public class HtmlAttributeParser extends HtmlUtilityParser {
         return result;
     }
     
-    private boolean isClosingTag() throws IOException {
-        return isClosingTag(this.currChar);
+    private boolean isClosingAttribute() throws IOException {
+        return isClosingAttribute(this.currChar);
     }
     
     @Override
     public void setState(PushbackAndPositionReader input, MutableHtmlData result) {
         super.setState(input, result);
-        this.currChar = attributeSeparator;
+        this.currChar = ' ';
     }
 }

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
+
 public class MutableHtmlData implements HtmlData{
-    public final static char closeTag = HtmlParser.CLOSE_TAG_ENCLOSURE;
-    public final static char openTag = HtmlParser.OPEN_TAG_ENCLOSURE;
     public final static String ELIPSIS = "...";
     public final int MAX_NUM_ATTR_IN_STRING = 2;
     
@@ -79,18 +79,27 @@ public class MutableHtmlData implements HtmlData{
         return this.isClosing;
     }
     
+    public boolean isSelfClosing() {
+        HtmlAttribute terminalAttr = this.attributes.get(this.attributes.size());
+        return terminalAttr.isClosingFlag();
+    }
+    
     public void setIsClosing(boolean isClosing) {
         this.isClosing = isClosing;
     }
     
     public String toString() {
-        String result = this.hasOpeningTag ? "" + openTag : "[" + openTag + "]";  
+        String open = MarkupTag.OPENING_TAG.toString();
+        String close = MarkupTag.CLOSING_TAG.toString();
+        String close_attr = MarkupTag.CLOSING_ATTRIBUTE.toString();
+        
+        String result = this.hasOpeningTag ? "" + open : "[" + open + "]";  
                 
-        result += (this.isClosing) ? "/" : "";
+        result += (this.isClosing) ? close_attr : "";
         result += this.getName();
         result += " ";
         result += getAttributeString();
-        result += this.hasClosingTag ? closeTag : "[" + closeTag + "]";
+        result += this.hasClosingTag ? close : "[" + close + "]";
         
         return result;
     }

@@ -3,12 +3,11 @@ package com.mycompany.htmlvalidator.scanners.readers;
 import java.io.*;
 import java.util.*;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
 public class HtmlBufferedReader implements HtmlReader{
-    private static final Set<Character> TAG_ENCLOSURES = DataParser.TAG_ENCLOSURES;
-    
     private PushbackAndPositionReader reader;
     private boolean emptyReader;
     private DataParser parser;
@@ -119,7 +118,7 @@ public class HtmlBufferedReader implements HtmlReader{
     }
     
     private boolean isTagEnclosure() {
-        return TAG_ENCLOSURES.contains(this.currChar);
+        return MarkupTag.OPENING_TAG.equals(this.currChar) || MarkupTag.CLOSING_TAG.equals(this.currChar);
     }
     
     private void updateState(HtmlData data) {

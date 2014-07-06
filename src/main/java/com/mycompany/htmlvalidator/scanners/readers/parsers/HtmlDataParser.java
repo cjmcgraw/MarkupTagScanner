@@ -2,6 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import java.io.IOException;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
@@ -59,10 +60,11 @@ public class HtmlDataParser extends DataParser{
     private void readOpenTag() throws IOException {
         char c = this.readNext();
         
-        if (!DataParser.isOpenTagEnclosure(c)) {
+        if (!isOpeningTag(c)) {
             this.unread(c);
+            MarkupTag tag = MarkupTag.getTag(c);
             throw new MissingEnclosureParsingException(input.getPosition(), 
-                                                       DataParser.OPEN_TAG_ENCLOSURE,
+                                                       (tag != null ? MarkupTag.CLOSING_TAG.toChar() : '?'),
                                                        this.result);
         }
         this.result.confirmOpeningTag();
@@ -83,7 +85,7 @@ public class HtmlDataParser extends DataParser{
     private void readCloseTag() throws IOException {
         char c = this.readNext();
         
-        if (!isCloseTagEnclosure(c)) {
+        if (!isClosingTag(c)) {
             this.openTagRead(c);
         }
         this.result.confirmClosingTag();

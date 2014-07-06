@@ -4,11 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
+
 public class HtmlAttributeTest {
     public static final String DEFAULT_NAME = "some name";
     public static final String DEFAULT_VALUE = "some value";
     public static final String EMPTY_VALUE = HtmlAttribute.DEFAULT_EMPTY_VALUES;
-    public static final String CLOSING_NAME = HtmlAttribute.CLOSING_TAG;
     
     private HtmlAttribute attribute;
     
@@ -127,7 +128,7 @@ public class HtmlAttributeTest {
         boolean expData = true;
         boolean data;
         
-        this.setState(CLOSING_NAME);
+        this.setState(MarkupTag.CLOSING_ATTRIBUTE.toString());
         
         // Apply
         data = this.attribute.isClosingFlag();
@@ -157,7 +158,7 @@ public class HtmlAttributeTest {
         boolean expData = true;
         boolean data;
         
-        this.attribute.setName(CLOSING_NAME);
+        this.attribute.setName(MarkupTag.CLOSING_ATTRIBUTE.toString());
         
         // Apply
         data = this.attribute.isClosingFlag();
@@ -172,7 +173,7 @@ public class HtmlAttributeTest {
         boolean expData = false;
         boolean data;
         
-        this.setState(CLOSING_NAME);
+        this.setState(MarkupTag.CLOSING_ATTRIBUTE.toString());
         
         this.attribute.setName(DEFAULT_NAME);
         
@@ -231,7 +232,7 @@ public class HtmlAttributeTest {
     @Test
     public void testToString_StandardName_StandardValue() {
         // Arrange
-        String expData = DEFAULT_NAME + HtmlAttribute.attributeSplitter + DEFAULT_VALUE;
+        String expData = DEFAULT_NAME + MarkupTag.ATTRIBUTE_VALUE_SEPARATOR.toString() + DEFAULT_VALUE;
         String data;
         
         // Apply
@@ -259,7 +260,7 @@ public class HtmlAttributeTest {
     @Test
     public void testToString_NoName_StandardValue() {
         // Arrange
-        String expData = HtmlAttribute.attributeSplitter + DEFAULT_VALUE;
+        String expData = MarkupTag.ATTRIBUTE_VALUE_SEPARATOR.toString() + DEFAULT_VALUE;
         String data;
         
         HtmlAttribute attr = new HtmlAttribute();
@@ -290,10 +291,10 @@ public class HtmlAttributeTest {
     @Test
     public void testToString_ClosingName() {
         // Arrange
-        String expData = HtmlAttribute.CLOSING_TAG;
+        String expData = MarkupTag.CLOSING_ATTRIBUTE.toString();
         String data;
         
-        this.attribute.setName(CLOSING_NAME);
+        this.attribute.setName(expData);
         
         // Apply
         data = this.attribute.toString();

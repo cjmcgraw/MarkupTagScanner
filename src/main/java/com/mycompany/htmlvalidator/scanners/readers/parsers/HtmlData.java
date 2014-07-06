@@ -10,6 +10,8 @@ public interface HtmlData {
     
     public boolean isClosing();
     
+    public boolean isSelfClosing();
+    
     public boolean hasOpeningTag();
     
     public boolean hasClosingTag();

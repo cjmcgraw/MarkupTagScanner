@@ -32,7 +32,7 @@ public class WhitespaceConsumerTest {
         String data;
         
         // Apply
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         data = this.input.getRemainingData();
         
         // Assert
@@ -48,7 +48,7 @@ public class WhitespaceConsumerTest {
         String data;
         
         // Apply
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         data = this.input.getRemainingData();
         
         // Assert
@@ -64,7 +64,7 @@ public class WhitespaceConsumerTest {
         String data;
         
         // Apply
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         data = this.input.getRemainingData();
         
         // Assert
@@ -80,7 +80,7 @@ public class WhitespaceConsumerTest {
         String data;
         
         // Apply
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         data = "" + (char) this.input.read();
         
         // Assert
@@ -95,11 +95,11 @@ public class WhitespaceConsumerTest {
         String expData = SECOND_VALUE;
         String data;
         
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         this.input.read();
         
         // Apply
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         data = "" + (char) this.input.read();
         
         // Assert
@@ -114,13 +114,13 @@ public class WhitespaceConsumerTest {
         String expData = THIRD_VALUE;
         String data;
         
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         this.input.read();
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         this.input.read();
         
         // Apply
-        this.consumer.consume(input);
+        this.consumer.parse(input);
         data = "" + (char) this.input.read();
         
         // Assert
