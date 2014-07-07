@@ -33,4 +33,8 @@ public abstract class InputParser<T> {
     protected Point currentPosition() {
         return this.input.getPosition();
     }
+    
+    protected boolean isWhitespace(char c) {
+        return Character.isWhitespace(c);
+    }
 }
