@@ -241,6 +241,21 @@ public class WhitespaceConsumerTest {
         assertEquals(expData, data);
     }
     
+    @Test
+    public void testConsume_ContainsNoWhitespace_ExpectedNumberReturnedRepresentsSpacesParsed() throws IOException {
+        // Arrange
+        this.setState(FIRST_VALUE + SECOND_VALUE + THIRD_VALUE);
+        
+        int expData = 0;
+        int data;
+        
+        // Apply
+        data = this.consumer.parse(input);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
     @Test(expected=EOFException.class)
     public void testConsume_InputContainsOnlyWhitespace_ThrowsEOFException() throws IOException {
         // Arrange
