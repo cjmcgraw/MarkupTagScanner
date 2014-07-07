@@ -2,11 +2,10 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import java.io.*;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public abstract class DataParser extends InputParser<HtmlData> {
+public abstract class DataParser extends MarkupParser<HtmlData> {
     protected MutableHtmlData result;
     
     protected char readNext() throws IOException {
@@ -51,25 +50,5 @@ public abstract class DataParser extends InputParser<HtmlData> {
     protected void clearState() {
         super.clearState();
         this.result = null;
-    }
-    
-    protected boolean isClosingTag(char c) {
-        return MarkupTag.CLOSING_TAG.equals(c);
-    }
-    
-    protected boolean isOpeningTag(char c) {
-        return MarkupTag.OPENING_TAG.equals(c);
-    }
-    
-    protected boolean isClosingAttribute(char c) {
-        return MarkupTag.CLOSING_ATTRIBUTE.equals(c);
-    }
-    
-    protected boolean isQuoteEnclosure(char c) {
-        return MarkupTag.isQuoteEnclosure(c);
-    }
-    
-    protected boolean isTagEnclosure(char c) {
-        return MarkupTag.isTagEnclosure(c);
     }
 }
