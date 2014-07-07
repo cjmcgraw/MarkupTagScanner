@@ -2,7 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.component
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 import org.junit.*;
@@ -40,6 +40,21 @@ public class WhitespaceConsumerTest {
     }
     
     @Test
+    public void testConsume_WithLeaderSpaces_ExpectedNumberReturnedRepresentingSpacesParsed() throws IOException {
+        // Arrange
+        this.setState(SPACE_SEPARATOR + FIRST_VALUE);
+        
+        int expData = SPACE_SEPARATOR.length();
+        int data;
+        
+        // Apply
+        data = this.consumer.parse(input);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testConsume_WithLeadingTabs_ExpectedDataRemains() throws IOException {
         // Arrange
         this.setState(TAB_SEPARATOR + FIRST_VALUE);
@@ -56,6 +71,21 @@ public class WhitespaceConsumerTest {
     }
     
     @Test
+    public void testConsume_WithLeadingTabs_ExpectedNumberReturnedRepresentingSpacesParsed() throws IOException {
+        // Arrange
+        this.setState(TAB_SEPARATOR + FIRST_VALUE);
+        
+         int expData = TAB_SEPARATOR.length();
+         int data;
+         
+         // Apply
+         data = this.consumer.parse(input);
+         
+         // Assert
+         assertEquals(expData, data);
+    }
+    
+    @Test
     public void testConsume_WithLeadingNewline_ExpectedDataRemains() throws IOException {
         // Arrange
         this.setState(NEWLINE_SEPARATOR + FIRST_VALUE);
@@ -66,6 +96,21 @@ public class WhitespaceConsumerTest {
         // Apply
         this.consumer.parse(input);
         data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testConsume_WithLeadingNewline_ExpectedNumberReturnedRepresentingSpacesParsed() throws IOException {
+        // Arrange
+        this.setState(NEWLINE_SEPARATOR + FIRST_VALUE);
+        
+        int expData = NEWLINE_SEPARATOR.length();
+        int data;
+        
+        // Apply
+        data = this.consumer.parse(input);
         
         // Assert
         assertEquals(expData, data);
@@ -88,6 +133,21 @@ public class WhitespaceConsumerTest {
     }
     
     @Test
+    public void testConsume_ConsecutiveConsumes_FirstConsume_ExpectedNumberReturnedRepresentingSpacesParsed() throws IOException {
+        // Arrange
+        this.setState(MIXED_DATA);
+        
+        int expData = SPACE_SEPARATOR.length();
+        int data;
+        
+        // Apply
+        data = this.consumer.parse(input);
+        
+        // assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testConsume_ConsecutiveConsumes_SecondConsumeSecondRead_DataIsSecondValue() throws IOException {
         // Arrange
         this.setState(MIXED_DATA);
@@ -101,6 +161,24 @@ public class WhitespaceConsumerTest {
         // Apply
         this.consumer.parse(input);
         data = "" + (char) this.input.read();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testConsume_ConsecutiveConsumes_SecondConsume_ExpectedNumberReturnedRepresentingSpacesParsed() throws IOException {
+        // Arrange
+        this.setState(MIXED_DATA);
+        
+        int expData = TAB_SEPARATOR.length();
+        int data;
+        
+        this.consumer.parse(input);
+        this.input.read();
+        
+        // Apply
+        data = this.consumer.parse(input);
         
         // Assert
         assertEquals(expData, data);
@@ -125,6 +203,60 @@ public class WhitespaceConsumerTest {
         
         // Assert
         assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testConsume_ConsecutiveConsumes_ThirdConsume_ExpectedNumberReturnedRepresentingSpacesParsed() throws IOException {
+        // Arrange
+        this.setState(MIXED_DATA);
+        
+        int expData = NEWLINE_SEPARATOR.length();
+        int data;
+        
+        this.consumer.parse(input);
+        this.input.read();
+        this.consumer.parse(input);
+        this.input.read();
+        
+        // Apply
+        data = this.consumer.parse(input);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testConsume_ContainsNoWhitespace_DataRemainsUnchanged() throws IOException {
+        // Arrange
+        String expData = FIRST_VALUE + SECOND_VALUE + THIRD_VALUE;
+        String data;
+        
+        this.setState(expData);
+        
+        // Apply
+        this.consumer.parse(input);
+        data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EOFException.class)
+    public void testConsume_InputContainsOnlyWhitespace_ThrowsEOFException() throws IOException {
+        // Arrange
+        this.setState(SPACE_SEPARATOR + TAB_SEPARATOR + NEWLINE_SEPARATOR);
+        
+        // Apply + Assert
+        this.consumer.parse(input);
+    }
+    
+    @Test(expected=EOFException.class)
+    public void testConsume_EmptyInput_ThrowsEOFException() throws IOException {
+        // Arrange
+        this.setState("");
+        
+        // Apply + Assert
+        this.consumer.parse(input);
     }
     
     public void setState(String s) {
