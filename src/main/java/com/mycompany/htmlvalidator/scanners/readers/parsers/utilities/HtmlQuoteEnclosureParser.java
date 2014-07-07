@@ -64,4 +64,8 @@ public class HtmlQuoteEnclosureParser extends HtmlUtilityParser {
         super.setState(input, result);
         this.setQuoteData(new StringBuilder());
     }
+    
+    public boolean isQuoteEnclosure(char c) {
+        return MarkupTag.isQuoteEnclosure(c);
+    }
 }

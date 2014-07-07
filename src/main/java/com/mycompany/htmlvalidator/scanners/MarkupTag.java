@@ -55,4 +55,12 @@ public enum MarkupTag {
         }
         return null;
     }
+    
+    public static boolean isTagEnclosure(char c) {
+        return MarkupTag.OPENING_TAG.equals(c) || MarkupTag.CLOSING_TAG.equals(c);
+    }
+    
+    public static boolean isQuoteEnclosure(char c) {
+        return MarkupTag.SINGLE_QUOTE.equals(c) || MarkupTag.DOUBLE_QUOTE.equals(c);
+    }
 }

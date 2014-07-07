@@ -2,12 +2,9 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import java.awt.Point;
 import java.io.*;
-import java.util.*;
-
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
-public abstract class HtmlParser<T> {
+public abstract class InputParser<T> {
     protected PushbackAndPositionReader input;
     
     public abstract T parse(PushbackAndPositionReader input) throws IOException;
@@ -35,29 +32,5 @@ public abstract class HtmlParser<T> {
     
     protected Point currentPosition() {
         return this.input.getPosition();
-    }
-    
-    protected boolean isTagEnclosure(char c) {
-        return MarkupTag.OPENING_TAG.equals(c) || MarkupTag.CLOSING_TAG.equals(c);
-    }
-    
-    protected boolean isQuoteEnclosure(char c) {
-        return MarkupTag.SINGLE_QUOTE.equals(c) || MarkupTag.DOUBLE_QUOTE.equals(c);
-    }
-    
-    protected boolean isOpeningTag(char c) {
-        return MarkupTag.OPENING_TAG.equals(c);
-    }
-    
-    protected boolean isClosingTag(char c) {
-        return MarkupTag.CLOSING_TAG.equals(c);
-    }
-    
-    protected boolean isClosingAttribute(char c) {
-        return MarkupTag.CLOSING_ATTRIBUTE.equals(c);
-    }
-    
-    protected boolean isAttributeValueSeparator(char c) {
-        return MarkupTag.ATTRIBUTE_VALUE_SEPARATOR.equals(c);
     }
 }
