@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
+package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components;
 
 import static org.junit.Assert.*;
 
@@ -274,7 +274,7 @@ public class HtmlQuoteEnclosureParserTest {
     }
     
     @Test
-    public void testParse_InvalidValueMissingStartQuoteQuote_AllDataRemainingInInput() throws IOException {
+    public void testParse_InvalidValueMissingStartQuote_AllDataRemainingInInput() throws IOException {
         // Arrange
         String expData = DEFAULT_REMAINING_DATA + MarkupTag.DOUBLE_QUOTE;
         String data = "";
