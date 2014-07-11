@@ -22,7 +22,7 @@ public class MissingCharacterComponentException extends ComponentException {
     
     @Override
     public String getErrorMessage() {
-        String msg = String.format(MISSING_CHAR_MSG, this.missing, this.position);
+        String msg = String.format(MISSING_CHAR_MSG, this.position, this.missing);
         return String.format(DEFAULT_ERROR_MESSAGE, msg);
     }
     
