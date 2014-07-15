@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.scanners.readers.parsers.errors;
+package com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions;
 
 import java.awt.Point;
 import java.util.ArrayList;

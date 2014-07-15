@@ -1,10 +1,9 @@
-package com.mycompany.htmlvalidator.scanners.readers.parsers.errors;
+package com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions;
 
 import java.awt.Point;
 
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.DataParser;
 
 public class UnexpectedCloseTagParsingException extends ParsingException {
     private static final long serialVersionUID = 5703077562778043822L;
