@@ -1,8 +1,10 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions;
 
-public abstract class ComponentException extends RuntimeException {
+import com.mycompany.htmlvalidator.exceptions.MarkupError;
+
+public abstract class ComponentException extends RuntimeException implements MarkupError{
     private static final long serialVersionUID = 8968887910665038407L;
-    protected static final String DEFAULT_ERROR_MESSAGE = "ERORR: Component Error in tag -> %s";
+    protected static final String DEFAULT_ERROR_MESSAGE = "ERROR: Component Error in tag -> %s";
     
     public abstract String getErrorMessage();
     
@@ -11,4 +13,5 @@ public abstract class ComponentException extends RuntimeException {
     public String toString() {
         return this.getErrorMessage();
     }
+    
 }
