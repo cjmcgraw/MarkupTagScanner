@@ -1,8 +1,9 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
+import com.mycompany.htmlvalidator.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 
-public class HtmlAttribute {
+public class HtmlAttribute extends HtmlErrorReporter{
     public static final String DEFAULT_CLOSING_NAME = "self-closing";
     public static final String DEFAULT_EMPTY_VALUES = "";
     
@@ -10,8 +11,7 @@ public class HtmlAttribute {
     private String attributeValue;
     
     public HtmlAttribute() {
-        this.attributeName = DEFAULT_EMPTY_VALUES;
-        this.attributeValue = DEFAULT_EMPTY_VALUES;
+        this(DEFAULT_EMPTY_VALUES);
     }
     
     public HtmlAttribute(String name) {
@@ -58,23 +58,23 @@ public class HtmlAttribute {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result
-                 + ((attributeName == null) ? 0 : attributeName.hashCode());
-        result = prime * result
-                 + ((attributeValue == null) ? 0 : attributeValue.hashCode());
+        result = prime * result + ((attributeName == null) ? 0 : attributeName.hashCode());
+        result = prime * result + ((attributeValue == null) ? 0 : attributeValue.hashCode());
+        result = prime * result + (super.hashCode());
         return result;
     }
 
     public boolean equals(Object other) {
         if (other instanceof HtmlAttribute)
-            return equals( (HtmlAttribute) other);
+            return equals((HtmlAttribute) other);
         else
             return super.equals(other);
     }
     
     public boolean equals(HtmlAttribute other) {
         boolean result = (this.nameIs(other.attributeName) &&
-                          this.valueIs(other.attributeValue));
+                          this.valueIs(other.attributeValue) &&
+                          super.equals(other));
         return result;
     }
     
