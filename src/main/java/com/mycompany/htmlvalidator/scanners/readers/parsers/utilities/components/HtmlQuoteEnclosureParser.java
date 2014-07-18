@@ -4,9 +4,12 @@ import java.io.*;
 import java.util.*;
 
 import com.mycompany.htmlvalidator.scanners.*;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {
+    private static final String CLASS_NAME = "HtmlQuoteEnclosureParser";
+    private static final String FIELD_NAME = "quoteData";
     private static final Collection<EnclosureTags> VALID_ENCLOSURES= 
             Arrays.asList(EnclosureTags.SINGLE_QUOTE_ENCLOSURE,
                           EnclosureTags.DOUBLE_QUOTE_ENCLOSURE);
@@ -25,6 +28,7 @@ public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {
     
     @Override
     protected String getData() {
+        this.validateState();
         return this.quoteData.toString();
     }
     
@@ -37,25 +41,25 @@ public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {
         this.parseOpenQuote();
         this.parseQuotedData();
         this.parseCloseQuote();
-        return this.quoteData.toString();
+        return this.getData();
     }
     
     private void parseOpenQuote() throws IOException {
         char c = this.read();
         this.setAndValidateOpening(c);
-        this.quoteData.append(c);
+        this.appendData(c);
     }
     
     private void parseCloseQuote() throws IOException {
         char c = this.read();
         this.validateClosing(c);
-        this.quoteData.append(c);
+        this.appendData(c);
     }
     
     private void parseQuotedData() throws IOException {
         char c = this.read();
         while (!this.isClosing(c)) {
-            this.quoteData.append(c);
+            this.appendData(c);
             c = this.read();
         }
         this.unread(c);
@@ -71,5 +75,19 @@ public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {
     protected void clearState() {
         super.clearState();
         this.quoteData = null;
+    }
+    
+    private void appendData(char c) {
+        this.validateState();
+        this.quoteData.append(c);
+    }
+    
+    private void validateState() {
+        if(this.isMissingState())
+            throw new InvalidStateException(CLASS_NAME, FIELD_NAME);
+    }
+    
+    private boolean isMissingState() {
+        return this.quoteData == null;
     }
 }

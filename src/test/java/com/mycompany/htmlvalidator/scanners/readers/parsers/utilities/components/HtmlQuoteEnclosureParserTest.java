@@ -8,7 +8,6 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.HtmlQuoteEnclosureParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.MissingCharacterComponentException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
@@ -402,12 +401,12 @@ public class HtmlQuoteEnclosureParserTest {
             this.inputData.add(data.charAt(i));
         
         this.input = new PushbackAndPositionReaderMock(this.inputData);
-        new MutableHtmlData();
     }
     
     @After
     public void clearState() {
         this.inputData = null;
         this.input = null;
+        this.parser.clearState();
     }
 }
