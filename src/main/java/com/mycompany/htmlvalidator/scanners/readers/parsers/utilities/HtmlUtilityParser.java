@@ -12,7 +12,6 @@ public abstract class HtmlUtilityParser extends DataParser{
     @Override
     public HtmlData parse(PushbackAndPositionReader input) throws IOException {
         MutableHtmlData result = new MutableHtmlData();
-        this.setState(input, result);
         return this.parse(input, result);
     }
     
