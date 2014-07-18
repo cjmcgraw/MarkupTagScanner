@@ -12,5 +12,4 @@ public class UnexpectedCloseTagParsingException extends ParsingException {
     public UnexpectedCloseTagParsingException(Point position, HtmlData result) {
         super(position, result, MarkupTag.CLOSING_TAG.toChar(), defaultMsg);
     }
-    
 }
