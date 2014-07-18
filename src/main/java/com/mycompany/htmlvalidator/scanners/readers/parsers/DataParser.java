@@ -2,10 +2,12 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import java.io.*;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.*;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class DataParser extends MarkupParser<HtmlData> {
+    private static final String CLASS_NAME = "DataParser";
+    private static final String FIELD_NAME = "result";
     protected MutableHtmlData result;
     
     protected char readNext() throws IOException {
@@ -50,5 +52,14 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
     protected void clearState() {
         super.clearState();
         this.result = null;
+    }
+    
+    private void validateState() {
+        if (this.isMissingState())
+            throw new InvalidStateException(CLASS_NAME, FIELD_NAME);
+    }
+    
+    private boolean isMissingState() {
+        return result == null;
     }
 }
