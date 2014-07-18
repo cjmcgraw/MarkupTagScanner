@@ -8,7 +8,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.EndOfInputParsingException;
 
 public class MutableHtmlTagTest {
     public static final String DEFAULT_NAME = "defaultName";
