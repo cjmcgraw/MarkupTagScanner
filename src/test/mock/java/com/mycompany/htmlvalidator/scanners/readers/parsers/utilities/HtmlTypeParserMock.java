@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.ParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.ParsingException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class HtmlTypeParserMock extends HtmlUtilityParser {

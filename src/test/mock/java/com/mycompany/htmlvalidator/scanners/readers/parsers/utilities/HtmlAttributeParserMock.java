@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.ParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.ParsingException;
 
 public class HtmlAttributeParserMock extends HtmlTypeParserMock {
     private List<HtmlAttribute> data;

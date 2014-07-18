@@ -1,6 +1,6 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.ParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.ParsingException;
 
 public class HtmlClosingParserMock extends HtmlTypeParserMock {    
     private boolean data;
