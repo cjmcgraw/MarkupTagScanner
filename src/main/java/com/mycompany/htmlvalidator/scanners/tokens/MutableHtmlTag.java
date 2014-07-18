@@ -7,7 +7,7 @@ import java.util.HashSet;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.ParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.ParsingException;
 
 public class MutableHtmlTag implements HtmlTag{
     public final static Set<String> SELF_CLOSING_TAGS = new HashSet<String>(
