@@ -1,7 +1,6 @@
 package com.mycompany.htmlvalidator.scanners;
 
 public enum MarkupTagNames {   
-    SCRIPT_TAG      ("script"),
     COMMENT_TAG     ("!--", "--");
     
     private static final String EMPTY_NAME = "";
@@ -20,7 +19,19 @@ public enum MarkupTagNames {
     }
     
     public boolean equals(String name) {
+        return this.isOpening(name);
+    }
+    
+    public boolean isOpening(String name) {
         return this.beginName.equals(name);
+    }
+    
+    public boolean isClosing(String name) {
+        return this.endName.equals(name);
+    }
+    
+    public String getBeginName() {
+        return this.beginName;
     }
     
     public String getEndName() {
