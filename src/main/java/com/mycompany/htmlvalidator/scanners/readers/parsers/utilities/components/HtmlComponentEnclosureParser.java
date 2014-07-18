@@ -5,10 +5,14 @@ import java.util.Collection;
 
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MarkupParser;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.MissingCharacterComponentException;
 
 public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> {
-    private EnclosureTags enclosure;
+    private final static String CLASS_NAME = "HtmlComponentEnclosureParser";
+    private final static String FIELD_NAME = "enclosure";
+    
+    protected EnclosureTags enclosure;
     
     protected abstract String getData();
     
@@ -32,7 +36,7 @@ public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> 
     }
     
     private boolean validateOpenEnclosure(char c) throws IOException {
-        if(this.enclosure == null) {
+        if(this.isMissingState()) {
             char ch = getValidOpeningEnclosure();
             String data = getData();
             this.unread(c);
@@ -49,29 +53,42 @@ public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> 
     
     protected boolean validateClosing(char c) throws IOException {
         MarkupTag tag = MarkupTag.getTag(c);
-        return this.validateCloseEnclosure(tag);
-    }
-    
-    private boolean validateCloseEnclosure(MarkupTag tag) throws IOException {
-        MarkupTag expectedTag = this.enclosure.getClosing();
+        MarkupTag expectedTag = this.getCurrentEnclosureClosing();
         
-        if (expectedTag != tag) {
-            char ch = tag.toChar();
+        if (tag == null || expectedTag != tag) {
             String data = getData();
-            this.unread(tag.toChar());
-            throw new MissingCharacterComponentException(ch, this.currentPosition(), data);
+            this.unread(c);
+            throw new MissingCharacterComponentException(c, this.currentPosition(), data);
         }
-        
         return expectedTag == tag;
     }
     
     protected boolean isClosing(char c) {
         MarkupTag tag = MarkupTag.getTag(c);
-        return this.enclosure.isClosing(tag);
+        return this.matchesCurrentEnclosureClosing(tag);
     }
     
     protected boolean isOpening(char c) {
         MarkupTag tag = MarkupTag.getTag(c);
         return this.findMatchingEnclosure(tag) != null;
+    }
+    
+    private MarkupTag getCurrentEnclosureClosing() {
+        this.validateState();
+        return this.enclosure.getClosing();
+    }
+    
+    private boolean matchesCurrentEnclosureClosing(MarkupTag tag) {
+        this.validateState();
+        return this.enclosure.isClosing(tag);
+    }
+    
+    private void validateState() {
+        if(this.isMissingState())
+            throw new InvalidStateException(CLASS_NAME, FIELD_NAME);
+    }
+    
+    private boolean isMissingState() {
+        return this.enclosure == null;
     }
 }
