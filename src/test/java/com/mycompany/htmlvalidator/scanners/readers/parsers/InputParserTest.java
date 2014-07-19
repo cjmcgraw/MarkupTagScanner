@@ -16,13 +16,12 @@ public class InputParserTest extends InputParser<Boolean>{
     private static final int FIRST_SECTION_START = 0;
     private static final int SECOND_SECTION_START = 15;
     private static final int THIRD_SECTION_START = 31;
-    
     private static final char SOME_CHAR = 'X';
     
     private PushbackAndPositionReaderMock inputData;
     
     @Before
-    public void setState() {
+    public void setUp() {
         LinkedList<Character> inputData = this.generateInputData(DEFAULT_DATA);
         this.inputData = new PushbackAndPositionReaderMock(inputData);
     }
@@ -45,7 +44,7 @@ public class InputParserTest extends InputParser<Boolean>{
         
         // Apply
         this.setState(expData);
-        data = this.input;
+        data = this.inputData;
         
         // Assert
         assertEquals(expData, data);
@@ -74,7 +73,7 @@ public class InputParserTest extends InputParser<Boolean>{
         this.setState(null);
         
         // Apply
-        this.clearState();
+        this.tearDown();
         data = this.input;
         
         // Assert
@@ -90,8 +89,8 @@ public class InputParserTest extends InputParser<Boolean>{
         this.setState(this.inputData);
         
         // Apply
-        this.clearState();
-        data = this.input;
+        this.tearDown();
+        data = this.inputData;
         
         // Assert
         assertEquals(expData, data);
@@ -107,6 +106,22 @@ public class InputParserTest extends InputParser<Boolean>{
         
         // Apply
         data = this.read();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testRead_FirstRead_WithDefaultDataInput_FirstValueMatchesCurrChar() throws IOException {
+        // Arrange
+        char expData = DEFAULT_DATA.charAt(0);
+        char data;
+        
+        this.setState(this.inputData);
+        this.read();
+        
+        // Apply
+        data = this.currChar;
         
         // Assert
         assertEquals(expData, data);
@@ -146,6 +161,24 @@ public class InputParserTest extends InputParser<Boolean>{
     }
     
     @Test
+    public void testRead_SecondRead_WithDefaultDataInput_SecondValueMatchesCurrChar() throws IOException {
+        // Arrange
+        char expData = DEFAULT_DATA.charAt(1);
+        char data;
+        
+        this.setState(this.inputData);
+        
+        this.read();
+        this.read();
+        
+        // Apply
+        data = this.currChar;
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testRead_SecondRead_WithDefaultDataInput_RemainingDataMatches() throws IOException {
         // Arrange
         String expData = DEFAULT_DATA.substring(2);
@@ -175,6 +208,25 @@ public class InputParserTest extends InputParser<Boolean>{
         
         // Apply
         data = this.read();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testRead_ThirdRead_WithDefaultDataInput_ThirdValueMatchesCurrChar() throws IOException {
+        // Arrange
+        char expData = DEFAULT_DATA.charAt(2);
+        char data;
+        
+        this.setState(this.inputData);
+        
+        this.read();
+        this.read();
+        this.read();
+        
+        // Apply
+        data = this.currChar;
         
         // Assert
         assertEquals(expData, data);
@@ -300,6 +352,7 @@ public class InputParserTest extends InputParser<Boolean>{
         this.read();
     }
     
+    
     @Test(expected=EOFException.class)
     public void testRead_EndOfInput_ThrowsEOFexception() throws IOException {
         // Arrange
@@ -403,6 +456,7 @@ public class InputParserTest extends InputParser<Boolean>{
         assertEquals(expData, data);
     }
     
+    
     @Test
     public void testIsWhitespace_isNewline_ResultIsTrue() {
         // Arrange
@@ -418,6 +472,7 @@ public class InputParserTest extends InputParser<Boolean>{
         assertEquals(expData, data);
     }
     
+    
     @Test
     public void testIsWhitespace_isTab_ResultIsTrue() {
         // Arrange
@@ -430,6 +485,7 @@ public class InputParserTest extends InputParser<Boolean>{
         // Assert
         assertEquals(expData, data);
     }
+    
     
     @Test
     public void testIsWhitespace_NonWhitespace_ResultIsFalse() {
@@ -444,15 +500,86 @@ public class InputParserTest extends InputParser<Boolean>{
         assertEquals(expData, data);
     }
     
+    
+    @Test
+    public void testGetCurrChar_WithSetData_MatchesExpectedCharacter() throws IOException {
+        // Arrange
+        char expData = SOME_CHAR;
+        char data;
+        
+        this.setState(this.inputData);
+        this.currChar = expData;
+        
+        // Apply
+        data = this.getCurrChar();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testGetCurrChar_WithoutReadFirst_ThrowsExpectedException() throws IOException {
+        super.getCurrChar();
+    }
+    
+    
+    @Test(expected=InvalidStateException.class)
+    public void testGetCurrChar_AfterUnread_ThrowsExpectedException() throws IOException {
+        // Arrange
+        this.currChar = SOME_CHAR;
+        this.unread();
+        
+        // Apply + Assert 
+        
+        this.getCurrChar();
+    }
+    
+    
+    @Test
+    public void testGetInput_WithValidInput_MatchesCurrentInput() throws IOException {
+        // Arrange
+        PushbackAndPositionReader expData = this.inputData;
+        PushbackAndPositionReader data;
+        
+        super.setState(this.inputData);
+        
+        // Apply
+        data = super.getInput();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testGetInput_WithUnsetInput_ThrowsExpectedException() {
+        // Arrange
+        
+        // Apply + Assert
+        super.getInput();
+    }
+    
+    
+    @Test(expected=InvalidStateException.class)
+    public void testGetInput_WithNullInput_ThrowsExpectedException() {
+        // Arrange
+        super.setState(null);
+        
+        // Apply + Assert
+        super.getInput();
+    }
+    
+    
     @Test(expected=InvalidStateException.class)
     public void testRead_WithoutStateSet_ThrowsExpectedException() throws IOException {
         this.read();
     }
     
+    
     @Test(expected=InvalidStateException.class)
     public void testUnread_WithoutStateSet_ThrowsExpectedException() throws IOException {
         this.unread(SOME_CHAR);
     }
+    
     
     @Test(expected=InvalidStateException.class)
     public void testCurrentPosition_WithoutStateSet_ThrowsExpectedException() throws IOException {
@@ -483,7 +610,7 @@ public class InputParserTest extends InputParser<Boolean>{
     }
     
     @After
-    public void clearState() {
+    public void tearDown() {
         super.clearState();
         this.inputData = null;
     }
