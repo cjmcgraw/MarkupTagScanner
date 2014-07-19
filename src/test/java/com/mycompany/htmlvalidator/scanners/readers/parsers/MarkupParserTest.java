@@ -18,6 +18,13 @@ public class MarkupParserTest extends MarkupParser<Boolean> {
     
     private static final char SOME_CHAR = 'X';
     
+    private char currChar = Character.UNASSIGNED;
+    
+    @Override
+    protected char getCurrChar() {
+        return this.currChar;
+    }
+    
     @Test
     public void testIsClosingTag_NonClosingTag_ResultIsFalse() {
         // Arrange
@@ -65,6 +72,66 @@ public class MarkupParserTest extends MarkupParser<Boolean> {
         
         // Apply
         data = this.isClosingTag(CLOSING_TAG);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsClosingTag_WithCurrChar_NonClosingTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = SOME_CHAR;
+        
+        // Apply
+        data = this.isClosingTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsClosingTag_WithCurrChar_OtherMarkupTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = CLOSING_ATTR;
+        
+        // Apply
+        data = this.isClosingTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsClosingTag_WithCurrChar_OpeningTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = OPENING_TAG;
+        
+        // Apply
+        data = this.isClosingTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsClosingTag_WithCurrChar_ClosingTag_ResultIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        this.currChar = CLOSING_TAG;
+        
+        // Apply
+        data = this.isClosingTag();
         
         // Assert
         assertEquals(expData, data);
@@ -123,6 +190,66 @@ public class MarkupParserTest extends MarkupParser<Boolean> {
     }
     
     @Test
+    public void testIsOpeningTag_WithCurrChar_NonOpeningTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = SOME_CHAR;
+        
+        // Apply
+        data = this.isOpeningTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsOpeninTag_WithCurrChar_OtherMarkupTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = CLOSING_ATTR;
+        
+        // Apply
+        data = this.isOpeningTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsOpeningTag_WithCurrChar_ClosingTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = CLOSING_TAG;
+        
+        // Apply
+        data = this.isOpeningTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsOpeningTag_WithCurrChar_OpeningTag_ResultIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        this.currChar = OPENING_TAG;
+        
+        // Apply
+        data = this.isOpeningTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testIsClosingAttribute_NonClosingAttribute_ResultIsFalse() {
         // Arrange
         boolean expData = false;
@@ -156,6 +283,51 @@ public class MarkupParserTest extends MarkupParser<Boolean> {
         
         // Apply
         data = this.isClosingAttribute(CLOSING_ATTR);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsClosingAttribute_WithCurrChar_NonClosingAttribute_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = SOME_CHAR;
+        
+        // Apply
+        data = this.isClosingAttribute();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsClosingAttribute_WithCurrChar_OtherMarkupTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = SINGLE_QUOTE;
+        
+        // Apply
+        data = this.isClosingAttribute();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsClosingAttribute_WithCurrChar_ClosingAttribute_ResultIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        this.currChar = CLOSING_ATTR;
+        
+        // Apply
+        data = this.isClosingAttribute();
         
         // Assert
         assertEquals(expData, data);
@@ -214,6 +386,64 @@ public class MarkupParserTest extends MarkupParser<Boolean> {
     }
     
     @Test
+    public void testIsQuoteEnclosure_WithCurrChar_NonQuoteEnclosure_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        this.currChar = SOME_CHAR;
+        // Apply
+        data = this.isQuoteEnclosure();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsQuoteEnclosure_WithCurrChar_OtherMarkupTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = CLOSING_ATTR;
+        
+        // Apply
+        data = this.isQuoteEnclosure();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsQuoteEnclosure_WithCurrChar_SingleQuote_ResultIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        this.currChar = SINGLE_QUOTE;
+        
+        // Apply
+        data = this.isQuoteEnclosure();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsQuoteEnclosure_WithCurrChar_DoubleQuote_ResultIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        this.currChar = DOUBLE_QUOTE;
+        
+        // Apply
+        data = this.isQuoteEnclosure();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testIsTagEnclosure_NonTagEnclosure_ResultIsFalse() {
         // Arrange
         boolean expData = false;
@@ -260,6 +490,66 @@ public class MarkupParserTest extends MarkupParser<Boolean> {
         
         // Apply
         data = this.isTagEnclosure(CLOSING_TAG);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsTagEnclosure_WithCurrChar_NonTagEnclosure_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = SOME_CHAR;
+        
+        // Apply
+        data = this.isTagEnclosure();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsTagEnclosure_WithCurrChar_OtherMarkupTag_ResultIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data;
+        
+        this.currChar = CLOSING_ATTR;
+        
+        // Apply
+        data = this.isTagEnclosure();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsTagEnclosure_WithCurrChar_OpeningTag_ResultIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        this.currChar = OPENING_TAG;
+        
+        // Apply
+        data = this.isTagEnclosure();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsTagEnclosure_WithCurrChar_ClosingTag_ResultIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        this.currChar = CLOSING_TAG;
+        
+        // Apply
+        data = this.isTagEnclosure();
         
         // Assert
         assertEquals(expData, data);
