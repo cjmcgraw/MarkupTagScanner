@@ -10,11 +10,11 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
     private static final String FIELD_NAME = "result";
     protected MutableHtmlData result;
     
-    protected char readNext() throws IOException {
+    protected char read() throws IOException {
         try {
-            return this.read();
+            return super.read();
         } catch (EOFException e) {
-            throw new EndOfInputParsingException(this.currentPosition(), this.result);
+            throw new EndOfInputParsingException(this.currentPosition(), this.getResult());
         }
     }
     
@@ -29,14 +29,14 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
         return true;
     }
     
-    protected void closeTagRead(char c) throws IOException {
+    private void closeTagRead(char c) throws IOException {
         this.unread(c);
-        throw new UnexpectedCloseTagParsingException(this.currentPosition(), this.result);
+        throw new UnexpectedCloseTagParsingException(this.currentPosition(), this.getResult());
     }
     
-    protected void openTagRead(char c) throws IOException {
+    private void openTagRead(char c) throws IOException {
         this.unread(c);
-        throw new UnclosedTagParsingException(this.currentPosition(), this.result);
+        throw new UnclosedTagParsingException(this.currentPosition(), this.getResult());
     }
     
     @Override
@@ -52,6 +52,11 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
     protected void clearState() {
         super.clearState();
         this.result = null;
+    }
+    
+    protected MutableHtmlData getResult() {
+        this.validateState();
+        return this.result;
     }
     
     private void validateState() {

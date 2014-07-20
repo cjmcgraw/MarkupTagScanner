@@ -13,10 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.EndOfInputParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.ParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnclosedTagParsingException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.UnexpectedCloseTagParsingException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlAttributeParserMock;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlClosingParserMock;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlElementParserMock;
