@@ -3,11 +3,16 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.errors.*;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlDataParser extends DataParser{
+    private static final String CLASS_NAME = "HtmlDataParser";
+    private static final String FIRST_FIELD_NAME = "closingParser";
+    private static final String SECOND_FIELD_NAME = "elementParser";
+    private static final String THIRD_FIELD_NAME = "attributeParser";
+    
     private HtmlUtilityParser closingParser;
     private HtmlUtilityParser elementParser;
     private HtmlUtilityParser attributeParser;
@@ -15,7 +20,7 @@ public class HtmlDataParser extends DataParser{
     public HtmlDataParser() {
         this(new HtmlClosingParser(), 
              new HtmlElementParser(), 
-             new HtmlAttributeParser());
+             new HtmlAttributesParser());
         }
     
     public HtmlDataParser(HtmlUtilityParser closingParser, 
@@ -39,10 +44,10 @@ public class HtmlDataParser extends DataParser{
             this.parseTagData();
             this.readCloseTag();
         } catch (ParsingException e) {
-            e.setHtmlData(this.result);
+            e.setHtmlData(this.getResult());
             return e;
         }
-        return this.result;
+        return this.getResult();
     }
     
     private void parseTagData() throws IOException {
@@ -58,36 +63,61 @@ public class HtmlDataParser extends DataParser{
     }
     
     private void readOpenTag() throws IOException {
-        char c = this.readNext();
+        char c = this.read();
         
         if (!isOpeningTag(c)) {
             this.unread(c);
             MarkupTag tag = MarkupTag.getTag(c);
-            throw new MissingEnclosureParsingException(input.getPosition(), 
+            throw new MissingEnclosureParsingException(this.currentPosition(), 
                                                        (tag != null ? MarkupTag.CLOSING_TAG.toChar() : '?'),
-                                                       this.result);
+                                                       this.getResult());
         }
-        this.result.confirmOpeningTag();
+        this.getResult().confirmOpeningTag();
     }
     
     private HtmlData parseClosingData() throws IOException {
-        return this.closingParser.parse(this.input, this.result);
+        this.validateState();
+        return this.closingParser.parse(this.getInput(), this.getResult());
     }
     
     private HtmlData parseElementName() throws IOException {
-        return this.elementParser.parse(this.input, this.result);
+        this.validateState();
+        return this.elementParser.parse(this.getInput(), this.getResult());
     }
     
     private HtmlData parseAttributeData() throws IOException {
-        return this.attributeParser.parse(this.input, this.result);
+        this.validateState();
+        return this.attributeParser.parse(this.getInput(), this.getResult());
     }
     
     private void readCloseTag() throws IOException {
-        char c = this.readNext();
-        
-        if (!isClosingTag(c)) {
-            this.openTagRead(c);
+        char c = this.read();
+        try {
+            this.validateChar(c);
+        } catch(UnexpectedCloseTagParsingException e) {
+            this.read();
+            this.getResult().confirmClosingTag();
         }
-        this.result.confirmClosingTag();
+    }
+    
+    private void validateState() {
+        if (this.isMissingState())
+            throw new InvalidStateException(CLASS_NAME, this.getMissingFieldName());
+    }
+    
+    private boolean isMissingState() {
+        return this.closingParser == null ||
+               this.elementParser == null ||
+               this.attributeParser == null;
+    }
+    
+    private String getMissingFieldName() {
+        if (this.closingParser == null)
+            return FIRST_FIELD_NAME;
+        if (this.elementParser == null)
+            return SECOND_FIELD_NAME;
+        if (this.attributeParser == null)
+            return THIRD_FIELD_NAME;
+        return "Unknown field is missing!";
     }
 }

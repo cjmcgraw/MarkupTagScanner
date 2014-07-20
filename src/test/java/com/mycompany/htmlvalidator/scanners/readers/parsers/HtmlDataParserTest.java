@@ -679,6 +679,33 @@ public class HtmlDataParserTest {
         this.input = new PushbackAndPositionReaderMock(new LinkedList<>(data));
     }
     
+    @Test(expected=InvalidStateException.class)
+    public void testParse_InvalidClosingParser_ThrowsExpectedException() {
+        // Arrange
+        this.parser = new HtmlDataParser(null, this.elementParser, this.attributeParser);
+        
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testParse_InvalidElementParser_ThrowsExpectedException() {
+        // Arrange
+        this.parser = new HtmlDataParser(this.closingParser, null, this.attributeParser);
+        
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testParse_InvalidAttributeParser_ThrowsExpectedException() {
+        // Arrange
+        this.parser = new HtmlDataParser(this.closingParser, this.elementParser, null);
+        
+        // Apply + Assert
+        this.parse();
+    }
+    
     @After
     public void clearState() {
         this.closingParser = null;
