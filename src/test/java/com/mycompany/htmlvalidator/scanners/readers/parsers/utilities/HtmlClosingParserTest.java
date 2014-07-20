@@ -18,7 +18,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingParserTest {
-    private static final List<Character> defaultData = Arrays.asList(HtmlClosingParser.closingChar, 'A');
+    private static final List<Character> defaultData = Arrays.asList(HtmlClosingParser.CLOSING_CHAR, 'A');
     private static final List<Character> additionalData = Arrays.asList('A', 'B');
     
     private HtmlClosingParser parser = new HtmlClosingParser();

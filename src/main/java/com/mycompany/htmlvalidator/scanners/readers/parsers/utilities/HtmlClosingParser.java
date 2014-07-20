@@ -4,16 +4,10 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlClosingParser extends HtmlUtilityParser {
-    private static final String CLASS_NAME = "HtmlClosingParser";
-    private static final String FIELD_NAME = "currChar";
-    
-    public static final char closingChar = '/';
-    
-    private char currChar = Character.UNASSIGNED;
+    public static final char CLOSING_CHAR = '/';
     
     @Override
     public HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException {
@@ -25,41 +19,22 @@ public class HtmlClosingParser extends HtmlUtilityParser {
     }
     
     private void readClosingCharLocation() throws IOException {
-        this.currChar = this.readNext();
+        this.read();
         this.validateChar();
     }
     
     protected boolean validateChar() throws IOException {
-        return super.validateChar(this.currChar);
+        return super.validateChar(this.getCurrChar());
     }
     
     private void confirmClosingTag() throws IOException {
         boolean isClosing = this.isClosing();
         if (!isClosing) 
-            this.unread(this.getCurrChar());
-        this.result.setIsClosing(isClosing);
+            this.unread();
+        this.getResult().setIsClosing(isClosing);
     }
     
     private boolean isClosing() {
-        return this.currChar == closingChar;
-    }
-    
-    public void setState(PushbackAndPositionReader input, MutableHtmlData result) {
-        super.setState(input, result);
-        this.currChar = Character.UNASSIGNED;
-    }
-    
-    private char getCurrChar() {
-        this.validateState();
-        return this.currChar;
-    }
-    
-    private void validateState() {
-        if (this.isMissingState())
-            throw new InvalidStateException(CLASS_NAME, FIELD_NAME);
-    }
-    
-    private boolean isMissingState() {
-        return this.currChar == Character.UNASSIGNED;
+        return this.getCurrChar() == CLOSING_CHAR;
     }
 }
