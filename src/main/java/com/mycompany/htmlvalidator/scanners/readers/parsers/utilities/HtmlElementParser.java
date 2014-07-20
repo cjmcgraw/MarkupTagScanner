@@ -23,8 +23,8 @@ public class HtmlElementParser extends HtmlUtilityParser {
     
     private void parseElementName() throws IOException {
         char c;
-        while(this.validateChar(c = readNext()))
-            this.result.updateName(c);
+        while(this.validateChar(c = read()))
+            this.getResult().updateName(c);
     }
     
     protected boolean validateChar(char c) throws IOException {
