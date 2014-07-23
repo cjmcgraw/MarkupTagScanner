@@ -7,7 +7,6 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlElementParser extends HtmlUtilityParser {
-    public static final char elementTerminator = ' ';
     
     @Override
     public HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException {
@@ -28,6 +27,6 @@ public class HtmlElementParser extends HtmlUtilityParser {
     }
     
     protected boolean validateChar(char c) throws IOException {
-        return super.validateChar(c) && c != elementTerminator;
+        return super.validateChar(c) && !this.isWhitespace(c);
     }
 }
