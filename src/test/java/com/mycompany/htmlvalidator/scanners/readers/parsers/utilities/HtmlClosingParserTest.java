@@ -19,7 +19,11 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingParserTest {
-    private static final List<Character> defaultData = Arrays.asList(MarkupTag.CLOSING_ATTRIBUTE.toChar(), 'A');
+    private static final char CLOSING_ATTR = MarkupTag.CLOSING_ATTRIBUTE.toChar();
+    private static final char OPENING_TAG = MarkupTag.OPENING_TAG.toChar();
+    private static final char CLOSING_TAG = MarkupTag.CLOSING_TAG.toChar();
+    
+    private static final List<Character> defaultData = Arrays.asList(CLOSING_ATTR, 'A');
     private static final List<Character> additionalData = Arrays.asList('A', 'B');
     
     private HtmlClosingParser parser = new HtmlClosingParser();
@@ -119,7 +123,7 @@ public class HtmlClosingParserTest {
     @Test(expected=UnexpectedCloseTagParsingException.class)
     public void testParse_WithClosingAngleBracket() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('>', 'A', 'B', 'C'));
+        this.setState(Arrays.asList(CLOSING_TAG, 'A', 'B', 'C'));
         
         // Apply + Assert
         this.parser.parse(this.input, this.result);
@@ -128,7 +132,7 @@ public class HtmlClosingParserTest {
     @Test
     public void testParse_WithClosingAngleBracket_ExceptionHtmlDataMatchesInitialData() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('>', 'A', 'B', 'C'));
+        this.setState(Arrays.asList(CLOSING_TAG, 'A', 'B', 'C'));
         
         HtmlData expData = this.result;
         HtmlData data = null;
@@ -148,9 +152,9 @@ public class HtmlClosingParserTest {
     @Test
     public void testParse_WithClosingAngleBracket_ConsumesNoElementsAndUnreadsClosingAngleBracket() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('>', 'A', 'B', 'C'));
+        this.setState(Arrays.asList(CLOSING_TAG, 'A', 'B', 'C'));
         
-        String expData = ">ABC";
+        String expData = CLOSING_TAG + "ABC";
         String data;
         
         // Apply
@@ -167,7 +171,7 @@ public class HtmlClosingParserTest {
     @Test(expected=UnclosedTagParsingException.class)
     public void testParse_WithOpeningAngleBracket() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('<', 'A', 'B', 'C'));
+        this.setState(Arrays.asList(OPENING_TAG, 'A', 'B', 'C'));
         
         // Apply + Assert
         this.parser.parse(this.input, this.result);
@@ -176,7 +180,7 @@ public class HtmlClosingParserTest {
     @Test
     public void testParse_WithOpeningAngleBracket_ExceptionHtmlDataMatchesInitialData() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('<', 'A', 'B', 'C'));
+        this.setState(Arrays.asList(OPENING_TAG, 'A', 'B', 'C'));
         
         HtmlData expData = this.result;
         HtmlData data = null;
@@ -195,9 +199,9 @@ public class HtmlClosingParserTest {
     @Test
     public void testParse_WithOpeningAngleBracket_ConsumesNoElementsAndUnreadsOpeningAngleBracket() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('<' , 'A', 'B', 'C'));
+        this.setState(Arrays.asList(OPENING_TAG , 'A', 'B', 'C'));
         
-        String expData = "<ABC";
+        String expData = OPENING_TAG + "ABC";
         String data;
         
         // Apply
