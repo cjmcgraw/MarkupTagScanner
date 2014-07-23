@@ -7,7 +7,6 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlClosingParser extends HtmlUtilityParser {
-    public static final char CLOSING_CHAR = '/';
     
     @Override
     public HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException {
@@ -28,13 +27,9 @@ public class HtmlClosingParser extends HtmlUtilityParser {
     }
     
     private void confirmClosingTag() throws IOException {
-        boolean isClosing = this.isClosing();
+        boolean isClosing = this.isClosingAttribute();
         if (!isClosing) 
             this.unread();
         this.getResult().setIsClosing(isClosing);
-    }
-    
-    private boolean isClosing() {
-        return this.getCurrChar() == CLOSING_CHAR;
     }
 }
