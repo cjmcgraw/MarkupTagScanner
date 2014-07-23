@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
@@ -20,6 +21,9 @@ import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositio
 public class HtmlElementParserTest {
     private static final List<Character> defaultData = Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', ' ', 'g', 'h');
     private static final List<Character> additionalData = Arrays.asList( ' ', 'a', 'b', 'c', 'd', 'e', 'f');
+    
+    private static final char CLOSING_TAG = MarkupTag.CLOSING_TAG.toChar();
+    private static final char OPENING_TAG = MarkupTag.OPENING_TAG.toChar();
     
     private HtmlElementParser parser = new HtmlElementParser();
     private PushbackAndPositionReaderMock input;
@@ -123,7 +127,7 @@ public class HtmlElementParserTest {
     @Test(expected=UnexpectedCloseTagParsingException.class)
     public void testParse_WithInvalidElementName_ContainsClosingTag() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('a', 'b', 'c', '>', 'e', 'f', 'g'));
+        this.setState(Arrays.asList('a', 'b', 'c', CLOSING_TAG, 'e', 'f', 'g'));
         
         // Apply + Assert
         this.parser.parse(this.input, this.result);
@@ -132,7 +136,7 @@ public class HtmlElementParserTest {
     @Test
     public void testParse_WithInvalidElementName_ContainsClosingTag_ExceptionHtmlDataMatchesInitialData() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('a', 'b', 'c', '>', 'e', 'f', 'g'));
+        this.setState(Arrays.asList('a', 'b', 'c', CLOSING_TAG, 'e', 'f', 'g'));
         
         HtmlData expData = this.result;
         HtmlData data = null;
@@ -151,9 +155,9 @@ public class HtmlElementParserTest {
     @Test
     public void testParse_WithInvalidElementName_ContainsClosingTag_ConsumesElementFromInputExceptForClosingTagAndProceedingData() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('a', 'b', 'c', '>', 'e', 'f', 'g'));
+        this.setState(Arrays.asList('a', 'b', 'c', CLOSING_TAG, 'e', 'f', 'g'));
         
-        String expData = ">efg";
+        String expData =  CLOSING_TAG + "efg";
         String data = "";
         
         // Apply
@@ -170,7 +174,7 @@ public class HtmlElementParserTest {
     @Test(expected=UnclosedTagParsingException.class)
     public void testParse_WithInvalidElementName_ContainsOpeningTag() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('a', 'b', 'c', '<', 'e', 'f', 'g'));
+        this.setState(Arrays.asList('a', 'b', 'c', OPENING_TAG, 'e', 'f', 'g'));
         
         // Apply + Assert
         this.parser.parse(this.input, this.result);
@@ -179,7 +183,7 @@ public class HtmlElementParserTest {
     @Test
     public void testParse_WithInvalidElementName_ContainsOpeningTag_ExceptionHtmlDataMatchesInitialData() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('a', 'b', 'c', '<', 'e', 'f', 'g'));
+        this.setState(Arrays.asList('a', 'b', 'c', OPENING_TAG, 'e', 'f', 'g'));
         
         HtmlData expData = this.result;
         HtmlData data = null;
@@ -198,9 +202,9 @@ public class HtmlElementParserTest {
     @Test
     public void testParse_WithInvalidElementName_ContainsOpeningTag_ConsumesElementFromInputExceptForOpeningTagAndProceedingData() throws IOException {
         // Arrange
-        this.setState(Arrays.asList('a', 'b', 'c', '<', 'e', 'f', 'g'));
+        this.setState(Arrays.asList('a', 'b', 'c', OPENING_TAG, 'e', 'f', 'g'));
         
-        String expData = "<efg";
+        String expData = OPENING_TAG + "efg";
         String data = "";
         
         // Apply
