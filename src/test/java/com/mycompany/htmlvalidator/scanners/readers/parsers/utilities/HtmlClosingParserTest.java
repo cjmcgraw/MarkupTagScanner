@@ -12,13 +12,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingParserTest {
-    private static final List<Character> defaultData = Arrays.asList(HtmlClosingParser.CLOSING_CHAR, 'A');
+    private static final List<Character> defaultData = Arrays.asList(MarkupTag.CLOSING_ATTRIBUTE.toChar(), 'A');
     private static final List<Character> additionalData = Arrays.asList('A', 'B');
     
     private HtmlClosingParser parser = new HtmlClosingParser();
