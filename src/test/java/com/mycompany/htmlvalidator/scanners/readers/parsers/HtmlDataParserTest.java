@@ -37,7 +37,6 @@ public class HtmlDataParserTest {
     private PushbackAndPositionReaderMock input;
     private HtmlDataParser parser;
     
-    
     @Before
     public void setUp() {
         this.closingParser = new HtmlClosingParserMock(null);
@@ -79,7 +78,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_ClosingParser_StandardParse_ConsumesOnlyExpectedInput()  {
+    public void testParse_ClosingParser_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
@@ -92,124 +91,123 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test
-    public void testParse_ClosingParser_ResultIsTrue_EndOfInputParsingException()  {
+    @Test(expected=EndOfInputParsingException.class)
+    public void testParse_ClosingParser_ThrowsExpectedException_EndOfInputParsingException()  {
         // Arrange
-        boolean expData = true;
-        boolean data;
-        
         ParsingException exception = this.createException("EndOfInput");
         this.closingParser = new HtmlClosingParserMock(exception);
-        this.closingParser.setData(expData);
         
-        this.setState(DEFAULT_INPUT);
-        
-        // Apply
-        HtmlData result = this.parse();
-        data = result.isClosing();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_ClosingParser_ResultIsFalse_EndOfInputParsingException()  {
-        // Arrange
-        boolean expData = false;
-        boolean data;
-        
-        ParsingException exception = this.createException("EndOfInput");
-        this.closingParser = new HtmlClosingParserMock(exception);
-        this.closingParser.setData(expData);
-        
-        this.setState(DEFAULT_INPUT);
-        
-        // Apply
-        HtmlData result = this.parse();
-        data = result.isClosing();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_ClosingParser_ExceptionParse_EndOfInputParsingException_ConsumesOnlyExpectedInput()  {
-        // Arrange
-        String expData = INTERRUPT_EXP_REMAINING_INPUT;
-        String data;
-        
-        ParsingException exception = this.createException("EndOfInput");
-        this.closingParser = new HtmlClosingParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
         this.parse();
-        data = this.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ClosingParser_ResultIsTrue_UnclosedTagException()  {
-        // Arrange
-        boolean expData = true;
-        boolean data;
+    public void testParse_ClosingParser_ThrowsExpectedException_EndOfInputParsingException_ExceptionResultMatchesExpected() {
+        // Arrange 
+        MutableHtmlData expData = this.createDataFromException();
+        expData.setIsClosing(true);
         
-        ParsingException exception = this.createException("UnclosedTag");
+        HtmlData data = null;
+        
+        ParsingException exception = this.createException("EndOfInput");
         this.closingParser = new HtmlClosingParserMock(exception);
-        this.closingParser.setData(expData);
+        this.closingParser.setData(expData.isClosing());
         
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        HtmlData result = this.parse();
-        data = result.isClosing();
+        try {
+            this.parse();
+        } catch (EndOfInputParsingException err) {
+            data = err.getHtmlData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ClosingParser_ResultIsFalse_UnclosedTagException()  {
-        // Arrange
-        boolean expData = false;
-        boolean data;
-        
-        ParsingException exception = this.createException("UnclosedTag");
-        this.closingParser = new HtmlClosingParserMock(exception);
-        this.closingParser.setData(expData);
-        
-        this.setState(DEFAULT_INPUT);
-        
-        // Apply
-        HtmlData result = this.parse();
-        data = result.isClosing();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_ClosingParser_ExceptionDuringParse_UnclosedTagException_ConsumesOnlyExpectedInput()  {
+    public void testParse_ClosingParser_ThrowsExpectedException_EndOfInputParsingException_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
-        String data;
+        String data = "";
+        
+        ParsingException exception = this.createException("EndOfInput");
+        this.closingParser = new HtmlClosingParserMock(exception);
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        try {
+            this.parse();
+            data = this.getRemainingData();
+        } catch (EndOfInputParsingException e) {
+            data = this.input.getRemainingData();
+        }
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=UnclosedTagParsingException.class)
+    public void testParse_ClosingParser_ThrowsExpectedException_UnclosedTagException()  {
+        // Arrange
+        ParsingException exception = this.createException("UnclosedTag");
+        this.closingParser = new HtmlClosingParserMock(exception);
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_ClosingParser_ThrowsExpectedException_UnclosedTagParsingException_ExceptionResultMatchesExpected()  {
+        // Arrange
+        MutableHtmlData expData = this.createDataFromException();
+        expData.setIsClosing(true);
+        
+        HtmlData data = null;
+        
+        ParsingException exception = this.createException("UnclosedTag");
+        this.closingParser = new HtmlClosingParserMock(exception);
+        this.closingParser.setData(expData.isClosing());
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = e.getHtmlData();
+        }
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_ClosingParser_ThrowsExpectedException_UnclosedTagParsingException_ConsumesOnlyExpectedInput()  {
+        // Arrange
+        String expData = INTERRUPT_EXP_REMAINING_INPUT;
+        String data = "";
         
         ParsingException exception = this.createException("UnclosedTag");
         this.closingParser = new HtmlClosingParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        this.parse();
-        data = this.getRemainingData();
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = this.getRemainingData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ClosingParser_ResultIsTrue_UnexpectedCloseTagException()  {
+    public void testParse_ClosingParser_UnexpectedCloseExceptionCaught_ResultIsTrue()  {
         // Arrange
         boolean expData = true;
         boolean data;
@@ -229,7 +227,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_ClosingParser_ResultIsFalse_UnexpectedCloseTagException()  {
+    public void testParse_ClosingParser_UnexpectedCloseExceptionCaught_ResultIsFalse()  {
         // Arrange
         boolean expData = false;
         boolean data;
@@ -249,7 +247,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_ClosingParser_ExceptionnDuringParse_UnexpectedCloseTagException()  {
+    public void testParse_ClosingParser_UnexpectedCloseExceptionCaught_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
@@ -301,7 +299,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_ElementParser_StandardParse_ConsumesOnlyExpectedInput()  {
+    public void testParse_ElementParser_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
@@ -314,87 +312,124 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test 
-    public void testParse_ElementParser_ResultIsDefaultString_EndOfInputParsingException()  {
+    @Test(expected=EndOfInputParsingException.class)
+    public void testParse_ElementParser_ThrowsExpectedException_EndOfInputParsingException() {
         // Arrange
-        String expData = DEFAULT_ELEMENT;
-        String data;
-        
-        ParsingException exception =  this.createException("EndOfInput");
+        ParsingException exception = this.createException("EndOfInput");
         this.elementParser = new HtmlElementParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         
-        this.elementParser.setElement(expData);
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test 
+    public void testParse_ElementParser_ThrowsExpectedException_EndOfInputParsingException_ExceptionResultMatchesExpected()  {
+        // Arrange
+        MutableHtmlData expData = this.createDataFromException();
+        expData.setName(DEFAULT_ELEMENT);
+        
+        HtmlData data = null;
+        
+        ParsingException exception =  this.createException("EndOfInput");
+        this.elementParser = new HtmlElementParserMock(exception);
+        this.elementParser.setElement(expData.getName());
+         
+        this.setState(DEFAULT_INPUT);
         
         // Apply
-        HtmlData result = this.parse();
-        data = result.getName();
+        try {
+            this.parse();
+        } catch (EndOfInputParsingException e) {
+            data = e.getHtmlData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ElementParser_ExceptionDuringParse_EndOfInputParsingException_ConsumesOnlyExpectedInput()  {
+    public void testParse_ElementParser_ThrowsExpectedException_EndOfInputParsingException_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
-        String data;
+        String data = "";
         
         ParsingException exception = new EndOfInputParsingException(new Point(0, 0), null);
         this.elementParser = new HtmlElementParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        this.parse();
-        data = this.getRemainingData();
+        try {
+            this.parse();
+        } catch (EndOfInputParsingException e) {
+            data = this.getRemainingData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
-    @Test
-    public void testParse_ElementParser_ResultIsDefaultString_UnclosedTagException()  {
+    @Test(expected=UnclosedTagParsingException.class)
+    public void testParse_ElementParser_ThrowsExpectedException_UnclosedTagParsingException() {
         // Arrange
-        String expData = DEFAULT_ELEMENT;
-        String data;
-        
-        ParsingException exception = new UnclosedTagParsingException(new Point(0, 0), null);
-        
+        ParsingException exception = this.createException("UnclosedTag");
         this.elementParser = new HtmlElementParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         
-        this.elementParser.setElement(expData);
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_ElementParser_ThrowsExpectedException_UnclosedTagParsingException_ExceptionResultMatchesExpected()  {
+        // Arrange
+        MutableHtmlData expData = this.createDataFromException();
+        expData.setName(DEFAULT_ELEMENT);
+        
+        HtmlData data = null;
+        
+        ParsingException exception = this.createException("UnclosedTag");
+        this.elementParser = new HtmlElementParserMock(exception);
+        this.elementParser.setElement(expData.getName());
+        
+        this.setState(DEFAULT_INPUT);
         
         // Apply
-        HtmlData result = this.parse();
-        data = result.getName();
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = e.getHtmlData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ElementParser_ExceptionDuringParse_UnclosedTagException_ConsumesOnlyExpectedInput()  {
+    public void testParse_ElementParser_ThrowsExpectedException_UnclosedTagParsingException_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
-        String data;
+        String data = "";
         
-        ParsingException exception = new UnclosedTagParsingException(new Point(0, 0), null);
+        ParsingException exception = this.createException("UnclosedTag");
         this.elementParser = new HtmlElementParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        this.parse();
-        data = this.getRemainingData();
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = this.getRemainingData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ElementParser_ResultIsDefaultString_UnexpectedCloseTagException()  {
+    public void testParse_ElementParser_UnexpectedCloseTagExceptionCaught_ResultNameMatches()  {
         // Arrange
         String expData = DEFAULT_ELEMENT;
         String data;
@@ -416,7 +451,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_ElementParser_ExceptionDuringParse_UnexpectedCloseTagException_ConsumesOnlyExpectedInput()  {
+    public void testParse_ElementParser_UnexpectedCloseTagExceptionCaught_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
@@ -466,84 +501,122 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test
-    public void testParse_AttributeParser_ResultIsDefaultAttributeData_EndOfInputParsingException()  {
+    @Test(expected=EndOfInputParsingException.class)
+    public void testParse_AttributeParser_ThrowsExpectedException_EndOfInputParsingException()  {
         // Arrange
-        List<HtmlAttribute> expData = DEFAULT_ATTR;
-        List<HtmlAttribute> data;
-        
         ParsingException exception =  this.createException("EndOfInput");
         this.attributeParser = new HtmlAttributeParserMock(exception);
-        
         this.setState(DEFAULT_INPUT);
         
-        this.attributeParser.setData(expData);
+        // Apply
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_AttributeParser_ThrowsExpectedException_EndOfInputParsingException_ExceptionResultMatchesExpected() {
+        // Arrange
+        MutableHtmlData expData = this.createDataFromException();
+        expData.updateAttributes(DEFAULT_ATTR);
+        
+        HtmlData data = null;
+        
+        ParsingException exception = this.createException("EndOfInput");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser.setData(DEFAULT_ATTR);
+        this.setState(DEFAULT_INPUT);
         
         // Apply
-        HtmlData result = this.parse();
-        data = result.getAttributes();
+        try {
+            this.parse();
+        } catch (EndOfInputParsingException e) {
+            data = e.getHtmlData();
+        }
+        
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_AttributeParser_ExceptionDuringParsing_EndOfInputParsingException_ConsumesOnlyExpectedInput()  {
+    public void testParse_AttributeParser_ThrowsExpectedException_EndOfInputParsingException_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
-        String data;
+        String data = "";
         
         ParsingException exception = this.createException("EndOfInput");
         this.attributeParser = new HtmlAttributeParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        this.parse();
-        data = this.getRemainingData();
+        try {
+            this.parse();
+        } catch (EndOfInputParsingException e) {
+            data = this.getRemainingData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
-    @Test
-    public void testParse_AttributeParser_ResultIsDefaultAttributeData_UnclosedTagException()  {
+    @Test(expected=UnclosedTagParsingException.class)
+    public void testParse_AttributeParser_ThrowsExpectedException_UnclosedTagParsingException()  {
         //Arrange
-        List<HtmlAttribute> expData = DEFAULT_ATTR;
-        List<HtmlAttribute> data;
+        ParsingException exception = this.createException("UnclosedTag");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply + Apply
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_AttributeParser_ThrowsExpectedException_UnclosedTagParsingException_ExceptionResultMatchesExpected() {
+        // Arrange
+        MutableHtmlData expData = this.createDataFromException();
+        expData.setAttributes(DEFAULT_ATTR);
+        
+        HtmlData data = null;
         
         ParsingException exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeParserMock(exception);
-        this.attributeParser.setData(expData);
+        this.attributeParser.setData(DEFAULT_ATTR);
+        
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        HtmlData result = this.parse();
-        data = result.getAttributes();
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = e.getHtmlData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_AttributeParser_ExceptionDuringParsing_UnclosedTagException_ConsumesOnlyExpectedInput() {
+    public void testParse_AttributeParser_ThrowsExpectedException_UnclosedTagParsingException_ConsumesOnlyExpectedInput() {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
-        String data;
+        String data = "";
         
         ParsingException exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        this.parse();
-        data = this.getRemainingData();
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = this.getRemainingData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_AttributeParser_ResultIsDefaultAttributeData_UnexpectedCloseTagException() {
+    public void testParse_AttributeParser_UnexpectedCloseTagExceptionCaught_ResultIsDefaultAttributeData() {
         // Arrange
         List<HtmlAttribute> expData = DEFAULT_ATTR;
         List<HtmlAttribute> data;
@@ -562,7 +635,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_AttributeParser_ExceptionDuringParsing_UnexpectedCloseTagException_ConsumesOnlyExpectedInput() {
+    public void testParse_AttributeParser_UnexpectedCloseTagExceptionCaught_ConsumesOnlyExpectedInput() {
         // Arrange
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
@@ -595,80 +668,255 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_MissingOpeningTag_ExceptionDuringParsing_ResultIsEmptyHtmlData_EmptyData() {
+    public void testParse_HasOpeningTag_ResultHasOpeningTagIsTrue() {
         // Arrange
-        HtmlData expData = new MutableHtmlData();
-        HtmlData data;
-        
-        this.closingParser.setData(true);
-        this.elementParser.setElement(DEFAULT_ELEMENT);
-        this.attributeParser.setData(DEFAULT_ATTR);
-        
-        this.setState(MISSING_OPENING_INPUT);
+        boolean expData = true;
+        boolean data;
         
         // Apply
-        data = this.parse();
+        HtmlData result = this.parse();
+        data = result.hasOpeningTag();
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_MissingOpeningtag_ExceptionDuringParsing_ConsumesOnlyExpectedInput() {
+    public void testParse_HasClosingTag_ResultHasClosingTagIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        // Apply
+        HtmlData result = this.parse();
+        data = result.hasClosingTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_HasOpeningTag_ThrowsException_EndOfInputParsingException_ResultHasOpeningTagIsTrue() {
+        // Arrange
+        boolean expData = true;
+        boolean data = !expData;
+        
+        ParsingException exception = this.createException("EndOfInput");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (EndOfInputParsingException e) {
+            data = e.getHtmlData().hasOpeningTag();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_HasClosingTag_ThrowsException_EndOfInputParsingException_ResultHasClosingTagIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data = !expData;
+        
+        ParsingException exception = this.createException("EndOfInput");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (EndOfInputParsingException e) {
+            data = e.getHtmlData().hasClosingTag();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_HasOpeningTag_ThrowsException_UnclosedTagParsingException_ResultHasOpeningTagIsTrue() {
+     // Arrange
+        boolean expData = true;
+        boolean data = !expData;
+        
+        ParsingException exception = this.createException("UnclosedTag");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = e.getHtmlData().hasOpeningTag();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_HasClosingTag_ThrowsException_UnclosedTagParsingException_ResultHasClosingTagIsFalse() {
+     // Arrange
+        boolean expData = false;
+        boolean data = !expData;
+        
+        ParsingException exception = this.createException("UnclosedTag");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (UnclosedTagParsingException e) {
+            data = e.getHtmlData().hasClosingTag();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_HasOpeningTag_UnexpectedCloseTagParsingExceptionCaught_ResultHasOpeningTagIsTrue() {
+     // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        ParsingException exception = this.createException("UnexpectedClose");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        HtmlData result = this.parse();
+        data = result.hasOpeningTag();
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_HasClosingTag_UnexpectedCloseTagParsingExceptionCaught_ResultHasClosingTagIsTrue() {
+     // Arrange
+        boolean expData = true;
+        boolean data;
+        
+        ParsingException exception = this.createException("UnexpectedClose");
+        this.attributeParser = new HtmlAttributeParserMock(exception);
+        
+        this.setState(DEFAULT_INPUT);
+        
+        // Apply
+        HtmlData result = this.parse();
+        data = result.hasClosingTag();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=MissingEnclosureParsingException.class)
+    public void testParse_MissingOpeningTag_ThrowsExpectedException_MissingEnclosureParsingException() {
+        // Arrange
+        this.setState(MISSING_OPENING_INPUT);
+        
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_MissingOpeningTag_ThrowsExpectedException_MissingEnclosureParsingException_ExceptionResultHasOpeningTagIsFalse() {
+        // Arrange
+        boolean expData = false;
+        boolean data = !expData;
+        
+        this.setState(MISSING_OPENING_INPUT);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (MissingEnclosureParsingException e) {
+            data = e.getHtmlData().hasOpeningTag();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_MissingOpeningtag_ThrowsExpectedException_MissingEnclosureParsingException_ConsumesOnlyExpectedInput() {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
-        String data;
+        String data = "";
         
         this.setState(MISSING_OPENING_INPUT);
         
         // Apply
-        this.parse();
-        data = this.getRemainingData();
+        try {
+            this.parse();
+        } catch (MissingEnclosureParsingException e) {
+            data = this.getRemainingData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
-    @Test
-    public void testParse_MissingClosingTag_ExceptionDuringParsing_ResultIsFullHtmlData_DefaultData() {
+    @Test(expected=MissingEnclosureParsingException.class)
+    public void testParse_MissingClosingTag_ThrowsExpectedException_MissingEnclosureParsingException() {
         // Arrange
-        boolean closing = true;
+        this.setState(MISSING_CLOSING_INPUT);
         
-        MutableHtmlData expData = new MutableHtmlData();
-        HtmlData data;
-        
-        expData.confirmOpeningTag();
-        
-        this.closingParser.setData(closing);
-        expData.setIsClosing(closing);
-        
-        this.elementParser.setElement(DEFAULT_ELEMENT);
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_MissingClosingTag_ThrowsExpectedException_MissingEnclosureParsingException_ExceptionResultMatchesExpected() {
+        // Arrange
+        MutableHtmlData expData = this.createDataFromException();
+        expData.setIsClosing(true);
         expData.setName(DEFAULT_ELEMENT);
-        
-        
-        this.attributeParser.setData(DEFAULT_ATTR);
         expData.setAttributes(DEFAULT_ATTR);
         
+        HtmlData data = null;
+        
+        this.closingParser.setData(expData.isClosing());
+        this.elementParser.setElement(DEFAULT_ELEMENT);
+        this.attributeParser.setData(DEFAULT_ATTR);
+        
         this.setState(MISSING_CLOSING_INPUT);
         
         // Apply
-        data = this.parse();
+        try {
+            this.parse();
+        } catch (MissingEnclosureParsingException e) {
+            data = e.getHtmlData();
+        }
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_MissingClosingTag_ExceptionDuringParsing_ConsumesOnlyExpectedInput() {
+    public void testParse_MissingClosingTag_ThrowsExpectedException_MissingEnclosureParsingException_ConsumesOnlyExpectedInput() {
         // Arrange
         String expData = DEFAULT_EXP_REMAINING_INPUT;
-        String data;
+        String data = "";
         
         this.setState(MISSING_CLOSING_INPUT);
         
         // Apply
-        this.parse();
-        data = this.getRemainingData();
+        try {
+            this.parse(); 
+        } catch (MissingEnclosureParsingException e) {
+            data = this.getRemainingData();
+        }
         
         // Assert
         assertEquals(expData, data);
@@ -728,6 +976,13 @@ public class HtmlDataParserTest {
         return this.input.getRemainingData();
     }
     
+    private MutableHtmlData createDataFromException() {
+        MutableHtmlData data = new MutableHtmlData();
+        data.confirmOpeningTag();
+        
+        return data;
+    }
+    
     private ParsingException createException(String name) {
         switch (name.toLowerCase()) {
             case "endofinput"       :   return this.createEndOfInputException();
@@ -737,16 +992,13 @@ public class HtmlDataParserTest {
         return null;
     }
     
-    
     private ParsingException createEndOfInputException() {
         return new EndOfInputParsingException(new Point(0,0), null);
     }
     
-    
     private ParsingException createUnexpectedCloseTagException() {
         return new UnexpectedCloseTagParsingException(new Point(0,0), null);
     }
-    
     
     private ParsingException createUnclosedTagException() {
         return new UnclosedTagParsingException(new Point(0,0), null);

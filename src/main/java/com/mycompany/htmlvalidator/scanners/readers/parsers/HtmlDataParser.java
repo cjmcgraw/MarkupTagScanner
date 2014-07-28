@@ -39,14 +39,9 @@ public class HtmlDataParser extends DataParser{
     }
     
     private HtmlData parseTag() throws IOException {
-        try {
-            this.readOpenTag();
-            this.parseTagData();
-            this.readCloseTag();
-        } catch (ParsingException e) {
-            e.setHtmlData(this.getResult());
-            return e;
-        }
+        this.readOpenTag();
+        this.parseTagData();
+        this.readCloseTag();
         return this.getResult();
     }
     
@@ -67,10 +62,8 @@ public class HtmlDataParser extends DataParser{
         
         if (!isOpeningTag(c)) {
             this.unread(c);
-            MarkupTag tag = MarkupTag.getTag(c);
-            throw new MissingEnclosureParsingException(this.currentPosition(), 
-                                                       (tag != null ? MarkupTag.CLOSING_TAG.toChar() : '?'),
-                                                       this.getResult());
+            char exp = MarkupTag.OPENING_TAG.toChar();
+            throw this.getMissingEnclosureParsingException(exp, c);
         }
         this.getResult().confirmOpeningTag();
     }
@@ -92,12 +85,17 @@ public class HtmlDataParser extends DataParser{
     
     private void readCloseTag() throws IOException {
         char c = this.read();
-        try {
-            this.validateChar(c);
-        } catch(UnexpectedCloseTagParsingException e) {
-            this.read();
-            this.getResult().confirmClosingTag();
+        
+        if (!isClosingTag(c)) {
+            this.unread(c);
+            char exp = MarkupTag.CLOSING_TAG.toChar();
+            throw this.getMissingEnclosureParsingException(exp, c);
         }
+        this.getResult().confirmClosingTag();
+    }
+    
+    private ParsingException getMissingEnclosureParsingException(char missing, char found) {
+        return new MissingEnclosureParsingException(this.currentPosition(), missing, found, this.getResult());
     }
     
     private void validateState() {
