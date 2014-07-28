@@ -8,6 +8,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.HtmlQuoteEnclosureParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.MissingCharacterComponentException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
@@ -20,6 +21,51 @@ public class HtmlQuoteEnclosureParserTest {
     private HtmlQuoteEnclosureParser parser = new HtmlQuoteEnclosureParser();
     private PushbackAndPositionReaderMock input;
     private LinkedList<Character> inputData;
+    
+    /* Potential exceptions specific to this class:
+     * 
+     *  1.
+     *      public method:
+     *          parse
+     *      
+     *      condition:
+     *          first character is not a valid enclosure (' , ")
+     *          
+     *      exception:
+     *          parser -> setAndValidateOpening -> MissingCharacterComponentException
+     *  
+     *  2.
+     *      public method:
+     *          parse
+     *      
+     *      condition:
+     *          last character is not a valid matching enclosure ( ' --> ', " --> ")
+     *      
+     *      exception:
+     *          EOFException (as the enclosure never terminates)
+     *          
+     *  3.
+     *      public method:
+     *          parse
+     *      
+     *      condition:
+     *          different opening and closing enclosures
+     *          
+     *      exception:
+     *          EOFException (as the enclosure never terminates)
+     *  
+     *  4.
+     *      public method:
+     *          parse
+     *          
+     *      condition:
+     *          quoteData cleared and never reinitialized
+     *          Cannot possibly occur and acts only to prevent
+     *          misuse of protected methods.
+     *              
+     *      exception:
+     *          InvalidStateException
+     */
     
     @Test
     public void testParse_OneQuotedValue_ValidSingleQuotedValue_ReturnedDataMatches() throws IOException {
@@ -263,6 +309,13 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
+    //=========================================================================
+    //*************************************************************************
+    //=========================================================================
+    // Exception 1
+    //=========================================================================
+    //*************************************************************************
+    //=========================================================================
     @Test(expected=MissingCharacterComponentException.class)
     public void testParse_InvalidValueMissingStartQuote_ExpectedThrowsException() throws IOException {
         // Arrange
@@ -310,6 +363,13 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
+    //=========================================================================
+    //*************************************************************************
+    //=========================================================================
+    // Exception 2
+    //=========================================================================
+    //*************************************************************************
+    //=========================================================================
     @Test(expected=EOFException.class)
     public void testParse_InvalidValueMissingEndDoubleQuote_ThrowsEOFException() throws IOException {
         // Arrange
@@ -337,6 +397,14 @@ public class HtmlQuoteEnclosureParserTest {
         // Assert
         assertEquals(expData, data);
     }
+    
+    //=========================================================================
+    //*************************************************************************
+    //=========================================================================
+    // Exception 3
+    //=========================================================================
+    //*************************************************************************
+    //=========================================================================
     
     @Test(expected=EOFException.class)
     public void testParse_SingleQuoteOpeningDoubleQuoteClosing_ThrowsEOFException() throws IOException {
@@ -392,6 +460,11 @@ public class HtmlQuoteEnclosureParserTest {
         
         // Assert
         assertEquals(expData, data);
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testParse_NullInputGivenViaParse_ThrowsExpectedException() throws IOException {
+        this.parser.parse(null);
     }
     
     private void setState(String data) {

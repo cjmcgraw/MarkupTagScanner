@@ -75,12 +75,17 @@ public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> 
     
     private MarkupTag getCurrentEnclosureClosing() {
         this.validateState();
-        return this.enclosure.getClosing();
+        return this.getEnclosure().getClosing();
     }
     
     private boolean matchesCurrentEnclosureClosing(MarkupTag tag) {
         this.validateState();
-        return this.enclosure.isClosing(tag);
+        return this.getEnclosure().isClosing(tag);
+    }
+    
+    protected EnclosureTags getEnclosure() {
+        this.validateState();
+        return this.enclosure;
     }
     
     private void validateState() {

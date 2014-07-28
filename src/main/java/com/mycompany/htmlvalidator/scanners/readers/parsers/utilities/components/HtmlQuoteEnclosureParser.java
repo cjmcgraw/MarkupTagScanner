@@ -29,7 +29,7 @@ public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {
     @Override
     protected String getData() {
         this.validateState();
-        return this.quoteData.toString();
+        return this.getQuoteData().toString();
     }
     
     @Override
@@ -65,6 +65,10 @@ public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {
         this.unread(c);
     }
     
+    private void appendData(char c) {
+        this.getQuoteData().append(c);
+    }
+    
     @Override
     protected void setState(PushbackAndPositionReader input) {
         super.setState(input);
@@ -77,9 +81,9 @@ public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {
         this.quoteData = null;
     }
     
-    private void appendData(char c) {
+    private StringBuilder getQuoteData() {
         this.validateState();
-        this.quoteData.append(c);
+        return this.quoteData;
     }
     
     private void validateState() {
