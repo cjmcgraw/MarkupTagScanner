@@ -14,8 +14,12 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
         try {
             return super.read();
         } catch (EOFException e) {
-            throw new EndOfInputParsingException(this.currentPosition(), this.getResult());
+            throw this.generateEndOfInputParsingException();
         }
+    }
+    
+    protected EndOfInputParsingException generateEndOfInputParsingException() {
+        return new EndOfInputParsingException(this.currentPosition(), this.getResult());
     }
     
     public abstract HtmlData parse(PushbackAndPositionReader input) throws IOException;
