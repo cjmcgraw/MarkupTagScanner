@@ -45,7 +45,13 @@ public abstract class InputParser<T> {
     }
     
     protected void unread() throws IOException {
-        this.getInput().unread(this.getCurrChar());
+        this.unread(this.getCurrChar());
+    }
+    
+    protected char peekNextRead() throws IOException {
+        char ch = this.read();
+        this.unread();
+        return ch;
     }
     
     protected Point currentPosition() {
