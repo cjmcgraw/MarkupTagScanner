@@ -68,7 +68,7 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
     private String parseValueString() throws IOException {
         this.consumeWhitespace();
         
-        char upcoming = this.peakNextRead();
+        char upcoming = this.peekNextRead();
         
         if (this.isQuoteEnclosure(upcoming))
             return this.getQuoteEnclosureData();
@@ -116,7 +116,7 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
     private void runWhitespaceConsumer() throws IOException {
         this.validateState();
         this.whitespaceConsumer.parse(this.getInput());
-        this.peakNextRead();
+        this.peekNextRead();
     }
     
     private boolean isValidCharacter() {
