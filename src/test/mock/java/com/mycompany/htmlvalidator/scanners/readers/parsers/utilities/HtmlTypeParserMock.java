@@ -29,9 +29,12 @@ public abstract class HtmlTypeParserMock extends HtmlUtilityParser {
     protected abstract void updateResult();
     
     protected void throwApplicableException() {
+        beforeException();
         if(this.exception != null) {
             exception.setHtmlData(this.result);
             throw this.exception;
         }
     }
+    
+    protected void beforeException() {}
 }

@@ -77,7 +77,7 @@ public class DataParserTest extends DataParser {
         try {
             this.validateChar(MarkupTag.CLOSING_TAG.toChar());
         } catch (ParsingException e) {
-            data = e;
+            data = e.getHtmlData();
         }
         
         // Assert
@@ -123,7 +123,7 @@ public class DataParserTest extends DataParser {
         try {
             this.validateChar(MarkupTag.OPENING_TAG.toChar());
         } catch (ParsingException e) {
-            data = e;
+            data = e.getHtmlData();
         }
         
         // Assert
@@ -170,7 +170,7 @@ public class DataParserTest extends DataParser {
         try {
             this.read();
         } catch (ParsingException e) {
-            data = e;
+            data = e.getHtmlData();
         }
         
         // Assert

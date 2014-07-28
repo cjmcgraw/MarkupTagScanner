@@ -38,10 +38,29 @@ public class WhitespaceConsumerMock extends Consumer {
         return this.parseHelper(input);
     }
     
-    private Integer parseHelper(PushbackAndPositionReader input) {
+    private Integer parseHelper(PushbackAndPositionReader input) throws IOException {
         PushbackAndPositionReaderMock mockInput = (PushbackAndPositionReaderMock) input;
-        this.receivedData.add(mockInput.getRemainingData());
+        String data = mockInput.getRemainingData();
+        this.receivedData.add(data);
+        
+        if(data.length() > 0) {
+            this.removeWhitespace(input);
+        }
+        
         return 0;
+    }
+    
+    private void removeWhitespace(PushbackAndPositionReader input) throws IOException {
+        String data = this.receivedData.get(this.receivedData.size() - 1);
+        
+        int i = 0;
+        char ch = data.charAt(i);
+        
+        while(this.isWhitespace(ch)) {
+            input.read();
+            i++;
+            ch = data.charAt(i);
+        }
     }
     
 }

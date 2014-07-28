@@ -2,13 +2,11 @@ package com.mycompany.htmlvalidator.scanners.tokens;
 
 import static org.junit.Assert.*;
 
-import java.awt.Point;
 import java.util.*;
 
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.EndOfInputParsingException;
 
 public class MutableHtmlTagTest {
     public static final String DEFAULT_NAME = "defaultName";
@@ -211,37 +209,6 @@ public class MutableHtmlTagTest {
         
         // Apply
         data = this.symmetricEqualsNegative(other);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testEqualsSymmetric_SameTag_SingleTagIsInvalid_ResultIsFalse() {
-        // Arrange
-        boolean expData = false;
-        boolean data;
-        
-        MutableHtmlTag other = this.createHtmlTagWithParsingExceptionFromFields();
-        
-        // Apply
-        data = this.symmetricEqualsNegative(other);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testEqualsSymmetric_SameTag_BothTagsInvalid_ResultIsTrue() {
-        // Arrange
-        boolean expData = true;
-        boolean data;
-        
-        this.tag = this.createHtmlTagWithParsingExceptionFromFields();
-        MutableHtmlTag other = this.createHtmlTagWithParsingExceptionFromFields();
-        
-        // Apply
-        data = this.symmetricEqualsPositive(other);
         
         // Assert
         assertEquals(expData, data);
@@ -494,21 +461,6 @@ public class MutableHtmlTagTest {
     }
     
     @Test
-    public void testMatches_InvalidTag_SameTagWithIsClosingParsingException_DefaultIsOpening_ReusltIsFalse() {
-        // Arrange
-        boolean expData = false;
-        boolean data;
-        
-        MutableHtmlTag other = this.createHtmlTagWithParsingExceptionFromFields();
-        
-        // Apply
-        data = this.tag.matches(other);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
     public void testSetData_DiffElementName_ResultIsChanged() {
         // Arrange
         String expData = "differentName";
@@ -655,21 +607,6 @@ public class MutableHtmlTagTest {
         assertEquals(expData, data);
     }
     
-    @Test
-    public void testValidate_InvalidTag_ParsingExceptionTag_ResultIsFalse() {
-        // Arrange
-        boolean expData = false;
-        boolean data;
-        
-        MutableHtmlTag tag = this.createHtmlTagWithParsingExceptionFromFields();
-        
-        // Apply
-        data = tag.validate();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
     private boolean symmetricEqualsPositive(MutableHtmlTag other) {
         return (this.tag.equals(other) && 
                 other.equals(this.tag) && 
@@ -706,11 +643,6 @@ public class MutableHtmlTagTest {
     
     private MutableHtmlTag createHtmlTagFromFields() {
         return new MutableHtmlTag(this.createHtmlDataFromFields());
-    }
-    
-    private MutableHtmlTag createHtmlTagWithParsingExceptionFromFields() {
-        HtmlData data = new EndOfInputParsingException(new Point(0, 0), this.createHtmlDataFromFields());
-        return new MutableHtmlTag(data);
     }
     
     @After
