@@ -9,8 +9,6 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlAttributesParser extends HtmlUtilityParser {
-    private static final String ERROR_PARSING_ATTR_NAME = "[ERROR PARSING THIS ATTRIBUTE]";
-    
     private static final String CLASS_NAME = "HtmlAttributeParser";
     private static final String FIRST_FIELD_NAME = "enclosureParser";
     private static final String SECOND_FIELD_NAME = "parser";
@@ -95,8 +93,6 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
         } catch (ComponentException err) {
             name = err.getData();
             result.addError(err);
-        //} catch (EOFException err) {
-        //  throw this.generateEndOfInputParsingException();
         }
         result.setName(name);
         return result;
