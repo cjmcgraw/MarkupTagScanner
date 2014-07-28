@@ -4,9 +4,14 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.MarkupTagNames;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlCommentAttributeParser extends HtmlComponentAttributeParser {
+    private final static String CLASS_NAME = "HtmlCommentAttributeParser";
+    private final static String FIRST_FIELD_NAME = "closingTag";
+    private final static String SECOND_FIELD_NAME = "data";
+    
     private final static String COMMENT_CLOSE = MarkupTagNames.COMMENT_TAG.getEndName();
     
     private StringBuilder closingTag;
@@ -18,7 +23,7 @@ public class HtmlCommentAttributeParser extends HtmlComponentAttributeParser {
         this.readCommentData();
         this.setAttributeData();
         
-        HtmlAttribute attribute = this.attribute;
+        HtmlAttribute attribute = this.getAttribute();
         this.clearState();
         return attribute;
     }
@@ -43,25 +48,21 @@ public class HtmlCommentAttributeParser extends HtmlComponentAttributeParser {
     }
     
     private char getNextExpectedClosingChar() {
-        return COMMENT_CLOSE.charAt(this.closingTag.length());
+        return COMMENT_CLOSE.charAt(this.getClosingTag().length());
     }
     
     private void updateClosingTag(char c) {
-        this.closingTag.append(c);
-    }
-    
-    private void clearClosingTag() {
-        this.closingTag = new StringBuilder();
+        this.getClosingTag().append(c);
     }
     
     private void updateAttributeData(char c) {
-        this.data.append(c);
+        this.getData().append(c);
     }
     
     private void setAttributeData() {
         int start = 0;
-        int end = this.data.length() - MarkupTagNames.COMMENT_TAG.getEndName().length();
-        this.attribute.setName(this.data.substring(start, end));
+        int end = this.getData().length() - MarkupTagNames.COMMENT_TAG.getEndName().length();
+        this.getAttribute().setName(this.getData().substring(start, end));
     }
     
     private boolean commentDataRemaining() {
@@ -69,7 +70,7 @@ public class HtmlCommentAttributeParser extends HtmlComponentAttributeParser {
     }
     
     private boolean closingFound() {
-        return this.closingTag.toString().equals(COMMENT_CLOSE);
+        return this.getClosingTag().toString().equals(COMMENT_CLOSE);
     }
     
     @Override
@@ -79,10 +80,42 @@ public class HtmlCommentAttributeParser extends HtmlComponentAttributeParser {
         this.clearClosingTag();
     }
     
+    private void clearClosingTag() {
+        this.closingTag = new StringBuilder();
+    }
+    
     @Override
     protected void clearState() {
         super.clearState();
         this.data = null;
         this.closingTag = null;
+    }
+    
+    private StringBuilder getClosingTag() {
+        this.validateState();
+        return this.closingTag;
+    }
+    
+    private StringBuilder getData() {
+        this.validateState();
+        return this.data;
+    }
+    
+    private void validateState() {
+        if (this.isMissingState())
+            throw new InvalidStateException(CLASS_NAME, this.getMissingFieldName());
+    }
+    
+    private boolean isMissingState() {
+        return this.closingTag == null ||
+               this.data == null;
+    }
+    
+    private String getMissingFieldName() {
+        if (this.closingTag == null)
+            return FIRST_FIELD_NAME;
+        if (this.data == null)
+            return SECOND_FIELD_NAME;
+        return "Unknown field is missing!";
     }
 }

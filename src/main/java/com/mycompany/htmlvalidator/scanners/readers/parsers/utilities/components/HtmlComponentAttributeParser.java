@@ -31,7 +31,12 @@ public abstract class HtmlComponentAttributeParser extends MarkupParser<HtmlAttr
     
     protected void addError(MarkupError err) {
         this.validateState();
-        this.attribute.addError(err);
+        this.getAttribute().addError(err);
+    }
+    
+    protected HtmlAttribute getAttribute() {
+        this.validateState();
+        return this.attribute;
     }
     
     private void validateState() {

@@ -68,7 +68,7 @@ public class HtmlSingleAttributeParserTest {
     @Test
     public void testParse_SingleAttribute_IsFlag_SpaceAfterAttribute_RemainingDataIsWhitespaceAndTag() throws IOException {
         // Arrange
-        String expData = DEFAULT_CLOSING;
+        String expData = MISSING_SPACE_CLOSING;
         String data;
         
         this.setState(DEFAULT_DATA);
@@ -543,7 +543,7 @@ public class HtmlSingleAttributeParserTest {
     @Test
     public void testParse_MultiAttribute_IsFlag_RemainingDataIsWhitespaceAndTag() throws IOException {
         // Arrange
-        String expData = DEFAULT_REMAINING_ATTRS;
+        String expData = DEFAULT_REMAINING_ATTRS.substring(1);
         String data;
         
         this.setState(DEFAULT_DATA_WITH_MULTI_ATTRS);
