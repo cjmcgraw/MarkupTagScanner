@@ -236,7 +236,6 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    
     @Test(expected=EOFException.class)
     public void testParse_InvalidHtmlComment_MultiLine_MissingFinalCharOfClosingCommentTag() throws IOException {
         // Arrange
@@ -245,7 +244,6 @@ public class HtmlCommentAttributeParserTest {
         // Apply + Assert
         this.parser.parse(this.input);
     }
-    
     
     @Test
     public void testParse_InvalidHtmlComment_MultiLine_MissingFinalCharOfClosingCommentTag_NoRemainingData() throws IOException {
