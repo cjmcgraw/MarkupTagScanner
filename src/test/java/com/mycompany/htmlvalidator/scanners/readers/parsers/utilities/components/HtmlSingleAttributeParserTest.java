@@ -15,14 +15,21 @@ import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositio
 
 public class HtmlSingleAttributeParserTest {
     private final static String CLOSING_TAG = "" + MarkupTag.CLOSING_TAG;
+    private final static String CLOSING_ATTR = "" + MarkupTag.CLOSING_ATTRIBUTE;
     private final static String SEPARATOR = "" + MarkupTag.ATTRIBUTE_VALUE_SEPARATOR;
     
     private static final String DEFAULT_CLOSING = " " + CLOSING_TAG;
     private static final String MISSING_SPACE_CLOSING = CLOSING_TAG;
+    private static final String CLOSING_WITH_ATTR = CLOSING_ATTR + " " + CLOSING_TAG;
+    private static final String MISSING_SPACE_CLOSING_ATTR = CLOSING_ATTR + CLOSING_TAG;
     
     private static final String DEFAULT_DATA = "some" + DEFAULT_CLOSING;
     private static final String DATA_NO_SPACE = "some" + MISSING_SPACE_CLOSING;
+    private static final String DATA_WITH_CLOSING_ATTR = "some" + CLOSING_WITH_ATTR;
+    
     private static final String DATA_WITH_VAL = "some" + SEPARATOR + "value" + DEFAULT_CLOSING;
+    private static final String DATA_WITH_VAL_AND_CLOSING_ATTR = "some" + SEPARATOR + "value" + CLOSING_WITH_ATTR;
+    
     private static final String DATA_WITH_DOUBLE_QUOTE = "some" + SEPARATOR + "\"" + DEFAULT_CLOSING ;
     private static final String DATA_WITH_SINGLE_QUOTE = "some" + SEPARATOR + "'" +  DEFAULT_CLOSING;
     
@@ -51,6 +58,163 @@ public class HtmlSingleAttributeParserTest {
     }
     
     @Test
+    public void testParse_OnlyClosingAttr_ReturnedAttributeMatches() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(CLOSING_ATTR);
+        HtmlAttribute data;
+        
+        this.setState(MISSING_SPACE_CLOSING_ATTR);
+        
+        // Apply
+        data = this.parser.parse(this.input);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_RemainingDataIsTag() throws IOException {
+        // Arrange
+        String expData = MISSING_SPACE_CLOSING;
+        String data;
+        
+        this.setState(MISSING_SPACE_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_SingleCallOnWhitespaceConsumer() throws IOException {
+        // Arrange
+        int expData = 1;
+        int data;
+        
+        this.setState(MISSING_SPACE_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerNumOfCalls();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_DataWithOnlyTagPassedToWhitespaceConsumer() throws IOException {
+        // Arrange
+        String expData = MISSING_SPACE_CLOSING;
+        String data;
+        
+        this.setState(MISSING_SPACE_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerCallData(0);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_NoCallsOnEnclosureParser() throws IOException {
+        // Arrange
+        int expData = 0;
+        int data;
+        
+        this.setState(MISSING_SPACE_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getEnclosureNumOfCalls();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    public void testParse_OnlyClosingAttr_HasSpaceAfterClosingAttr_ReturnedAttributeMatches() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(CLOSING_ATTR);
+        HtmlAttribute data;
+        
+        this.setState(CLOSING_WITH_ATTR);
+        
+        // Apply
+        data = this.parser.parse(this.input);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_HasSpaceAfterClosingAttr_RemainingDataIsTag() throws IOException {
+        // Arrange
+        String expData = MISSING_SPACE_CLOSING;
+        String data;
+        
+        this.setState(CLOSING_WITH_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_HasSpaceAfterClosingAttr_SingleCallOnWhitespaceConsumer() throws IOException {
+        // Arrange
+        int expData = 1;
+        int data;
+        
+        this.setState(CLOSING_WITH_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerNumOfCalls();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_HasSpaceAfterClosingAttr_DataWithOnlyWhitespaceAndTagPassedToWhitespaceConsumer() throws IOException {
+        // Arrange
+        String expData = DEFAULT_CLOSING;
+        String data;
+        
+        this.setState(CLOSING_WITH_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerCallData(0);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_OnlyClosingAttr_HasSpaceAfterClosingAttr_NoCallsOnEnclosureParser() throws IOException {
+        // Arrange
+        int expData = 0;
+        int data;
+        
+        this.setState(CLOSING_WITH_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getEnclosureNumOfCalls();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testParse_SingleAttribute_IsFlag_SpaceAfterAttribute_ReturnedAttributeMatches() throws IOException {
         // Arrange
         HtmlAttribute expData = new HtmlAttribute("some");
@@ -66,7 +230,7 @@ public class HtmlSingleAttributeParserTest {
     }
     
     @Test
-    public void testParse_SingleAttribute_IsFlag_SpaceAfterAttribute_RemainingDataIsWhitespaceAndTag() throws IOException {
+    public void testParse_SingleAttribute_IsFlag_SpaceAfterAttribute_RemainingDataIsTag() throws IOException {
         // Arrange
         String expData = MISSING_SPACE_CLOSING;
         String data;
@@ -209,6 +373,83 @@ public class HtmlSingleAttributeParserTest {
     }
     
     @Test
+    public void testParse_SingleAttribute_IsFlag_FollowedImmediateByClosingAttr_ReturnedAttributeMatches() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("some");
+        HtmlAttribute data;
+        
+        this.setState(DATA_WITH_CLOSING_ATTR);
+        // Apply
+        data = this.parser.parse(this.input);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_IsFlag_FollowedImmediatelyByClosingAttr_RemainingDataContainsClosingAttrAndTag() throws IOException {
+        // Arrange
+        String expData = CLOSING_WITH_ATTR;
+        String data;
+        
+        this.setState(DATA_WITH_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_IsFlag_FollowedImmediatelyByClosingAttr_SingleCallOnWhitespaceConsumer() throws IOException {
+        // Arrange
+        int expData = 1;
+        int data;
+        
+        this.setState(DATA_WITH_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerNumOfCalls();
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_IsFlag_FollowedImmediatelyByClosingAttr_DataWithClosingAttrAndTagPassedToWhitespaceConsumer() throws IOException {
+        // Arrange
+        String expData = CLOSING_WITH_ATTR;
+        String data;
+        
+        this.setState(DATA_WITH_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerCallData(0);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_IsFlag_FollowedImmediatelyByClosingAttr_NoCallsOnEnclosureParser() throws IOException {
+        // Arrange
+        int expData = 0;
+        int data;
+        
+        this.setState(DATA_WITH_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getEnclosureNumOfCalls();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
     public void testParse_SingleAttribute_HasValue_ReturnedAttributeMatches() throws IOException {
         // Arrange
         HtmlAttribute expData = new HtmlAttribute("some", "value");
@@ -294,6 +535,98 @@ public class HtmlSingleAttributeParserTest {
         int data;
         
         this.setState(DATA_WITH_VAL);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getEnclosureNumOfCalls();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    public void testParse_SingleAttribute_HasValue_FollowedImmediateByClosingAttr_ReturnedAttributeMatches() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("some");
+        HtmlAttribute data;
+        
+        this.setState(DATA_WITH_VAL_AND_CLOSING_ATTR);
+        // Apply
+        data = this.parser.parse(this.input);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_HasValue_FollowedImmediatelyByClosingAttr_RemainingDataContainsClosingAttrAndTag() throws IOException {
+        // Arrange
+        String expData = CLOSING_WITH_ATTR;
+        String data;
+        
+        this.setState(DATA_WITH_VAL_AND_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_HasValue_FollowedImmediatelyByClosingAttr_TwoCallsOnWhitespaceConsumer() throws IOException {
+        // Arrange
+        int expData = 2;
+        int data;
+        
+        this.setState(DATA_WITH_VAL_AND_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerNumOfCalls();
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_HasValue_FollowedImmediatelyByClosingAttr_FirstCallOnWhitespaceIsSeparator() throws IOException {
+        // Arrange
+        String expData = SEPARATOR + DATA_WITH_VAL_AND_CLOSING_ATTR.split(SEPARATOR)[1];
+        String data;
+        
+        this.setState(DATA_WITH_VAL_AND_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerCallData(0);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_HasValue_FollowedImmediatelyByClosingAttr_SecondCallOnWhitespaceIsAfterSeparator() throws IOException {
+        // Arrange
+        String expData = DATA_WITH_VAL_AND_CLOSING_ATTR.split(SEPARATOR)[1];
+        String data;
+        
+        this.setState(DATA_WITH_VAL_AND_CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input);
+        data = this.getConsumerCallData(1);
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_SingleAttribute_HasValue_FollowedImmediatelyByClosingAttr_NoCallsOnEnclosureParser() throws IOException {
+        // Arrange
+        int expData = 0;
+        int data;
+        
+        this.setState(DATA_WITH_VAL_AND_CLOSING_ATTR);
         
         // Apply
         this.parser.parse(this.input);

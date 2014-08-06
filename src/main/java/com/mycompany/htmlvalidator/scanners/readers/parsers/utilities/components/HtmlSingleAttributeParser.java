@@ -47,6 +47,10 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
     }
     
     private String parseName() throws IOException {
+        char upcoming = this.peekNextRead();
+        
+        if(this.isClosingAttribute(upcoming))
+            return this.parseClosingAttributeData();
         return this.parseGeneralAttributeData();
     }
     
@@ -91,6 +95,11 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
         return this.quoteEnclosureParser.parse(this.getInput());
     }
     
+    private String parseClosingAttributeData() throws IOException {
+        this.read();
+        return "" + this.currChar;
+    }
+    
     private String parseGeneralAttributeData() throws IOException {
         StringBuilder result = new StringBuilder();
         
@@ -116,7 +125,6 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
     private void runWhitespaceConsumer() throws IOException {
         this.validateState();
         this.whitespaceConsumer.parse(this.getInput());
-        this.peekNextRead();
     }
     
     private boolean isValidCharacter() {
