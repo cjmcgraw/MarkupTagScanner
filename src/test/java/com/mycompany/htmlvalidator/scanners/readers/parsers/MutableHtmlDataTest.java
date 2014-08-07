@@ -2,8 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import org.junit.After;
 import org.junit.Test;
@@ -140,13 +139,16 @@ public class MutableHtmlDataTest {
     }
     
     @Test
-    public void testToString_AlteredAttributeData_MorethanTwoAttributes() {
+    public void testToString_AlteredAttributeData_MorethanMaxAttributes() {
         // Arrange
-        this.defaultAttr = Arrays.asList(new HtmlAttribute("firstAttr", "\"firstValue\""),
-                                         new HtmlAttribute("secondAttr", "secondValue"),
-                                         new HtmlAttribute("thirdAttr", ""));
+        this.defaultAttr = new ArrayList<HtmlAttribute>();
         
-        String expData = "<" + this.defaultName + " ..." + ">";
+        for (int i = 0; i <= MutableHtmlData.MAX_NUM_ATTR_IN_STRING; i++) {
+            HtmlAttribute attr = new HtmlAttribute("attr" + i, "value" + i);
+            this.defaultAttr.add(attr);
+        }
+        
+        String expData = "<" + this.defaultName + " " + MutableHtmlData.ELIPSIS + ">";
         String data;
         
         // Apply

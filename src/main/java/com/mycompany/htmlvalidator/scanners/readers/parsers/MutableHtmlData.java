@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.*;
 
 public class MutableHtmlData implements HtmlData{
-    public final static String ELIPSIS = "...";
-    public final int MAX_NUM_ATTR_IN_STRING = 2;
+    private final static String COMMENT_START = MarkupTagNames.COMMENT_TAG.getBeginName();
+    private final static String COMMENT_END = MarkupTagNames.COMMENT_TAG.getEndName();
+    
+    public final static String ELIPSIS = "[...]";
+    public final static int MAX_NUM_ATTR_IN_STRING = 10;
     
     private boolean hasOpeningTag;
     private boolean hasClosingTag;
@@ -88,6 +91,10 @@ public class MutableHtmlData implements HtmlData{
         this.isClosing = isClosing;
     }
     
+    private boolean isComment() {
+        return COMMENT_START.equals(this.name);
+    }
+    
     public String toString() {
         String open = MarkupTag.OPENING_TAG.toString();
         String close = MarkupTag.CLOSING_TAG.toString();
@@ -99,6 +106,7 @@ public class MutableHtmlData implements HtmlData{
         result += this.getName();
         result += " ";
         result += getAttributeString();
+        result += (this.isComment()) ? COMMENT_END : "";
         result += this.hasClosingTag ? close : "[" + close + "]";
         
         return result;
