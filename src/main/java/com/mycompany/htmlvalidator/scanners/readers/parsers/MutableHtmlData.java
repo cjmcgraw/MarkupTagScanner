@@ -16,17 +16,23 @@ public class MutableHtmlData implements HtmlData{
     private boolean hasOpeningTag;
     private boolean hasClosingTag;
     private List<HtmlAttribute> attributes;
+    private boolean selfClosing;
     private boolean isClosing;
     private StringBuilder name;
     
     public MutableHtmlData() {
-        this.name = new StringBuilder();
-        this.isClosing = false;
-        
-        this.hasOpeningTag = false;
-        this.hasOpeningTag = false;
-        
-        this.attributes = new ArrayList<>();
+        this("", false, false, false, false, new ArrayList<HtmlAttribute>());
+    }
+    
+    public MutableHtmlData(String name, boolean isClosing, boolean hasOpening,
+                           boolean hasClosing, boolean selfClosing,
+                           List<HtmlAttribute> attributes) {
+        this.name = new StringBuilder(name);
+        this.isClosing = isClosing;
+        this.hasOpeningTag = hasOpening;
+        this.hasClosingTag = hasClosing;
+        this.attributes = attributes;
+        this.selfClosing = selfClosing;
     }
     
     public String getName() {
@@ -67,15 +73,22 @@ public class MutableHtmlData implements HtmlData{
     
     public void setAttributes(Collection<HtmlAttribute> data) {
         this.attributes = new ArrayList<>();
+        this.selfClosing = false;
         this.updateAttributes(data);
     }
     
     public void updateAttributes(Collection<HtmlAttribute> data) {
-        this.attributes.addAll(data);
+        for (HtmlAttribute attr : data)
+            this.updateAttributes(attr);
     }
     
     public void updateAttributes(HtmlAttribute data) {
+        this.selfClosing = this.selfClosing || this.isSelfClosingAttr(data);
         this.attributes.add(data);
+    }
+    
+    private boolean isSelfClosingAttr(HtmlAttribute data) {
+        return MarkupTag.CLOSING_ATTRIBUTE.equals(data.toString());
     }
     
     public boolean isClosing() {
@@ -83,8 +96,7 @@ public class MutableHtmlData implements HtmlData{
     }
     
     public boolean isSelfClosing() {
-        HtmlAttribute terminalAttr = this.attributes.get(this.attributes.size());
-        return terminalAttr.isClosingFlag();
+        return this.selfClosing;
     }
     
     public void setIsClosing(boolean isClosing) {
@@ -92,7 +104,7 @@ public class MutableHtmlData implements HtmlData{
     }
     
     private boolean isComment() {
-        return COMMENT_START.equals(this.name);
+        return this.name.toString().equals(COMMENT_START);
     }
     
     public String toString() {
@@ -107,7 +119,7 @@ public class MutableHtmlData implements HtmlData{
         result += " ";
         result += getAttributeString();
         result += (this.isComment()) ? COMMENT_END : "";
-        result += this.hasClosingTag ? close : "[" + close + "]";
+        result += (this.hasClosingTag) ? close : "[" + close + "]";
         
         return result;
     }
@@ -126,11 +138,11 @@ public class MutableHtmlData implements HtmlData{
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + MAX_NUM_ATTR_IN_STRING;
         result = prime * result + ((attributes == null) ? 0 : attributes.hashCode());
         result = prime * result + (hasClosingTag ? 1231 : 1237);
         result = prime * result + (hasOpeningTag ? 1231 : 1237);
         result = prime * result + (isClosing ? 1231 : 1237);
+        result = prime * result + (selfClosing ? 1231 : 1237);
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
