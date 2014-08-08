@@ -28,11 +28,11 @@ public class MutableHtmlData implements HtmlData{
                            boolean hasClosing, boolean selfClosing,
                            List<HtmlAttribute> attributes) {
         this.name = new StringBuilder(name);
-        this.isClosing = isClosing;
+        this.attributes = attributes;
         this.hasOpeningTag = hasOpening;
         this.hasClosingTag = hasClosing;
-        this.attributes = attributes;
         this.selfClosing = selfClosing;
+        this.isClosing = isClosing;
     }
     
     public String getName() {
@@ -56,7 +56,7 @@ public class MutableHtmlData implements HtmlData{
     }
     
     public void setName(String name) {
-        this.name = new StringBuilder(name);
+        this.name = new StringBuilder(name.trim());
     }
     
     public void updateName(char c) {
@@ -83,8 +83,14 @@ public class MutableHtmlData implements HtmlData{
     }
     
     public void updateAttributes(HtmlAttribute data) {
-        this.selfClosing = this.selfClosing || this.isSelfClosingAttr(data);
-        this.attributes.add(data);
+        if (this.isValidAttribute(data)) {
+            this.selfClosing = this.selfClosing || this.isSelfClosingAttr(data);
+            this.attributes.add(data);
+        }
+    }
+    
+    private boolean isValidAttribute(HtmlAttribute attr) {
+        return attr != null && !attr.isEmpty();
     }
     
     private boolean isSelfClosingAttr(HtmlAttribute data) {
