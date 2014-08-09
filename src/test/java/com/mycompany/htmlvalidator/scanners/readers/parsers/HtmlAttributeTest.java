@@ -14,6 +14,7 @@ public class HtmlAttributeTest {
     public static final String DEFAULT_NAME = "some name";
     public static final String DEFAULT_VALUE = "some value";
     public static final String EMPTY_VALUE = HtmlAttribute.DEFAULT_EMPTY_VALUES;
+    public static final String WHITESPACE = String.format("    \t\t    \t\t %n%n  \t \t ");
     
     public static final ComponentException FIRST_ERROR = new MissingCharacterComponentException('a', new Point(0, 0), "some data");
     public static final ComponentException SECOND_ERROR = new UnexpectedCharacterComponentException('a', new Point(1, 1), "other data");
@@ -29,65 +30,108 @@ public class HtmlAttributeTest {
     }
     
     @Test
-    public void testNameConstructor_ReturnsCorrectName() {
+    public void testNameConstructor_ReturnsCorrectName_DependsOnGetName() {
         // Arrange
         String expData = "constructed name";
-        String data;
         
+        // Apply
         this.setState(expData);
         
-        // Apply
-        data = this.attribute.getName();
-        
         // Assert
-        assertEquals(expData, data);
+        assertEquals(expData, this.attribute.getName());
     }
     
     @Test
-    public void testNameConstructor_ReturnsEmptyValue() {
-        // Arrange
-        String expData = "";
-        String data;
-        
+    public void testNameConstructor_ReturnsEmptyValue_DependsOnGetValue() {
+        // Apply
         this.setState("constructed name");
         
-        // Apply
-        data = this.attribute.getValue();
-        
         // Assert
-        assertEquals(expData, data);
+        assertEquals(EMPTY_VALUE, this.attribute.getValue());
     }
     
     @Test
-    public void testSetName_ReturnsCorrectName() {
+    public void testGetName_DefaultName() {
+        // Assert
+        assertEquals(DEFAULT_NAME, this.attribute.getName());
+    }
+    
+    @Test
+    public void testGetName_OtherName() {
         // Arrange
         String expData = "other name";
-        String data;
         
-        this.attribute = new HtmlAttribute(DEFAULT_NAME);
+        // Apply
+        this.setState(expData);
+        
+        // Assert
+        assertEquals(expData, this.attribute.getName());
+    }
+    
+    @Test
+    public void testSetName_DependsOnGetName() {
+        // Arrange
+        String expData = "other name";
         
         // Apply
         this.attribute.setName(expData);
-        data = this.attribute.getName();
         
         // Assert
-        assertEquals(expData, data);
+        assertEquals(expData, this.attribute.getName());
     }
     
     @Test
-    public void testSetValue_ReturnsCorrectValue() {
+    public void testGetValue_DefaultValue() {
+        // Assert
+        assertEquals(DEFAULT_VALUE, this.attribute.getValue());
+    }
+    
+    @Test
+    public void testGetValue_OtherValue() {
         // Arrange
-        String expData = DEFAULT_VALUE;
-        String data;
+        String expData = "other value";
         
-        this.setState(DEFAULT_NAME);
+        // Apply
+        this.setState(DEFAULT_NAME, expData);
+        
+        // Assert
+        assertEquals(expData, this.attribute.getValue());
+    }
+    
+    @Test
+    public void testSetName_LeadingAndTrailingWhitespace_DependsOnGetName() {
+        // Arrange
+        String expData = "some name with whitespace";
+        
+        // Apply
+        this.attribute.setName(WHITESPACE + expData + WHITESPACE);
+        
+        // Assert
+        assertEquals(expData, this.attribute.getName());
+    }
+    
+    @Test
+    public void testSetValue_ReturnsCorrectValue_DependsOnGetValue() {
+        // Arrange
+        String expData = "other value";
         
         // Apply
         this.attribute.setValue(expData);
-        data = this.attribute.getValue();
         
         // Assert
-        assertEquals(expData, data);
+        assertEquals(expData, this.attribute.getValue());
+    }
+    
+    @Test
+    public void testSetValue_LeadingAndTrailingWhitespace_DependsOnGetValue() {
+        // Arrange
+        String expData = "some value with whitespace";
+        
+        // Apply
+        this.attribute.setValue(WHITESPACE + expData + WHITESPACE);
+        
+        // Assert
+        assertEquals(expData, this.attribute.getValue());
     }
     
     @Test
@@ -116,6 +160,61 @@ public class HtmlAttributeTest {
         
         // Assert
         assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testIsEmpty_WithEmptyAttribute_FromEmptyConstructor() {
+        // Arrange
+        HtmlAttribute attr = new HtmlAttribute();
+        
+        // Assert
+        assertEquals(true, attr.isEmpty());
+    }
+    
+    @Test
+    public void testIsEmpty_WithNonEmptyName_FromConstructor() {
+        // Arrange
+        this.setState("some name");
+        
+        // Assert
+        assertEquals(false, this.attribute.isEmpty());
+    }
+    
+    @Test
+    public void testIsEmpty_WithNonEmptyValue_FromConstructor() {
+        // Arrange
+        this.setState(EMPTY_VALUE, "some value");
+        
+        // Assert
+        assertEquals(false, this.attribute.isEmpty());
+    }
+    
+    @Test
+    public void testIsEmpty_WithEmptyAttribute_FromSet() {
+        // Arrange
+        this.attribute.setName(EMPTY_VALUE);
+        this.attribute.setValue(EMPTY_VALUE);
+        
+        // Assert
+        assertEquals(true, this.attribute.isEmpty());
+    }
+    
+    @Test
+    public void testIsEmpty_WithNonEmptyName_FromSet() {
+        // Arrange
+        this.attribute.setValue(EMPTY_VALUE);
+        
+        // Assert
+        assertEquals(false, this.attribute.isEmpty());
+    }
+    
+    @Test
+    public void testIsEmpty_WithNonEmptyValue_FromSet() {
+        // Arrange
+        this.attribute.setName(EMPTY_VALUE);
+        
+        // Assert
+        assertEquals(false, this.attribute.isEmpty());
     }
     
     @Test

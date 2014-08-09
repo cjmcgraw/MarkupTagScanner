@@ -32,7 +32,7 @@ public class HtmlAttribute extends HtmlErrorReporter{
             this.attributeName = DEFAULT_CLOSING_NAME;
             this.setValue(DEFAULT_EMPTY_VALUES);
         }else
-            this.attributeName = name;
+            this.attributeName = name.trim();
     }
     
     public String getValue() {
@@ -52,6 +52,10 @@ public class HtmlAttribute extends HtmlErrorReporter{
     
     public boolean isClosingFlag() {
         return this.isFlag() && this.nameIs(DEFAULT_CLOSING_NAME);
+    }
+    
+    public boolean isEmpty() {
+        return this.nameIs(DEFAULT_EMPTY_VALUES) && this.valueIs(DEFAULT_EMPTY_VALUES);
     }
     
     @Override
