@@ -3,19 +3,16 @@ package com.mycompany.htmlvalidator.scanners.readers;
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.HtmlBufferedReader;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
+
+
 public class HtmlBufferedReaderTest {
     public static final List<HtmlData> DEFAULT_DATA = generateStandardData();
     public static final List<Character> STANDARD_INPUT_DATA = Arrays.asList( '<', '>', 's', 'o', 'm', 'e', '<', '>', 'd', 'a', 't', 'a', '<', '>');
