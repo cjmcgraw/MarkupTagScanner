@@ -2,6 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
 import java.io.*;
 
+import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.*;
@@ -12,24 +13,31 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     private static final String CLASS_NAME = "HtmlAttributeParser";
     private static final String FIRST_FIELD_NAME = "enclosureParser";
     private static final String SECOND_FIELD_NAME = "parser";
-    private static final String THIRD_FIELD_NAME = "consumer";
+    private static final String THIRD_FIELD_NAME = "commentParser";
+    private static final String FOURTH_FIELD_NAME = "consumer";
+    
+    private static final String COMMENT_NAME = MarkupTagNames.COMMENT_TAG.getBeginName();
     
     private HtmlComponentEnclosureParser enclosureParser;
     private HtmlComponentAttributeParser attributeParser;
+    private HtmlComponentAttributeParser commentParser;
     private Consumer whitespaceConsumer;
     
     public HtmlAttributesParser() {
         this(new HtmlQuoteEnclosureParser(),
              new HtmlSingleAttributeParser(),
+             new HtmlCommentAttributeParser(),
              new WhitespaceConsumer());
     }
     
     public HtmlAttributesParser(HtmlComponentEnclosureParser enclosureParser,
                                 HtmlComponentAttributeParser attributeParser,
+                                HtmlComponentAttributeParser commentParser,
                                 Consumer whitespaceConsumer) {
         super();
         this.enclosureParser = enclosureParser;
         this.attributeParser = attributeParser;
+        this.commentParser = commentParser;
         this.whitespaceConsumer = whitespaceConsumer;
     }
     
@@ -41,6 +49,22 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     }
     
     private void parseAttributes() throws IOException {
+        if (this.resultIsComment())
+            this.parseCommentData();
+        else 
+            this.parseStandardAttributes();
+    }
+    
+    private boolean resultIsComment() {
+        return this.getResult().getName().startsWith(COMMENT_NAME);
+    }
+    
+    private void parseCommentData() throws IOException{
+        HtmlAttribute attribute = this.parseCommentAttribute();
+        this.getResult().updateAttributes(attribute);
+    }
+    
+    private void parseStandardAttributes() throws IOException {
         this.updateCurrentCharacter();
         
         while(this.isValidCharacter()) {
@@ -76,6 +100,11 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
         if (this.isQuoteEnclosure()) 
             return this.parseQuoteEnclosure();
         return this.parseGeneralAttribute();
+    }
+    
+    private HtmlAttribute parseCommentAttribute() throws IOException {
+        this.validateState();
+        return this.commentParser.parse(this.getInput());
     }
     
     private HtmlAttribute parseQuoteEnclosure() throws IOException {
@@ -116,6 +145,7 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     private boolean isMissingState() {
         return this.enclosureParser == null ||
                this.attributeParser == null ||
+               this.commentParser == null ||
                this.whitespaceConsumer == null;
     }
     
@@ -124,8 +154,10 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
             return FIRST_FIELD_NAME;
         if (this.attributeParser == null)
             return SECOND_FIELD_NAME;
-        if (this.whitespaceConsumer == null)
+        if (this.commentParser == null)
             return THIRD_FIELD_NAME;
+        if (this.whitespaceConsumer == null)
+            return FOURTH_FIELD_NAME;
         return "Unknown Field Caused Error";
     }
 }

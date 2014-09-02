@@ -15,19 +15,24 @@ import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
 public class HtmlAttributesParserTest {;
     private static final String ATTR_DATA = "someAttrData";
+    private static final String CMNT_DATA = "someCommentData";
     private static final String QUOTE_DATA = "someQuoteData";
     
-    private static final HtmlAttribute QUOTE_ATTR = new HtmlAttribute("someQuoteData");
-    private static final HtmlAttribute STND_ATTR = new HtmlAttribute("someAttrData");
+    private static final HtmlAttribute QUOTE_ATTR = new HtmlAttribute(QUOTE_DATA);
+    private static final HtmlAttribute STND_ATTR = new HtmlAttribute(ATTR_DATA);
+    private static final HtmlAttribute CMNT_ATTR = new HtmlAttribute(CMNT_DATA);
     
-    private static final String SINGLE_ATTR = "X";
+    private static final String STANDARD_ATTR = "X";
     private static final String SINGLE_QUOTE = MarkupTag.SINGLE_QUOTE.toString();
     private static final String DOUBLE_QUOTE = MarkupTag.DOUBLE_QUOTE.toString();
     
     private static final String CLOSING_TAG = MarkupTag.CLOSING_TAG.toString();
     private static final String OPENING_TAG = MarkupTag.OPENING_TAG.toString();
     
+    private static final String COMMENT_OPEN = MarkupTagNames.COMMENT_TAG.getBeginName();
+    
     private HtmlSingleAttributeParserMock attributeParser = new HtmlSingleAttributeParserMock(ATTR_DATA);
+    private HtmlCommentAttributeParserMock commentParser = new HtmlCommentAttributeParserMock(CMNT_DATA);
     private HtmlQuoteEnclosureParserMock enclosureParser = new HtmlQuoteEnclosureParserMock(QUOTE_DATA);
     private WhitespaceConsumerMock whitespaceConsumer = new WhitespaceConsumerMock();
     
@@ -36,939 +41,617 @@ public class HtmlAttributesParserTest {;
     private HtmlAttributesParser parser;
     private MutableHtmlData result;
     
-    /* Potential exceptions:
-     * 
-     *  1. 
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          null EnclosureParser
-     *      
-     *      exception:
-     *          InvalidStateException
-     *          
-     *  2. 
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          null attributeParser
-     *      
-     *      exception:
-     *          InvalidStateException
-     *           
-     *  3. 
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          null whitespaceConsumer
-     *      
-     *      exception:
-     *          InvalidStateException
-     *  4.
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          unclosed data (unexpected "<" in string)
-     *      
-     *      exception:
-     *          UnclosedTagParsingException
-     *  
-     *  5.
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          Unclosed input (missing ">" in string)
-     *      
-     *      exception:
-     *          EndOfInputParsingException
-     *          
-     */
-    
-    /* Potential component exceptions:
-     * 
-     *  1.
-     *      public method:
-     *          parse
-     *          
-     *      component:
-     *          enclosureParser
-     *      
-     *      exception:
-     *          EOFException
-     *          
-     *      expected outcome:
-     *          repackage at EndOfInputParsingException
-     * 
-     */
     
     @Before
     public void setUp() {
         this.parser = new HtmlAttributesParser(this.enclosureParser,
                                                this.attributeParser,
+                                               this.commentParser,
                                                this.whitespaceConsumer);
         this.result = new MutableHtmlData();
     }
     
     @Test
-    public void testParse_SoloAttr_SingleAttrs_SpaceBeforeClosingTag_ResultContainsAttrsAsFirstValue() throws IOException {
-        // Arrange
-        HtmlAttribute expData = STND_ATTR;
-        HtmlAttribute data;
+    public void testParse_SoloAttr_StndAttr_SpaceBeforeClosingTag_ResultContainsExpectedAttrs()  {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR);
+        String str = STANDARD_ATTR + " " + CLOSING_TAG;
         
-        this.setState(SINGLE_ATTR + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleAttrs_SpaceBeforeClosingTag_ResultAttrssContainsOnlyOneAttr() throws IOException {
-        // Arrange
-        int expData = 1;
-        int data;
-        
-        this.setState(SINGLE_ATTR + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_StndAttr_SpaceBeforeClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + CLOSING_TAG);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleAttrs_SpaceBeforeClosingTag_RemainingDataMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(SINGLE_ATTR + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_StndAttr_SpaceBeforeClosingTag_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
     @Test
-    public void testParse_SoloAttr_SingleAttrs_NoSpaceBeforeClosingTag_ResultContainsAttrsAsFirstValue() throws IOException {
-        // Arrange
-        HtmlAttribute expData = STND_ATTR;
-        HtmlAttribute data;
+    public void testParse_SoloAttr_StndAttr_NoSpaceBeforeClosingTag_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR);
+        String str = STANDARD_ATTR + CLOSING_TAG;
         
-        this.setState(SINGLE_ATTR + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleAttrs_NoSpaceBeforeClosingTag_ResultAttrssContainsOnlyOneAttr() throws IOException {
-        // Arrange
-        int expData = 1;
-        int data;
-        
-        this.setState(SINGLE_ATTR + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_StndAttr_NoSpaceBeforeClosingTag_RemainingDataMatches() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + CLOSING_TAG);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleAttrs_NoSpaceBeforeClosingTag_RemainingDataMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(SINGLE_QUOTE + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_StndAttr_NoSpaceBeforeClosingTag_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
     @Test
-    public void testParse_SoloAttr_SingleQuoteAttr_SpaceBeforeClosingTag_ResultContainsAttrsAsFirstValue() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
+    public void testParse_SoloAttr_SingleQuoteAttr_SpaceBeforeClosingTag_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR);
+        String str = SINGLE_QUOTE + " " + CLOSING_TAG;
         
-        this.setState(SINGLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleQuoteAttr_SpaceBeforeClosingTag_ResultAttrssContainsOnlyOneAttr() throws IOException {
-        // Arrange
-        int expData = 1;
-        int data;
-        
-        this.setState(SINGLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_SingleQuoteAttr_SpaceBeforeClosingTag_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + CLOSING_TAG);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleQuoteAttr_SpaceBeforeClosingTag_RemainingDataMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(SINGLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_SingleQuoteAttr_SpaceBeforeClosingTag_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
     @Test
-    public void testParse_SoloAttr_SingleQuoteAttr_NoSpaceBeforeClosingTag_ResultContainsAttrsAsFirstValue() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
+    public void testParse_SoloAttr_SingleQuoteAttr_NoSpaceBeforeClosingTag_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR);
+        String str = SINGLE_QUOTE + CLOSING_TAG;
         
-        this.setState(SINGLE_QUOTE + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleQuoteAttr_NoSpaceBeforeClosingTag_ResultAttrssContainsOnlyOneAttr() throws IOException {
-        // Arrange
-        int expData = 1;
-        int data;
-        
-        this.setState(SINGLE_QUOTE + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_SingleQuoteAttr_NoSpaceBeforeClosingTag_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + CLOSING_TAG);
     }
     
     @Test
-    public void testParse_SoloAttr_SingleQuoteAttr_NoSpaceBeforeClosingTag_RemainingDataMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(SINGLE_QUOTE + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_SingleQuoteAttr_NoSpaceBeforeClosingTag_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
     @Test
-    public void testParse_SoloAttr_DoubleQuoteAttr_SpaceBeforeClosingTag_ResultContainsAttrsAsFirstValue() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
+    public void testParse_SoloAttr_DoubleQuoteAttr_SpaceBeforeClosingTag_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR);
+        String str = DOUBLE_QUOTE + " " + CLOSING_TAG;
         
-        this.setState(DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_SoloAttr_DoubleQuoteAttr_SpaceBeforeClosingTag_ResultAttrssContainsOnlyOneAttr() throws IOException {
-        // Arrange
-        int expData = 1;
-        int data;
-        
-        this.setState(DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_DoubleQuoteAttr_SpaceBeforeClosingTag_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + " " + CLOSING_TAG);
     }
     
     @Test
-    public void testParse_SoloAttr_DoubleQuoteAttr_SpaceBeforeClosingTag_RemainingDataMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_DoubleQuoteAttr_SpaceBeforeClosingTag_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
     @Test
-    public void testParse_SoloAttr_DoubleQuoteAttr_NoSpaceBeforeClosingTag_ResultContainsAttrsAsFirstValue() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
+    public void testParse_SoloAttr_DoubleQuoteAttr_NoSpaceBeforeClosingTag_ResultContainsAttrs() {
+     // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR);
+        String str = DOUBLE_QUOTE + CLOSING_TAG;
         
-        this.setState(DOUBLE_QUOTE + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_SoloAttr_DoubleQuoteAttr_NoSpaceBeforeClosingTag_ResultAttrssContainsOnlyOneAttr() throws IOException {
-        // Arrange
-        int expData = 1;
-        int data;
-        
-        this.setState(DOUBLE_QUOTE + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_DoubleQuoteAttr_NoSpaceBeforeClosingTag_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + CLOSING_TAG);
     }
     
     @Test
-    public void testParse_SoloAttr_DoubleQuoteAttr_NoSpaceBeforeClosingTag_RemainingDataMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(DOUBLE_QUOTE + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_DoubleQuoteAttr_NoSpaceBeforeClosingTag_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
     @Test
-    public void testParse_PairAttr_TwoSingleAttrs_ResultContainsExpectedAttrsAsFirstAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = STND_ATTR;
-        HtmlAttribute data;
+    public void testParse_SoloAttr_ResultHasCommentName_ResultContainsAttrs() {
+     // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(CMNT_ATTR);
+        String str = STANDARD_ATTR + CLOSING_TAG;
         
-        this.setState(SINGLE_ATTR + " " + SINGLE_ATTR + " " + CLOSING_TAG);
+        this.result.setName(COMMENT_OPEN);
         
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_PairAttr_TwoSingleAttrs_ResultContainsExpectedAttrsAsSecondAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = STND_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_ATTR + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(1);
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_ResultHasCommentName_RemainingInputMatchesExpected() {
+     // Test
+        this.result.setName(COMMENT_OPEN);
+        this.testParse_HasCommentName_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + CLOSING_TAG);
     }
     
     @Test
-    public void testParse_PairAttr_TwoSingleAttrs_ResultContainsOnlyTwoAttrs() throws IOException {
-        // Arrange
-        int expData = 2;
-        int data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_ATTR + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
+    public void testParse_SoloAttr_ResultHasCommentName_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.result.setName(COMMENT_OPEN);
+        this.testParse_HasCommentName_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
     @Test
-    public void testParse_PairAttr_TwoSingleAttrs_RemainingInputMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
+    public void testParse_PairAttr_TwoStndAttrs_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, STND_ATTR);
+        String str = STANDARD_ATTR + " " + STANDARD_ATTR + " " + CLOSING_TAG;
         
-        this.setState(SINGLE_ATTR + " " + SINGLE_ATTR + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    public void testParse_PairAttr_OneSingleOneQuote_ResultContainsExpectedAttrsAsFirstAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = STND_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG); 
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
     }
     
     @Test
-    public void testParse_PairAttr_OneSingleOneQuote_ResultContainsExpectedAttrsAsSecondAttr() throws IOException {
+    public void testParse_PairAttr_TwoStndAttrs_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + STANDARD_ATTR + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_PairAttr_TwoStndAttrs_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + STANDARD_ATTR + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    public void testParse_PairAttr_OneStndOneQuote_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR);
+        String str = STANDARD_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG;
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_PairAttr_OneStndOneQuote_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_PairAttr_OneStndOneQuote_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + SINGLE_QUOTE + " "+ CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    public void testParse_PairAttr_OneStndOneDoubleQuote_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR);
+        String str = STANDARD_ATTR + " " + DOUBLE_QUOTE + " " + CLOSING_TAG;
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_PairAttr_OneStndOneDoubleQuote_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_PairAttr_OneStndOneDoubleQuote_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + DOUBLE_QUOTE + " "+ CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    @Test
+    public void testParse_PairAttr_TwoQuotes_BothDiff_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR, QUOTE_ATTR);
+        String str = SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG;
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_pairAttr_TwoQuotes_BothDiff_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_PairAttr_TwoQuotes_BothDiff_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " "+ CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    @Test
+    public void testParse_PairAttr_TwoQuotes_BothSame_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR, QUOTE_ATTR);
+        String str =  DOUBLE_QUOTE+ " " + DOUBLE_QUOTE + " " + CLOSING_TAG;
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_PairAttr_TwoQuotes_BothSame_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_PairAttr_TwoQuotes_BothSame_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + " " + DOUBLE_QUOTE + " "+ CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    @Test
+    public void testParse_PairAttr_ResultHasCommentName_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(CMNT_ATTR);
+        String str = STANDARD_ATTR + STANDARD_ATTR + CLOSING_TAG;
+        
+        this.result.setName(COMMENT_OPEN);
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_PairAttr_ResultHasCommentName_RemainingInputMatchesExpected() {
+     // Test
+        this.result.setName(COMMENT_OPEN);
+        this.testParse_HasCommentName_ExpectedInputMatchesRemainingInput(STANDARD_ATTR  + STANDARD_ATTR + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_PairAttr_ResultHasCommentName_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.result.setName(COMMENT_OPEN);
+        this.testParse_HasCommentName_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + STANDARD_ATTR + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Standard_Single_Double_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR, QUOTE_ATTR);
+        String str = STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG;
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Standard_Single_Double_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Standard_Single_Double_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + " " + SINGLE_QUOTE + "" + DOUBLE_QUOTE + " "+ CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Single_Double_Standard_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR, QUOTE_ATTR, STND_ATTR);
+        String str = SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + STANDARD_ATTR + " " + CLOSING_TAG;
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Single_Double_Standard_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + STANDARD_ATTR + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Single_Double_Standard_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + STANDARD_ATTR + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    public void testParse_MultiAttr_AllDiff_Double_Standard_Single_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR, STND_ATTR, QUOTE_ATTR);
+        String str = DOUBLE_QUOTE + " " + STANDARD_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG;
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Double_Standard_Single_RemainingInputMatchesExpected() {
+     // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + " " + STANDARD_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_AllDiff_Double_Standard_Single_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.testParse_ExpectedInputMatchesRemainingInput(DOUBLE_QUOTE + " " + STANDARD_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    @Test
+    public void testParse_MultiAttr_ResultHasCommentName_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(CMNT_ATTR);
+        String str = STANDARD_ATTR + STANDARD_ATTR + STANDARD_ATTR +CLOSING_TAG;
+        
+        this.result.setName(COMMENT_OPEN);
+        
+        // Test
+        this.testParse_ParsedAttrListMatchesExpectedAttrList(str, attrs);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_ResultHasCommentName_RemainingInputMatchesExpected() {
+     // Test
+        this.result.setName(COMMENT_OPEN);
+        this.testParse_HasCommentName_ExpectedInputMatchesRemainingInput(STANDARD_ATTR  + STANDARD_ATTR + STANDARD_ATTR + CLOSING_TAG);
+    }
+    
+    @Test
+    public void testParse_MultiAttr_ResultHasCommentName_AdditionalDataAfterClosingTag_RemainingInputMatchesExpected() {
+        // Test
+        this.result.setName(COMMENT_OPEN);
+        this.testParse_HasCommentName_ExpectedInputMatchesRemainingInput(STANDARD_ATTR + STANDARD_ATTR + STANDARD_ATTR + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
+    }
+    
+    private void testParse_ParsedAttrListMatchesExpectedAttrList(String str, List<HtmlAttribute> attrs) {
         // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
+        this.setState(str);
         
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(1);
+        // Apply 
+        this.parse();
         
         // Assert
-        assertEquals(expData, data);
+        assertEquals(attrs, this.result.getAttributes());
     }
     
-    @Test
-    public void testParse_PairAttr_OneSingleOneQuote_ResultContainsOnlyTwoAttrs() throws IOException {
+    private void testParse_ExpectedInputMatchesRemainingInput(String str) {
         // Arrange
-        int expData = 2;
-        int data;
+        String expData = CLOSING_TAG + str.split(CLOSING_TAG, 2)[1];
         
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG);
+        this.setState(str);
         
         // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
+        this.parse();
         
         // Assert
-        assertEquals(expData, data);
+        assertEquals(expData, this.input.getRemainingData());
     }
     
-    @Test
-    public void testParse_PairAttr_OneSingleOneQuote_RemainingInputMatches() throws IOException {
+    private void testParse_HasCommentName_ExpectedInputMatchesRemainingInput(String str) {
         // Arrange
-        String expData = CLOSING_TAG;
-        String data;
+        String expData = str.substring(1);
         
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + CLOSING_TAG);
+        this.setState(str);
         
         // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
+        this.parse();
         
         // Assert
-        assertEquals(expData, data);
+        assertEquals(expData, this.input.getRemainingData());
     }
     
-    public void testParse_PairAttr_OneSingleOneDoubleQuote_ResultContainsExpectedAttrsAsFirstAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = STND_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_ATTR + " " + DOUBLE_QUOTE + " " + CLOSING_TAG); 
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_OneSingleOneDoubleQuote_ResultContainsExpectedAttrsAsSecondAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_ATTR + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(1);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_OneSingleOneDoubleQuote_ResultContainsOnlyTwoAttrs() throws IOException {
-        // Arrange
-        int expData = 2;
-        int data;
-        
-        this.setState(SINGLE_ATTR + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_OneSingleOneDoubleQuote_RemainingInputMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(SINGLE_ATTR + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_TwoQuotes_BothDiff_ResultContainsExpectedAttrsAsFirstAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_TwoQuotes_BothDiff_ResultContainsExpectedAttrsAsSecondAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(1);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_TwoQuotes_BothDiff_ResultContainsOnlyTwoAttrs() throws IOException {
-        // Arrange
-        int expData = 2;
-        int data;
-        
-        this.setState(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Apply
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_pairAttr_TwoQuotes_BothDiff_RemainingInputMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_TwoQuotes_BothSame_ResultContainsExpectedAttrsAsFirstAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(DOUBLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_TwoQuotes_BothSame_ResultContainsExpectedAttrsAsSecondAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(DOUBLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(1);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_TwoQuotes_BothSame_ResultContainsOnlyTwoAttrs() throws IOException {
-        // Arrange
-        int expData = 2;
-        int data;
-        
-        this.setState(DOUBLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Apply
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_PairAttr_TwoQuotes_BothSame_RemainingInputMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(DOUBLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_MultiAttr_ResultContainsExpectedAttrsAsFirstAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = STND_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(0);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_MultiAttr_ResultContainsExpectedAttrsAsSecondAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(1);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_MultiAttr_ResultContainsExpectedAttrsAsThirdAttr() throws IOException {
-        // Arrange
-        HtmlAttribute expData = QUOTE_ATTR;
-        HtmlAttribute data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().get(1);
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_MultiAttr_ResultContainsOnlyThreeAttrs() throws IOException {
-        // Arrange
-        int expData = 3;
-        int data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.result.getAttributes().size();
-        
-        // Apply
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_MultiAttr_RemainingInputMatches() throws IOException {
-        // Arrange
-        String expData = CLOSING_TAG;
-        String data;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + CLOSING_TAG);
-        
-        // Apply
-        this.parser.parse(this.input, this.result);
-        data = this.input.getRemainingData();
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 1
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
     @Test(expected=InvalidStateException.class)
-    public void testParse_WithNullEnclosureParser_ThrowsExpectedException() throws IOException {
+    public void testParse_WithNullEnclosureParser_ThrowsExpectedException() {
         // Arrange
         this.parser = new HtmlAttributesParser(null,
                                                this.attributeParser,
+                                               this.commentParser,
                                                this.whitespaceConsumer);
-        this.setState("some data");
-        
         // Apply + Assert
-        this.parser.parse(this.input, this.result);
+        this.parserDryRun();
     }
     
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 2
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
     @Test(expected=InvalidStateException.class)
-    public void testParse_WithNullAttributeParser_ThrowsExpectedException() throws IOException {
+    public void testParse_WithNullAttributeParser_ThrowsExpectedException() {
         // Arrange
         this.parser = new HtmlAttributesParser(this.enclosureParser,
                                                null,
+                                               this.commentParser,
                                                this.whitespaceConsumer);
-        this.setState("some data");
-        
         // Apply + Assert
-        this.parser.parse(this.input, this.result);
+        this.parserDryRun();
     }
     
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 3
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
     @Test(expected=InvalidStateException.class)
-    public void testParse_WithNullWhitespaceConsumer_ThrowsExpectedException() throws IOException {
+    public void testParse_WithNullCommentParser_ThrowsExpectedException() {
         // Arrange
         this.parser = new HtmlAttributesParser(this.enclosureParser,
                                                this.attributeParser,
+                                               null,
+                                               this.whitespaceConsumer);
+        // Apply + Assert
+        this.parserDryRun();
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testParse_WithNullWhitespaceConsumer_ThrowsExpectedException() {
+        // Arrange
+        this.parser = new HtmlAttributesParser(this.enclosureParser,
+                                               this.attributeParser,
+                                               this.commentParser,
                                                null);
+        // Apply + Assert
+        this.parserDryRun();
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testParse_WithNullInput_ThrowsExpectedException() throws IOException {
+        // Apply + Assert
+        this.parser.parse(null, this.result);
+    }
+    
+    @Test(expected=InvalidStateException.class)
+    public void testParse_WithNullResult_ThrowsExpectedException() throws IOException {
+        // Apply + Assert
+        this.parser.parse(this.input, null);
+    }
+    
+    @Test(expected=UnclosedTagParsingException.class)
+    public void testParse_OpeningTag_ThrowsExpectedException() {
+        // Arrange
+        this.setState(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE +" " + OPENING_TAG);
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_OpeningTag_RemainingInputMatchesExpected_ThrowsException() {
+        // Set up
+        String remaining = OPENING_TAG + "abcdefghijklmnopqrstuvwxyz";
+        String str = STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + remaining;
+        
+        // Test
+        this.testParse_ThrowsException_RemainingInputMatchesExpected(str, remaining);
+    }
+    
+    @Test
+    public void testParse_OpeningTag_ExceptionResultMatchesStoredResult_ThrowsException() {
+        // Test
+        this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + OPENING_TAG);
+    }
+    
+    @Test
+    public void testParse_OpeningTag_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR, QUOTE_ATTR);
+        String str = STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + OPENING_TAG;
+        
+        this.testParse_ThrowsException_ResultContainsExpectedAttrs(str, attrs);
+    }
+    
+    @Test(expected=EndOfInputParsingException.class)
+    public void testParse_MissingClosingTag_ThrowsExpectedException() {
+        // Arrange
+        this.setState(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
+        
+        // Apply + Assert
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_missingClosingTag_ExceptionResultMatchesStoredResult_ThrowsException() {
+        // Test
+        this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
+    }
+    
+    @Test
+    public void testParse_MissingClosingTag_RemainingInputMatchesExpected_ThrowsException() {
+        // Test
+        this.testParse_ThrowsException_RemainingInputMatchesExpected(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE, "");
+    }
+    
+    @Test
+    public void testParse_MissingClosingTag_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR, QUOTE_ATTR);
+        String str = STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE;
+        
+        // Test
+        this.testParse_ThrowsException_ResultContainsExpectedAttrs(str, attrs);
+    }
+    
+    private void testParse_ThrowsException_RemainingInputMatchesExpected(String str, String remaining) {
+        // Arrange
+        this.setState(str);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (ParsingException e) {}
+        
+        // Assert
+        assertEquals(remaining, this.input.getRemainingData());
+    }
+    
+    private void testParse_ThrowsException_ThrownExceptionMatchesStoredResult(String str) {
+        // Arrange
+        HtmlData data = null;
+        
+        this.result.setName("some unique name");
+        this.setState(str);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (ParsingException e) {
+            data = e.getHtmlData();
+        }
+        
+        // Assert
+        assertEquals(this.result, data);
+    }
+    
+    private void testParse_ThrowsException_ResultContainsExpectedAttrs(String str, List<HtmlAttribute> attrs) {
+        // Arrange
+        this.setState(str);
+        
+        // Apply
+        try {
+            this.parse();
+        } catch (ParsingException e) {}
+        
+        // Assert
+        assertEquals(attrs, this.result.getAttributes());
+    }
+    
+    private void parserDryRun() {
+        // Arrange
         this.setState("some data");
         
-        // Apply + Assert
-        this.parser.parse(this.input, this.result);
-    }
-    
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 4
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    @Test(expected=UnclosedTagParsingException.class)
-    public void testParse_OpeningTag_ThrowsExpectedException() throws IOException {
-        // Arrange
-        this.setState(SINGLE_ATTR + " " + OPENING_TAG);
-        this.parser.parse(this.input, this.result);
-    }
-    
-    @Test
-    public void testParse_OpeningTag_RemainingInputContainsParsedOpeningTag() throws IOException {
-        // Arrange
-        String expData = OPENING_TAG + "some other data";
-        String data = "";
-        
-        this.setState(SINGLE_ATTR + " " + OPENING_TAG + "some other data");
-        
         // Apply
-        try {
-            this.parser.parse(input, result);
-        } catch (UnclosedTagParsingException err) {
-            data = this.input.getRemainingData();
-        }
-        
-        // Assert
-        assertEquals(expData, data);
+        this.parse();
     }
     
-    @Test
-    public void testParse_OpeningTag_ThrownExceptionMatchesExpectedResult() throws IOException {
-        // Arrange
-        MutableHtmlData expData = new MutableHtmlData();
-        HtmlData data = null;
-        
-        expData.updateAttributes(STND_ATTR);
-        
-        this.setState(SINGLE_ATTR + " " + OPENING_TAG);
-        
-        // Apply
-        try {
-            this.parser.parse(input, result);
-        } catch (UnclosedTagParsingException err) {
-            data = err.getHtmlData();
-        }
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_OpeningTag_ArgResultMatchesExpectedResult() throws IOException {
-        // Arrange
-        MutableHtmlData expData = new MutableHtmlData();
-        HtmlData data = null;
-        
-        expData.updateAttributes(STND_ATTR);
-        
-        this.setState(SINGLE_ATTR + " " + OPENING_TAG);
-        
-        // Apply
+    private void parse() {
         try {
             this.parser.parse(this.input, this.result);
-        } catch (UnclosedTagParsingException err) {
-            data = this.result;
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 5
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    @Test(expected=EndOfInputParsingException.class)
-    public void testParse_MissingClosingTag_ThrowsExpectedException() throws IOException {
-        // Arrange
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
-        
-        // Apply + Assert
-        this.parser.parse(this.input, this.result);
     }
     
     @Test
-    public void testParse_MissingClosingTag_RemainingInputIsEmpty() throws IOException {
-        // Arrange
-        int expData = 0;
-        int data = -1;
-        
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
-        
-        // Apply
-        try {
-            this.parser.parse(this.input, this.result);
-        } catch (EndOfInputParsingException err) {
-            data = this.input.getRemainingData().length();
-        }
-        
-        // Assert
-        assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_MissingClosingTag_ThrownExceptionMatchesExpectedResult() throws IOException {
+    public void testParse_MissingClosingTag_ThrownExceptionMatchesExpectedResult() {
         // Arrange
         MutableHtmlData expData = new MutableHtmlData();
         HtmlData data = null;
@@ -977,11 +660,11 @@ public class HtmlAttributesParserTest {;
         expData.updateAttributes(QUOTE_ATTR);
         expData.updateAttributes(QUOTE_ATTR);
         
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
+        this.setState(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
         
         // Apply
         try {
-            this.parser.parse(this.input, this.result);
+            this.parse();
         } catch (EndOfInputParsingException err) {
             data = err.getHtmlData();
         }
@@ -991,7 +674,7 @@ public class HtmlAttributesParserTest {;
     }
     
     @Test
-    public void testParse_MissingClosingTag_ArgResultMatchesExpectedResult() throws IOException {
+    public void testParse_MissingClosingTag_ArgResultMatchesExpectedResult() {
         // Arrange
         MutableHtmlData expData = new MutableHtmlData();
         HtmlData data = null;
@@ -1000,32 +683,17 @@ public class HtmlAttributesParserTest {;
         expData.updateAttributes(QUOTE_ATTR);
         expData.updateAttributes(QUOTE_ATTR);
         
-        this.setState(SINGLE_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
+        this.setState(STANDARD_ATTR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
         
         // Apply
         try {
-            this.parser.parse(this.input, this.result);
+            this.parse();
         } catch (EndOfInputParsingException err) {
             data = this.result;
         }
         
         // Assert
         assertEquals(expData, data);
-    }
-    
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Component Exception 5
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    
-    //@Test(expected=EndOfInputParsingException.class)
-    public void testParse_EnclosureParserThrowsEOFException_RepackagesAndThrowsExpectedException() throws IOException {
-        // Arrange
-        
-        // Apply + Assert
     }
     
     public void setState(String data) {
@@ -1039,6 +707,15 @@ public class HtmlAttributesParserTest {;
         for (int i = 0; i < data.length(); i++)
             result.add(data.charAt(i));
         
+        return result;
+    }
+    
+    private List<HtmlAttribute> generateAttrList(HtmlAttribute... attrs) {
+        List<HtmlAttribute> result = new ArrayList<>();
+        
+        for (HtmlAttribute attr : attrs)
+            result.add(attr);
+            
         return result;
     }
     
