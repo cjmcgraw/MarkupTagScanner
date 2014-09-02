@@ -4,18 +4,19 @@ import java.io.IOException;
 import java.util.*;
 
 import com.mycompany.htmlvalidator.scanners.EnclosureTags;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.ComponentException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
 public class HtmlQuoteEnclosureParserMock extends HtmlComponentEnclosureParser {
     private List<String> receivedData;
-    private RuntimeException error;
+    private ComponentException error;
     private String result;
     
     public HtmlQuoteEnclosureParserMock(String result) {
         this(result, null);
     }
     
-    public HtmlQuoteEnclosureParserMock(String result, RuntimeException error) {
+    public HtmlQuoteEnclosureParserMock(String result, ComponentException error) {
         this.receivedData = new ArrayList<>();
         this.result = result;
         this.error = error;
@@ -35,11 +36,11 @@ public class HtmlQuoteEnclosureParserMock extends HtmlComponentEnclosureParser {
         return this.receivedData;
     }
     
-    public RuntimeException getError() {
+    public ComponentException getError() {
         return this.error;
     }
     
-    public void setError(RuntimeException err) {
+    public void setError(ComponentException err) {
         this.error = err;
     }
     
