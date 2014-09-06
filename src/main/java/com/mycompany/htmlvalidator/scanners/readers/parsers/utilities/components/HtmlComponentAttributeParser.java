@@ -30,10 +30,14 @@ public abstract class HtmlComponentAttributeParser extends MarkupParser<HtmlAttr
         try {
             return super.read();
         } catch (EOFException e) {
-            this.attribute.setName(this.getAttributeName());
-            this.attribute.setValue(this.getAttributeValue());
-            throw new EndOfInputAttributeException(this.getAttribute());
+            throw this.generateEndOfInputAttributeException();
         }
+    }
+    
+    protected EndOfInputAttributeException generateEndOfInputAttributeException() {
+        this.attribute.setName(this.getAttributeName());
+        this.attribute.setValue(this.getAttributeValue());
+        return new EndOfInputAttributeException(this.getAttribute());
     }
     
     protected abstract String getAttributeName();
