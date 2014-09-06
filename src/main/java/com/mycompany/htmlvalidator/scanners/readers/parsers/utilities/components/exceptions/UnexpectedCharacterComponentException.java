@@ -11,6 +11,7 @@ public class UnexpectedCharacterComponentException extends ComponentException {
     private Object data;
     
     public UnexpectedCharacterComponentException(char unexpected, Point position, Object data) {
+        super(String.format(DEFAULT_ERROR_MSG, String.format(UNEXPECTED_CHAR_MSG, position, unexpected)));
         this.position = position;
         this.unexpected = unexpected;
         this.data = data;
@@ -23,7 +24,7 @@ public class UnexpectedCharacterComponentException extends ComponentException {
     @Override
     public String getErrorMessage() {
         String msg = String.format(UNEXPECTED_CHAR_MSG, this.position, this.unexpected);
-        return String.format(DEFAULT_ERROR_MESSAGE, msg);
+        return String.format(DEFAULT_ERROR_MSG, msg);
     }
 
     @Override

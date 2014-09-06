@@ -11,6 +11,7 @@ public class MissingCharacterComponentException extends ComponentException {
     private Object data;
     
     public MissingCharacterComponentException(char missing, Point position, Object data) {
+        super(String.format(DEFAULT_ERROR_MSG, String.format(MISSING_CHAR_MSG, position, missing)));
         this.missing = missing;
         this.position = position;
         this.data = data;
@@ -23,7 +24,7 @@ public class MissingCharacterComponentException extends ComponentException {
     @Override
     public String getErrorMessage() {
         String msg = String.format(MISSING_CHAR_MSG, this.position, this.missing);
-        return String.format(DEFAULT_ERROR_MESSAGE, msg);
+        return String.format(DEFAULT_ERROR_MSG, msg);
     }
     
     @Override
