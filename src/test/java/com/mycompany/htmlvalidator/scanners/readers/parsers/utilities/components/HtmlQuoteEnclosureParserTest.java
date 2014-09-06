@@ -10,62 +10,18 @@ import org.junit.*;
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.HtmlQuoteEnclosureParser;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.MissingCharacterComponentException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlQuoteEnclosureParserTest {
     private static final String DEFAULT_DATA_SINGLE_QUOTED = String.format("%sother data%s", MarkupTag.SINGLE_QUOTE, MarkupTag.SINGLE_QUOTE);
     private static final String DEFAULT_DATA_DOUBLE_QUOTED = String.format("%ssome other data%s", MarkupTag.DOUBLE_QUOTE, MarkupTag.DOUBLE_QUOTE);
     private static final String DEFAULT_REMAINING_DATA = "some remaining data";
+    private static final String FILLER_DATA = "some filler data";
     
     private HtmlQuoteEnclosureParser parser = new HtmlQuoteEnclosureParser();
     private PushbackAndPositionReaderMock input;
     private LinkedList<Character> inputData;
-    
-    /* Potential exceptions specific to this class:
-     * 
-     *  1.
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          first character is not a valid enclosure (' , ")
-     *          
-     *      exception:
-     *          parser -> setAndValidateOpening -> MissingCharacterComponentException
-     *  
-     *  2.
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          last character is not a valid matching enclosure ( ' --> ', " --> ")
-     *      
-     *      exception:
-     *          EOFException (as the enclosure never terminates)
-     *          
-     *  3.
-     *      public method:
-     *          parse
-     *      
-     *      condition:
-     *          different opening and closing enclosures
-     *          
-     *      exception:
-     *          EOFException (as the enclosure never terminates)
-     *  
-     *  4.
-     *      public method:
-     *          parse
-     *          
-     *      condition:
-     *          quoteData cleared and never reinitialized
-     *          Cannot possibly occur and acts only to prevent
-     *          misuse of protected methods.
-     *              
-     *      exception:
-     *          InvalidStateException
-     */
     
     @Test
     public void testParse_OneQuotedValue_ValidSingleQuotedValue_ReturnedDataMatches() throws IOException {
@@ -309,15 +265,8 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 1
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
     @Test(expected=MissingCharacterComponentException.class)
-    public void testParse_InvalidValueMissingStartQuote_ExpectedThrowsException() throws IOException {
+    public void testParse_InvalidValue_MissingStartQuote_ExpectedThrowsException() throws IOException {
         // Arrange
         this.setState(DEFAULT_REMAINING_DATA + MarkupTag.DOUBLE_QUOTE);
         
@@ -326,7 +275,7 @@ public class HtmlQuoteEnclosureParserTest {
     }
     
     @Test
-    public void testParse_InvalidValueMissingStartQuote_AllDataRemainingInInput() throws IOException {
+    public void testParse_InvalidValue_MissingStartQuote_AllDataRemainingInInput() throws IOException {
         // Arrange
         String expData = DEFAULT_REMAINING_DATA + MarkupTag.DOUBLE_QUOTE;
         String data = "";
@@ -345,7 +294,7 @@ public class HtmlQuoteEnclosureParserTest {
     }
     
     @Test
-    public void testParse_InvalidValueMissingStartQuote_StoredExceptionDataIsEmpty() throws IOException {
+    public void testParse_InvalidValue_MissingStartQuote_StoredExceptionDataIsEmpty() throws IOException {
         // Arrange
         String expData = "";
         String data = "filler to prevent false positive";
@@ -363,34 +312,46 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 2
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    @Test(expected=EOFException.class)
-    public void testParse_InvalidValueMissingEndDoubleQuote_ThrowsEOFException() throws IOException {
+    @Test(expected=EndOfInputComponentException.class)
+    public void testParse_InvalidValue_EmptyInput_ThrowsException() throws IOException {
         // Arrange
-        this.setState(MarkupTag.DOUBLE_QUOTE + DEFAULT_REMAINING_DATA);
+        this.setState("");
         
         // Apply + Assert
         this.parser.parse(input);
     }
     
     @Test
-    public void testParse_InvalidValueMissingEndDoubleQuote_NoRemainingData() throws IOException {
+    public void testParse_InvalidValue_EmptyInput_StoredExceptionDataMatchesExpected() throws IOException {
         // Arrange
         String expData = "";
-        String data = "value to prevent false positive";
+        String data = null;
         
-        this.setState(MarkupTag.DOUBLE_QUOTE + DEFAULT_REMAINING_DATA);
+        this.setState("");
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputComponentException e) {
+            data = e.getData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidValue_EmptyInput_NoRemainingData() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = "data to prevent false positive";
+        
+        this.setState("");
         
         // Apply
         try {
             this.parser.parse(input);
-        } catch (EOFException e) {
+        } catch (EndOfInputComponentException e) {
             data = this.input.getRemainingData();
         }
         
@@ -398,35 +359,46 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    // Exception 3
-    //=========================================================================
-    //*************************************************************************
-    //=========================================================================
-    
-    @Test(expected=EOFException.class)
-    public void testParse_SingleQuoteOpeningDoubleQuoteClosing_ThrowsEOFException() throws IOException {
+    @Test(expected=EndOfInputComponentException.class)
+    public void testParse_InvalidValue_MissingFinalEnclosure_ThrowsException() throws IOException {
         // Arrange
-        this.setState(MarkupTag.DOUBLE_QUOTE + DEFAULT_REMAINING_DATA + MarkupTag.SINGLE_QUOTE + DEFAULT_REMAINING_DATA);
+        this.setState(MarkupTag.DOUBLE_QUOTE + FILLER_DATA);
         
         // Apply + Assert
-        this.parser.parse(input);
+        this.parser.parse(this.input);
     }
     
     @Test
-    public void testParse_SingleQuoteOpeningDoubleQuoteClosing_RemainingDataIsEmpty() throws IOException {
+    public void testParse_InvalidValue_MissingFinalEnclosure_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = MarkupTag.DOUBLE_QUOTE + FILLER_DATA;
+        String data = null;
+        
+        this.setState(expData);
+        
+        // Apply
+        try { 
+            this.parser.parse(this.input);
+        } catch (EndOfInputComponentException e) {
+            data = e.getData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidValue_MissingFinalEnclosure_RemainingDataMatchesExpected() throws IOException {
         // Arrange
         String expData = "";
-        String data = "value to prevent false positive";
+        String data = "data to prevent false positive";
         
-        this.setState(MarkupTag.DOUBLE_QUOTE + DEFAULT_REMAINING_DATA + MarkupTag.SINGLE_QUOTE + DEFAULT_REMAINING_DATA);
+        this.setState(MarkupTag.DOUBLE_QUOTE + FILLER_DATA);
         
         // Apply
         try {
-            this.parser.parse(input);
-        } catch (EOFException e) {
+            data = this.parser.parse(this.input);
+        } catch (EndOfInputComponentException e) {
             data = this.input.getRemainingData();
         }
         
@@ -434,27 +406,93 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EOFException.class)
-    public void testParse_DoubleQuoteOpeningSingleQuoteClosing_ThrowsEOFException() throws IOException {
+    @Test(expected=EndOfInputComponentException.class)
+    public void testParse_InvalidValue_DiffOpeningAndClosingEnclosures_OpenDoubleCloseSingle_ThrowsException() throws IOException {
         // Arrange
-        this.setState(MarkupTag.SINGLE_QUOTE + DEFAULT_REMAINING_DATA + MarkupTag.DOUBLE_QUOTE + DEFAULT_REMAINING_DATA);
+        this.setState(MarkupTag.DOUBLE_QUOTE + FILLER_DATA + MarkupTag.SINGLE_QUOTE + FILLER_DATA);
         
         // Apply + Assert
         this.parser.parse(input);
     }
     
     @Test
-    public void testParse_DoubleQuoteOpeningSingleQuoteClosing_RemainingDataIsEmpty() throws IOException {
+    public void testParse_InvalidValue_DiffOpeningAndClosingEnclosures_OpenDoubleCloseSingle_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = MarkupTag.DOUBLE_QUOTE + FILLER_DATA + MarkupTag.SINGLE_QUOTE + FILLER_DATA;
+        String data = null;
+        
+        this.setState(expData);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputComponentException e) {
+            data = e.getData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidValue_DiffOpeningAndClosingEnclosures_OpenDoubleCloseSingle_RemainingDataMatchesExpected() throws IOException {
         // Arrange
         String expData = "";
         String data = "value to prevent false positive";
         
-        this.setState(MarkupTag.SINGLE_QUOTE + DEFAULT_REMAINING_DATA + MarkupTag.DOUBLE_QUOTE + DEFAULT_REMAINING_DATA);
+        this.setState(MarkupTag.DOUBLE_QUOTE + FILLER_DATA + MarkupTag.SINGLE_QUOTE + FILLER_DATA);
         
         // Apply
         try {
             this.parser.parse(input);
-        } catch (EOFException e) {
+        } catch (EndOfInputComponentException e) {
+            data = this.input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputComponentException.class)
+    public void testParse_InvalidValue_DiffOpeningAndClosingEnclosures_OpenSingleCloseDouble_ThrowsException() throws IOException {
+        // Arrange
+        this.setState(MarkupTag.SINGLE_QUOTE + FILLER_DATA + MarkupTag.DOUBLE_QUOTE + FILLER_DATA);
+        
+        // Apply + Assert
+        this.parser.parse(input);
+    }
+    
+    @Test
+    public void testParse_InvalidValue_DiffopeningAndClosingEnclosures_OpenSingleCloseDouble_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = MarkupTag.SINGLE_QUOTE + FILLER_DATA + MarkupTag.DOUBLE_QUOTE + FILLER_DATA;
+        String data = null;
+        
+        this.setState(expData);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputComponentException e) {
+            data = e.getData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidValue_DiffOpeningAndClosingEnclosures_OpenSingleCloseDouble_RemainingDataIsEmpty() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = "value to prevent false positive";
+        
+        this.setState(MarkupTag.SINGLE_QUOTE + FILLER_DATA + MarkupTag.DOUBLE_QUOTE + FILLER_DATA);
+        
+        // Apply
+        try {
+            this.parser.parse(input);
+        } catch (EndOfInputComponentException e) {
             data = this.input.getRemainingData();
         }
         
@@ -463,7 +501,7 @@ public class HtmlQuoteEnclosureParserTest {
     }
     
     @Test(expected=InvalidStateException.class)
-    public void testParse_NullInputGivenViaParse_ThrowsExpectedException() throws IOException {
+    public void testParse_InvalidValue_NullInputGivenViaParse_ThrowsExpectedException() throws IOException {
         this.parser.parse(null);
     }
     
