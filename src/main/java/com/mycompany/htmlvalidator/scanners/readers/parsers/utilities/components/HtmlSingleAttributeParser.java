@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.ComponentException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
@@ -14,6 +14,9 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
     
     private HtmlComponentEnclosureParser quoteEnclosureParser;
     private Consumer whitespaceConsumer;
+    
+    private StringBuilder attributeName;
+    private StringBuilder attributeValue;
     
     public HtmlSingleAttributeParser() {
         this(new HtmlQuoteEnclosureParser(),
@@ -37,27 +40,51 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
         return result;
     }
     
-    private void parseAttribute() throws IOException {
-        String name = this.parseName();
-        this.consumeWhitespace();
-        String value = this.parseValue();
-        
-        this.getAttribute().setName(name);
-        this.getAttribute().setValue(value);
+    @Override
+    protected void setState(PushbackAndPositionReader input) {
+        super.setState(input);
+        this.attributeName = new StringBuilder();
+        this.attributeValue = new StringBuilder();
     }
     
-    private String parseName() throws IOException {
+    @Override
+    protected void clearState() {
+        super.clearState();
+        this.attributeName = null;
+        this.attributeValue = null;
+    }
+    
+    @Override
+    protected String getAttributeName() {
+        return this.attributeName.toString();
+    }
+    
+    @Override
+    protected String getAttributeValue() {
+        return this.attributeValue.toString();
+    }
+    
+    private void parseAttribute() throws IOException {
+        this.parseName();
+        this.consumeWhitespace();
+        this.parseValue();
+        
+        this.getAttribute().setName(this.getAttributeName());
+        this.getAttribute().setValue(this.getAttributeValue());
+    }
+    
+    private void parseName() throws IOException {
         char upcoming = this.peekNextRead();
         
         if(this.isClosingAttribute(upcoming))
-            return this.parseClosingAttributeData();
-        return this.parseGeneralAttributeData();
+            this.parseClosingAttributeData();
+        else
+            this.parseGeneralAttributeData(this.attributeName);
     }
     
-    private String parseValue() throws IOException {
-        if(this.attributeIsFlag())
-            return "";
-        return this.parseValueString();
+    private void parseValue() throws IOException {
+        if(!this.attributeIsFlag())
+            this.parseValueString();
     }
     
     private boolean attributeIsFlag() throws IOException {
@@ -69,25 +96,28 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
         return true;
     }
     
-    private String parseValueString() throws IOException {
+    private void parseValueString() throws IOException {
         this.consumeWhitespace();
         
         char upcoming = this.peekNextRead();
         
         if (this.isQuoteEnclosure(upcoming))
-            return this.getQuoteEnclosureData();
-        return this.parseGeneralAttributeData();
+            this.getQuoteEnclosureData(this.attributeValue);
+        else
+            this.parseGeneralAttributeData(this.attributeValue);
     }
     
-    private String getQuoteEnclosureData() throws IOException {
-        String result;
+    private void getQuoteEnclosureData(StringBuilder s) throws IOException {
+        
         try {
-            result = this.runQuoteEnclosureParser();
+            s.append(runQuoteEnclosureParser());
+        } catch (EndOfInputComponentException e) {
+            this.attributeValue = new StringBuilder(e.getData());
+            throw this.generateEndOfInputAttributeException();
         } catch (ComponentException e) {
-            result = e.getData();
+            s.append(e.getData());
             this.addError(e);
         }
-        return result;
     }
     
     private String runQuoteEnclosureParser() throws IOException {
@@ -95,28 +125,29 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
         return this.quoteEnclosureParser.parse(this.getInput());
     }
     
-    private String parseClosingAttributeData() throws IOException {
+    private void parseClosingAttributeData() throws IOException {
         this.read();
-        return "" + this.currChar;
+        this.attributeName.append("" + this.currChar);
+        this.attributeValue = new StringBuilder();
     }
     
-    private String parseGeneralAttributeData() throws IOException {
-        StringBuilder result = new StringBuilder();
-        
+    private String parseGeneralAttributeData(StringBuilder s) throws IOException {
         this.read();
          
         while(isValidCharacter()) {
-            result.append(this.getCurrChar());
+            s.append(this.getCurrChar());
             this.read();
         }
         
         this.unread();
-        return result.toString();
+        return s.toString();
     }
     
     private void consumeWhitespace() throws IOException {
         try {
             this.runWhitespaceConsumer();
+        } catch (EndOfInputComponentException e) {
+            throw this.generateEndOfInputAttributeException();
         } catch (ComponentException e) {
             this.addError(e);
         }

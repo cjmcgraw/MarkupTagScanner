@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.component
 import static org.junit.Assert.*;
 
 import java.awt.Point;
-import java.io.IOException;
+import java.io.*;
 import java.util.LinkedList;
 
 import org.junit.*;
@@ -1684,6 +1684,256 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         this.parser.parse(this.input);
         data = this.input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputAttributeException.class)
+    public void testParse_InvalidInput_NoName_NoValue_NoSpace_EOFImmediately() throws IOException {
+        // Arrange
+        this.setState("");
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_NoName_NoValue_NoSpace_EOFImmediately_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("");
+        HtmlAttribute data = null;
+        
+        this.setState("");
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_NoName_NoValue_NoSpace_EOFImmediately_RemainingDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = null;
+        
+        this.setState("");
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = this.input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputAttributeException.class)
+    public void testParse_InvalidInput_WithName_NoValue_NoSpace_EOFAfterName() throws IOException {
+        // Arrange
+        this.setState("someName");
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_WithName_NoValue_NoSpace_EOFAfterName_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("someName");
+        HtmlAttribute data = null;
+        
+        this.setState("someName");
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testparse_InvalidInput_WithName_NoValue_NoSpace_EOFAfterName_RemainingDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = null;
+        
+        this.setState("someName");
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = this.input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputAttributeException.class)
+    public void testParse_InvalidInput_WithName_NoValue_WithSpace_EOFAfterSpaceAfterName() throws IOException {
+        // Arrange
+        this.setState("someName  ");
+        this.consumer.setError(new EndOfInputComponentException(""));
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_WithName_NoValue_WithSpace_EOFAfterSpaceAfterName_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("someName");
+        HtmlAttribute data = null;
+        
+        this.setState("someName    ");
+        this.consumer.setError(new EndOfInputComponentException(""));
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputAttributeException.class)
+    public void testParse_InvalidInput_WithName_WithValueSeparator_NoValue_EOFAfterValueSeparator() throws IOException {
+        // Arrange
+        this.setState("someName" + MarkupTag.ATTRIBUTE_VALUE_SEPARATOR);
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_WithName_WithValueSeparator_NoValue_EOFAfterValueSeparator_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("someName");
+        HtmlAttribute data = null;
+        
+        this.setState("someName" + MarkupTag.ATTRIBUTE_VALUE_SEPARATOR);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_WithName_WithValueSeparator_NoValue_EOFAfterValueSeparator_RemainingDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = null;
+        
+        this.setState("someName" + MarkupTag.ATTRIBUTE_VALUE_SEPARATOR);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = this.input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputAttributeException.class)
+    public void testParse_InvalidInput_WithName_WithValueSeparator_WithValue_EOFAfterValue() throws IOException {
+        // Arrange
+        this.setState("someName=SomeValue");
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_WithName_WithValueSeparator_WithValue_EOFAfterValueSeparator_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("someName", "someValue");
+        HtmlAttribute data = null;
+        
+        this.setState("someName=someValue");
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_WithName_WithValueSeparator_WithValue_EOFAfterValueSeparator_RemainingDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = null;
+        
+        this.setState("someName=someValue");
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = this.input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputAttributeException.class)
+    public void testParse_InvalidInput_WithName_WithValueSeparator_WithValueInEnclosure_EOFInsideEnclosure() throws IOException {
+        // Arrange
+        this.setState("someName=\"");
+        ComponentException err = new EndOfInputComponentException("\"someValue");
+        this.enclosureParser.setError(err);
+        
+        // Apply + Assert
+        this.parser.parse(input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_WithName_WithValueSeparator_WithValueInEnclosure_EOFInsideEnclosure_StoredExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute("someName", "\"someValue");
+        HtmlAttribute data = null;
+        
+        this.setState("someName=\"");
+        
+        ComponentException err = new EndOfInputComponentException("\"someValue");
+        this.enclosureParser.setError(err);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
         
         // Assert
         assertEquals(expData, data);
