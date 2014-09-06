@@ -1,12 +1,12 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.Collection;
 
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MarkupParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.MissingCharacterComponentException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 
 public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> {
     private final static String CLASS_NAME = "HtmlComponentEnclosureParser";
@@ -22,6 +22,15 @@ public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> 
         MarkupTag tag = MarkupTag.getTag(c);
         this.findAndSetEnclosure(tag);
         return this.validateOpenEnclosure(c);
+    }
+    
+    @Override
+    public char read() throws IOException {
+        try {
+            return super.read();
+        } catch (EOFException e) {
+            throw new EndOfInputComponentException(this.getData());
+        }
     }
     
     private void findAndSetEnclosure(MarkupTag tag) {

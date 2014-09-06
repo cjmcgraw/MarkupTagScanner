@@ -9,11 +9,12 @@ import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.EnclosureTags;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.MissingCharacterComponentException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
 public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosureParser {
     private static final char SOME_CHAR = 'X';
+    private static final String DEFAULT_DATA = "some default data";
     private static final Set<Character> VALID_OPENING_ENCLOSURES = generateValidEnclosures();
     
     private static Set<Character> generateValidEnclosures() {
@@ -204,10 +205,92 @@ public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosurePars
         // Assert
         assertEquals(expData, data);
     }
+    
+    @Test
+    public void testRead_ValidData() throws IOException {
+        // Arrange
+        char expData = 'x';
+        char data;
+        
+        this.setState(new PushbackAndPositionReaderMock("xyz"));
+        
+        // Apply
+        data = this.read();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testRead_ValidData_InputContainsExpectedRemainingData() throws IOException {
+        // Arrange
+        String expData = "yz";
+        String data;
+        
+        PushbackAndPositionReaderMock input = new PushbackAndPositionReaderMock("xyz");
+        
+        this.setState(input);
+        
+        // Apply
+        this.read();
+        data = input.getRemainingData();
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputComponentException.class)
+    public void testRead_InvalidData() throws IOException {
+        // Arrange
+        this.setState(new PushbackAndPositionReaderMock(""));
+        
+        // Apply + Assert
+        this.read();
+    }
+    
+    @Test
+    public void testRead_InvalidData_ExceptionStoredDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = DEFAULT_DATA;
+        String data = "";
+        
+        this.setState(new PushbackAndPositionReaderMock(""));
+        
+        // Apply
+        try {
+            this.read();
+        } catch (EndOfInputComponentException e) {
+            data = e.getData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testRead_InvalidData_EmptyInputRemainingAfterException() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = "data to prevent false positive";
+        
+        PushbackAndPositionReaderMock input = new PushbackAndPositionReaderMock("");
+        
+        this.setState(input);
+        
+        // Apply
+        try {
+            this.read();
+        } catch (EndOfInputComponentException e) {
+            data = input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
 
     @Override
     protected String getData() {
-        return "some data";
+        return DEFAULT_DATA;
     }
 
     @Override
