@@ -1,11 +1,12 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components;
 
-import java.io.IOException;
+import java.io.*;
 
 import com.mycompany.htmlvalidator.exceptions.MarkupError;
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.EndOfInputAttributeException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class HtmlComponentAttributeParser extends MarkupParser<HtmlAttribute> {
@@ -24,6 +25,20 @@ public abstract class HtmlComponentAttributeParser extends MarkupParser<HtmlAttr
         super.clearState();
         this.attribute = null;
     }
+    
+    protected char read() throws IOException {
+        try {
+            return super.read();
+        } catch (EOFException e) {
+            this.attribute.setName(this.getAttributeName());
+            this.attribute.setValue(this.getAttributeValue());
+            throw new EndOfInputAttributeException(this.getAttribute());
+        }
+    }
+    
+    protected abstract String getAttributeName();
+    
+    protected abstract String getAttributeValue();
     
     protected boolean isValueSeparator(char c) {
         return MarkupTag.ATTRIBUTE_VALUE_SEPARATOR.equals(c);
