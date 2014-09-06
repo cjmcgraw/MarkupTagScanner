@@ -91,6 +91,16 @@ public class HtmlCommentAttributeParser extends HtmlComponentAttributeParser {
         this.closingTag = null;
     }
     
+    @Override
+    protected String getAttributeName() {
+        return this.getData().toString();
+    }
+    
+    @Override
+    protected String getAttributeValue() {
+        return "";
+    }
+    
     private StringBuilder getClosingTag() {
         this.validateState();
         return this.closingTag;

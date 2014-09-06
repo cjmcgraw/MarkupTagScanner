@@ -9,6 +9,7 @@ import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.EndOfInputAttributeException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlCommentAttributeParserTest {
@@ -152,13 +153,32 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EOFException.class)
+    @Test(expected=EndOfInputAttributeException.class)
     public void testParse_InvalidHtmlComment_SingleLine_MissingFirstCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(DEFAULT_DATA + MISSING_FIRST_CLOSING);
         
         // Apply + Assert
         this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_SingleLine_MissingFirstCharOfClosingCommentTag_ExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(DEFAULT_DATA + MISSING_FIRST_CLOSING);
+        HtmlAttribute data = null;
+        
+        this.setState(DEFAULT_DATA + MISSING_FIRST_CLOSING);
+        
+        // Apply
+        try { 
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
     }
     
     @Test
@@ -172,7 +192,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EOFException e) {
+        } catch (EndOfInputAttributeException e) {
             data = this.input.getRemainingData();
         }
         
@@ -180,13 +200,32 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EOFException.class)
+    @Test(expected=EndOfInputAttributeException.class)
     public void testParse_InvalidHtmlComment_MultiLine_MissingFirstCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(MULTI_LINE_DATA + MISSING_FIRST_CLOSING);
         
         // Apply + Assert
         this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_MultiLine_MissingFirstCharOfClosingCommentTag_ExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(MULTI_LINE_DATA + MISSING_FIRST_CLOSING);
+        HtmlAttribute data = null;
+        
+        this.setState(MULTI_LINE_DATA + MISSING_FIRST_CLOSING);
+        
+        // Apply
+        try { 
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
     }
     
     @Test
@@ -200,7 +239,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EOFException e) {
+        } catch (EndOfInputAttributeException e) {
             data = this.input.getRemainingData();
         }
         
@@ -208,13 +247,32 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EOFException.class)
+    @Test(expected=EndOfInputAttributeException.class)
     public void testParse_InvalidHtmlComment_SingleLine_MissingFinalCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(DEFAULT_DATA + MISSING_FINAL_CLOSING);
         
         // Apply
         this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_SingleLine_MissingFinalCharOfClosingCommentTag_ExceptionDataMatcheExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(DEFAULT_DATA + MISSING_FINAL_CLOSING);
+        HtmlAttribute data = null;
+        
+        this.setState(DEFAULT_DATA + MISSING_FINAL_CLOSING);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
     }
     
     @Test
@@ -228,7 +286,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EOFException e) {
+        } catch (EndOfInputAttributeException e) {
             data = this.input.getRemainingData();
         }
         
@@ -236,13 +294,32 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EOFException.class)
+    @Test(expected=EndOfInputAttributeException.class)
     public void testParse_InvalidHtmlComment_MultiLine_MissingFinalCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(MULTI_LINE_DATA + MISSING_FINAL_CLOSING);
         
         // Apply + Assert
         this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_MultiLine_MissingFinalCharOfClosingCommentTag_ExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(MULTI_LINE_DATA + MISSING_FINAL_CLOSING);
+        HtmlAttribute data = null;
+        
+        this.setState(MULTI_LINE_DATA + MISSING_FINAL_CLOSING);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        //  Assert
+        assertEquals(expData, data);
     }
     
     @Test
@@ -256,7 +333,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EOFException e) {
+        } catch (EndOfInputAttributeException e) {
             data = this.input.getRemainingData();
         }
         
@@ -264,13 +341,98 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EOFException.class)
+    @Test(expected=EndOfInputAttributeException.class)
     public void testParse_InvalidHtmlComment_MissingClosingTag() throws IOException {
         // Arrange
         this.setState(DEFAULT_DATA + MarkupTagNames.COMMENT_TAG.getEndName());
         
         // Apply + Assert
         this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_MissingClosingTag_ExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(DEFAULT_DATA + MarkupTagNames.COMMENT_TAG.getEndName());
+        HtmlAttribute data = null;
+        
+        this.setState(DEFAULT_DATA + MarkupTagNames.COMMENT_TAG.getEndName());
+        
+        // Apply
+        try { 
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_MissingClosingTag_NoRemainingData() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = "to prevent false positive";
+        
+        this.setState(DEFAULT_DATA + MarkupTagNames.COMMENT_TAG.getEndName());
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = this.input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test(expected=EndOfInputAttributeException.class)
+    public void testParse_InvalidHtmlComment_EOFBeforeClosingTag() throws IOException {
+        // Arrange
+        this.setState(DEFAULT_DATA);
+        
+        // Apply + Assert
+        this.parser.parse(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_EOFBeforeClosingTag_ExceptionDataMatchesExpected() throws IOException {
+        // Arrange
+        HtmlAttribute expData = new HtmlAttribute(DEFAULT_DATA);
+        HtmlAttribute data = null;
+        
+        this.setState(DEFAULT_DATA);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = e.getAttribute();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
+    }
+    
+    @Test
+    public void testParse_InvalidHtmlComment_EOFBeforeClosingTag_NoRemainingData() throws IOException {
+        // Arrange
+        String expData = "";
+        String data = "to prevent false positive";
+        
+        this.setState(DEFAULT_DATA);
+        
+        // Apply
+        try {
+            this.parser.parse(this.input);
+        } catch (EndOfInputAttributeException e) {
+            data = this.input.getRemainingData();
+        }
+        
+        // Assert
+        assertEquals(expData, data);
     }
     
     private void setState(String data) {
