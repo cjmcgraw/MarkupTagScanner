@@ -7,6 +7,7 @@ import java.util.*;
 
 import org.junit.*;
 
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.EndOfInputComponentException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class WhitespaceConsumerTest {
@@ -256,7 +257,7 @@ public class WhitespaceConsumerTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EOFException.class)
+    @Test(expected=EndOfInputComponentException.class)
     public void testConsume_InputContainsOnlyWhitespace_ThrowsEOFException() throws IOException {
         // Arrange
         this.setState(SPACE_SEPARATOR + TAB_SEPARATOR + NEWLINE_SEPARATOR);
@@ -265,7 +266,7 @@ public class WhitespaceConsumerTest {
         this.consumer.parse(input);
     }
     
-    @Test(expected=EOFException.class)
+    @Test(expected=EndOfInputComponentException.class)
     public void testConsume_EmptyInput_ThrowsEOFException() throws IOException {
         // Arrange
         this.setState("");

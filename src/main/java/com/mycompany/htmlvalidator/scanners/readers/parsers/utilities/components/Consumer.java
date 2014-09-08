@@ -1,8 +1,9 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components;
 
-import java.io.IOException;
+import java.io.*;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.InputParser;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.EndOfInputComponentException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class Consumer extends InputParser<Integer>{
@@ -17,8 +18,12 @@ public abstract class Consumer extends InputParser<Integer>{
     
     @Override
     protected char read() throws IOException{
-        this.counter++;
-        return super.read();
+        try {
+            this.counter++;
+            return super.read();
+        } catch (EOFException e) {
+            throw new EndOfInputComponentException("");
+        }
     }
     
     @Override
