@@ -6,7 +6,7 @@ import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.*;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.ComponentException;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlAttributesParser extends HtmlUtilityParser {
@@ -60,8 +60,16 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     }
     
     private void parseCommentData() throws IOException{
-        HtmlAttribute attribute = this.parseCommentAttribute();
-        this.getResult().updateAttributes(attribute);
+        HtmlAttribute attr;
+        
+        try {
+            attr = this.parseCommentAttribute();
+            this.getResult().updateAttributes(attr);
+        } catch (EndOfInputAttributeException e) {
+            attr = e.getAttribute();
+            this.getResult().updateAttributes(attr);
+            throw this.generateEndOfInputParsingException();
+        } 
     }
     
     private void parseStandardAttributes() throws IOException {
@@ -87,8 +95,12 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     }
     
     private void consumeWhitespace() throws IOException {
-        this.validateState();
-        this.whitespaceConsumer.parse(this.getInput());
+        try {
+            this.validateState();
+            this.whitespaceConsumer.parse(this.getInput());
+        } catch (EndOfInputComponentException e) {
+            throw this.generateEndOfInputParsingException();
+        }
     }
     
     private void updateResultAttributes() throws IOException {
@@ -128,13 +140,24 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     }
     
     private String getEnclosureDataName() throws IOException {
-        return this.enclosureParser.parse(this.getInput());
+        try {
+            return this.enclosureParser.parse(this.getInput());
+        } catch (EndOfInputComponentException e) {
+            HtmlAttribute attr = new HtmlAttribute(e.getData());
+            this.getResult().updateAttributes(attr);
+            throw this.generateEndOfInputParsingException();
+        }
     }
     
     private HtmlAttribute parseGeneralAttribute() throws IOException {
-        this.validateState();
-        this.unread();
-        return this.attributeParser.parse(this.getInput());
+        try {
+            this.validateState();
+            this.unread();
+            return this.attributeParser.parse(this.getInput());
+        } catch (EndOfInputAttributeException e) {
+            this.getResult().updateAttributes(e.getAttribute());
+            throw this.generateEndOfInputParsingException();
+        }
     }
     
     private void validateState() {
