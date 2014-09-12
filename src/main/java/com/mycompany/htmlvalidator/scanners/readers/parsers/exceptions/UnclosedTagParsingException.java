@@ -5,7 +5,7 @@ import java.awt.Point;
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 
-public class UnclosedTagParsingException extends ParsingException {
+public class UnclosedTagParsingException extends NonFatalParsingException {
     private static final long serialVersionUID = -8194616683282825723L;
     private static final String defaultMsg = "UNEXPECTED OPEN TAG. Found open tag before current tag was closed";
     
