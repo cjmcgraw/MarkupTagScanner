@@ -39,10 +39,14 @@ public class HtmlDataParser extends DataParser{
     }
     
     private HtmlData parseTag() throws IOException {
-        this.readOpenTag();
-        this.parseTagData();
-        this.readCloseTag();
-        return this.getResult();
+        try {
+            this.readOpenTag();
+            this.parseTagData();
+            this.readCloseTag();
+            return this.getResult();
+        } catch (NonFatalParsingException e) {
+            return e.getHtmlData();
+        }
     }
     
     private void parseTagData() throws IOException {
@@ -60,12 +64,18 @@ public class HtmlDataParser extends DataParser{
     private void readOpenTag() throws IOException {
         char c = this.read();
         
-        if (!isOpeningTag(c)) {
-            this.unread(c);
-            char exp = MarkupTag.OPENING_TAG.toChar();
-            throw this.getMissingEnclosureParsingException(exp, c);
-        }
+        if (!isOpeningTag(c))
+            throw this.invalidOpeningTagRead();
         this.getResult().confirmOpeningTag();
+    }
+    
+    private ParsingException invalidOpeningTagRead() throws IOException {
+        if (!isClosingTag())
+            this.unread();
+        else
+            this.getResult().confirmClosingTag();
+        char exp = MarkupTag.OPENING_TAG.toChar();
+        return this.getMissingEnclosureParsingException(exp, getCurrChar());
     }
     
     private HtmlData parseClosingData() throws IOException {

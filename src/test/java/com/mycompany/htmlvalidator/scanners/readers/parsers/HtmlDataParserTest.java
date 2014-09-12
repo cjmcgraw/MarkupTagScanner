@@ -149,8 +149,8 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
-    public void testParse_ClosingParser_ThrowsExpectedException_UnclosedTagException()  {
+    @Test
+    public void testParse_ClosingParser_ThrowsUnclosedTagParsingException_ExceptionIsCaught()  {
         // Arrange
         ParsingException exception = this.createException("UnclosedTag");
         this.closingParser = new HtmlClosingParserMock(exception);
@@ -162,7 +162,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_ClosingParser_ThrowsExpectedException_UnclosedTagParsingException_ExceptionResultMatchesExpected()  {
+    public void testParse_ClosingParser_UnclosedTagParsingExceptionCaught_ResultMatchesExpected()  {
         // Arrange
         MutableHtmlData expData = this.createDataFromException();
         expData.setIsClosing(true);
@@ -176,17 +176,13 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = e.getHtmlData();
-        }
+        data = this.parse();
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ClosingParser_ThrowsExpectedException_UnclosedTagParsingException_ConsumesOnlyExpectedInput()  {
+    public void testParse_ClosingParser_UnclosedTagParsingExceptionCaught_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
@@ -196,11 +192,9 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = this.getRemainingData();
-        }
+        
+        this.parse();
+        data = input.getRemainingData();
         
         // Assert
         assertEquals(expData, data);
@@ -370,8 +364,8 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
-    public void testParse_ElementParser_ThrowsExpectedException_UnclosedTagParsingException() {
+    @Test
+    public void testParse_ElementParser_ThrowsExpectedException_ExceptionIsCaught() {
         // Arrange
         ParsingException exception = this.createException("UnclosedTag");
         this.elementParser = new HtmlElementParserMock(exception);
@@ -383,12 +377,12 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_ElementParser_ThrowsExpectedException_UnclosedTagParsingException_ExceptionResultMatchesExpected()  {
+    public void testParse_ElementParser_UnclosedTagParsingExceptionCaught_ResultMatchesExpected()  {
         // Arrange
         MutableHtmlData expData = this.createDataFromException();
         expData.setName(DEFAULT_ELEMENT);
         
-        HtmlData data = null;
+        HtmlData data;
         
         ParsingException exception = this.createException("UnclosedTag");
         this.elementParser = new HtmlElementParserMock(exception);
@@ -397,18 +391,14 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = e.getHtmlData();
-        }
+        data = this.parse();
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_ElementParser_ThrowsExpectedException_UnclosedTagParsingException_ConsumesOnlyExpectedInput()  {
+    public void testParse_ElementParser_UnclosedTagParsingExceptionCaught_ConsumesOnlyExpectedInput()  {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
@@ -418,11 +408,8 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = this.getRemainingData();
-        }
+        this.parse();
+        data = this.getRemainingData();
         
         // Assert
         assertEquals(expData, data);
@@ -558,8 +545,8 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
-    public void testParse_AttributeParser_ThrowsExpectedException_UnclosedTagParsingException()  {
+    @Test
+    public void testParse_AttributeParser_UnclosedTagParsingException_ExceptionIsCaught()  {
         //Arrange
         ParsingException exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeParserMock(exception);
@@ -570,7 +557,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_AttributeParser_ThrowsExpectedException_UnclosedTagParsingException_ExceptionResultMatchesExpected() {
+    public void testParse_AttributeParser_UnclosedTagParsingExceptionCaugt_ResultMatchesExpected() {
         // Arrange
         MutableHtmlData expData = this.createDataFromException();
         expData.setAttributes(DEFAULT_ATTR);
@@ -584,18 +571,14 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = e.getHtmlData();
-        }
+        data = this.parse();
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_AttributeParser_ThrowsExpectedException_UnclosedTagParsingException_ConsumesOnlyExpectedInput() {
+    public void testParse_AttributeParser_UnclosedTagParsingExceptionCaught_ConsumesOnlyExpectedInput() {
         // Arrange
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
@@ -605,11 +588,8 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = this.getRemainingData();
-        }
+        this.parse();
+        data = this.getRemainingData();
         
         // Assert
         assertEquals(expData, data);
@@ -740,7 +720,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_HasOpeningTag_ThrowsException_UnclosedTagParsingException_ResultHasOpeningTagIsTrue() {
+    public void testParse_HasOpeningTag_UnclosedTagParsingExceptionCaught_ResultHasOpeningTagIsTrue() {
      // Arrange
         boolean expData = true;
         boolean data = !expData;
@@ -751,18 +731,15 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = e.getHtmlData().hasOpeningTag();
-        }
+        HtmlData result = this.parse();
+        data = result.hasOpeningTag();
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_HasClosingTag_ThrowsException_UnclosedTagParsingException_ResultHasClosingTagIsFalse() {
+    public void testParse_HasClosingTag_UnclosedTagParsingExceptionCaught_ResultHasClosingTagIsFalse() {
      // Arrange
         boolean expData = false;
         boolean data = !expData;
@@ -773,11 +750,8 @@ public class HtmlDataParserTest {
         this.setState(DEFAULT_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (UnclosedTagParsingException e) {
-            data = e.getHtmlData().hasClosingTag();
-        }
+        HtmlData result = this.parse();
+        data = result.hasClosingTag();
         
         // Assert
         assertEquals(expData, data);
@@ -820,8 +794,8 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=MissingEnclosureParsingException.class)
-    public void testParse_MissingOpeningTag_ThrowsExpectedException_MissingEnclosureParsingException() {
+    @Test
+    public void testParse_MissingOpeningTag_MissingEnclosureParsingException_ExceptionIsCaught() {
         // Arrange
         this.setState(MISSING_OPENING_INPUT);
         
@@ -830,7 +804,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_MissingOpeningTag_ThrowsExpectedException_MissingEnclosureParsingException_ExceptionResultHasOpeningTagIsFalse() {
+    public void testParse_MissingOpeningTag_MissingEnclosureParsingExceptionCaught_ResultHasOpeningTagIsFalse() {
         // Arrange
         boolean expData = false;
         boolean data = !expData;
@@ -838,37 +812,31 @@ public class HtmlDataParserTest {
         this.setState(MISSING_OPENING_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (MissingEnclosureParsingException e) {
-            data = e.getHtmlData().hasOpeningTag();
-        }
+        HtmlData result = this.parse();
+        data = result.hasOpeningTag();
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_MissingOpeningtag_ThrowsExpectedException_MissingEnclosureParsingException_ConsumesOnlyExpectedInput() {
+    public void testParse_MissingOpeningtag_MissingEnclosureParsingExceptionCaught_ConsumesOnlyExpectedInput() {
         // Arrange
-        String expData = INTERRUPT_EXP_REMAINING_INPUT;
+        String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data = "";
         
         this.setState(MISSING_OPENING_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (MissingEnclosureParsingException e) {
-            data = this.getRemainingData();
-        }
+        this.parse();
+        data = this.getRemainingData();
         
         // Assert
         assertEquals(expData, data);
     }
     
-    @Test(expected=MissingEnclosureParsingException.class)
-    public void testParse_MissingClosingTag_ThrowsExpectedException_MissingEnclosureParsingException() {
+    @Test
+    public void testParse_MissingClosingTag_MissingEnclosureParsingException_ExceptionIsCaught() {
         // Arrange
         this.setState(MISSING_CLOSING_INPUT);
         
@@ -877,7 +845,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_MissingClosingTag_ThrowsExpectedException_MissingEnclosureParsingException_ExceptionResultMatchesExpected() {
+    public void testParse_MissingClosingTag_MissingEnclosureParsingExceptionCaught_ResultMatchesExpected() {
         // Arrange
         MutableHtmlData expData = this.createDataFromException();
         expData.setIsClosing(true);
@@ -893,18 +861,14 @@ public class HtmlDataParserTest {
         this.setState(MISSING_CLOSING_INPUT);
         
         // Apply
-        try {
-            this.parse();
-        } catch (MissingEnclosureParsingException e) {
-            data = e.getHtmlData();
-        }
+        data = this.parse();
         
         // Assert
         assertEquals(expData, data);
     }
     
     @Test
-    public void testParse_MissingClosingTag_ThrowsExpectedException_MissingEnclosureParsingException_ConsumesOnlyExpectedInput() {
+    public void testParse_MissingClosingTag_MissingEnclosureParsingExceptionCaught_ConsumesOnlyExpectedInput() {
         // Arrange
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data = "";
@@ -912,11 +876,8 @@ public class HtmlDataParserTest {
         this.setState(MISSING_CLOSING_INPUT);
         
         // Apply
-        try {
-            this.parse(); 
-        } catch (MissingEnclosureParsingException e) {
-            data = this.getRemainingData();
-        }
+        this.parse(); 
+        data = this.getRemainingData();
         
         // Assert
         assertEquals(expData, data);
