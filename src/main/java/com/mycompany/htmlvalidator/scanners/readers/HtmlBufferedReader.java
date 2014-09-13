@@ -5,12 +5,15 @@ import java.util.*;
 
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
 public class HtmlBufferedReader implements HtmlReader{
     private PushbackAndPositionReader reader;
     private boolean emptyReader;
     private DataParser parser;
+    
+    private ParsingException incomingException;
     
     private HtmlData currData;
     private boolean hasData;
@@ -21,6 +24,7 @@ public class HtmlBufferedReader implements HtmlReader{
         this.parser = new HtmlDataParser();
         this.currData = null;
         this.hasData = false;
+        this.incomingException = null;
     }
     
     public HtmlBufferedReader(DataParser parser) throws IOException {
@@ -64,6 +68,8 @@ public class HtmlBufferedReader implements HtmlReader{
     }
     
     private void validateNext() {
+        if (this.incomingException != null) 
+            throw this.incomingException;
         if (this.currData == null || !this.hasData)
             throw new NoSuchElementException();
     }
@@ -73,6 +79,10 @@ public class HtmlBufferedReader implements HtmlReader{
             this.readNextData();
         } catch (IOException e) {
             throw new NoSuchElementException(" An error occurred in reading the input! No such element found");
+        } catch (FatalParsingException e) {
+            this.incomingException = e;
+        } catch (NonFatalParsingException e) {
+            this.updateState(e.getHtmlData());
         }
     }
     

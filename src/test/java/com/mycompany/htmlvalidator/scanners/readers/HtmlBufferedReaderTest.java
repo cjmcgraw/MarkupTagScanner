@@ -2,6 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
@@ -10,6 +11,7 @@ import org.junit.*;
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.HtmlBufferedReader;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
+import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 
@@ -441,7 +443,6 @@ public class HtmlBufferedReaderTest {
         assertEquals(expData, data);
     }
     
-    
     @Test
     public void testHasNext_NoNextValue_ResultIsFalse() {
         // Arrange
@@ -458,13 +459,11 @@ public class HtmlBufferedReaderTest {
         assertEquals(expData, data);
     }
     
-    
     @Test(expected=UnsupportedOperationException.class)
     public void testRemove_ThrowsUnsupportedOperationException() {
         // Apply + Assert
         this.reader.remove();
     }
-    
     
     @Test
     public void testClose_ClosesStoredInputReader() throws IOException {
@@ -480,6 +479,123 @@ public class HtmlBufferedReaderTest {
         assertEquals(expData, data);
     }
     
+    @Test
+    public void testPreParse_InvalidInput_EndOfInputParsingException_PreParseDoesntThrowException() throws IOException {
+        /* This test case checks that the pre-parsing when the reader is primed
+         * with an exception doesn't cause the exception to be thrown.*/
+        this.parser.setException(new EndOfInputParsingException(new Point(0,0), new MutableHtmlData()));
+        this.reader = new HtmlBufferedReader(this.parser);
+        this.reader.setReader(this.input);
+    }
+    
+    @Test(expected=EndOfInputParsingException.class)
+    public void testNext_InvalidInput_EndOfInputParsingException_ThrowsExpectedException() throws IOException {
+        // Arrange
+        ParsingException err = new EndOfInputParsingException(new Point(0,0), new MutableHtmlData());
+        this.setException(err);
+        
+        // Apply + Assert
+        this.readData();
+    }
+    
+    @Test
+    public void testNext_InvalidInput_EndOfInputParsingException_StoredExceptionResultMatchesExpected() throws IOException {
+        // Arrange
+        HtmlData data = null;
+        MutableHtmlData exp = new MutableHtmlData();
+        exp.setName("some data");
+        
+        ParsingException err = new EndOfInputParsingException(new Point(0,0), exp);
+        this.setException(err);
+        
+        // Apply
+        try {
+            this.readData();
+        } catch (EndOfInputParsingException e) {
+            data = e.getHtmlData();
+        }
+        
+        // Assert
+        assertEquals(exp, data);
+    }
+    
+    @Test
+    public void testPreParse_InvalidInput_MissingEnclosureParsingException_CatchesExpectedException() throws IOException {
+        /* This test case checks that the pre-parsing whent he reader is primed
+         * with an exception doesnt' cause the exception to be thrown*/
+        this.parser.setException(new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', new MutableHtmlData()));
+        this.reader = new HtmlBufferedReader(this.parser);
+        this.reader.setReader(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_MissingEnclosureParsingException_ReturnedResultMatchesExpected() throws IOException {
+        // Arrange
+        HtmlData data;
+        MutableHtmlData exp = new MutableHtmlData();
+        exp.setName("some name");
+        
+        ParsingException err = new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', exp);
+        this.setException(err);
+        
+        // Apply
+        data = this.readData();
+        
+        // Assert
+        assertEquals(exp, data);
+    }
+    
+    @Test
+    public void testPreParse_InvalidInput_UnclosedTagParsingException_CatchesExpectedException() throws IOException {
+        /* This test case checks that the pre-parsing whent he reader is primed
+         * with an exception doesnt' cause the exception to be thrown*/
+        this.parser.setException(new UnclosedTagParsingException(new Point(0,0), new MutableHtmlData()));
+        this.reader = new HtmlBufferedReader(this.parser);
+        this.reader.setReader(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_UnclosedTagParsingException_ReturnedResultMatchesExpected() throws IOException {
+        // Arrange
+        HtmlData data;
+        MutableHtmlData exp = new MutableHtmlData();
+        exp.setName("some name");
+        
+        ParsingException err = new UnclosedTagParsingException(new Point(0,0),  exp);
+        this.setException(err);
+        
+        // Apply
+        data = this.readData();
+        
+        // Assert
+        assertEquals(exp, data);
+    }
+    
+    @Test
+    public void testPreParse_InvalidInput_UnexpectedCloseTagParsingException_CatchesExpectedException() throws IOException {
+        /* This test case checks that the pre-parsing whent he reader is primed
+         * with an exception doesnt' cause the exception to be thrown*/
+        this.parser.setException(new UnexpectedCloseTagParsingException(new Point(0,0), new MutableHtmlData()));
+        this.reader = new HtmlBufferedReader(this.parser);
+        this.reader.setReader(this.input);
+    }
+    
+    @Test
+    public void testParse_InvalidInput_UnexpectedCloseTagParsingException_ReturnedResultMatchesExpected() throws IOException {
+        // Arrange
+        HtmlData data;
+        MutableHtmlData exp = new MutableHtmlData();
+        exp.setName("some name");
+        
+        ParsingException err = new UnexpectedCloseTagParsingException(new Point(0,0), exp);
+        this.setException(err);
+        
+        // Apply
+        data = this.readData();
+        
+        // Assert
+        assertEquals(exp, data);
+    }
     
     private HtmlData readData() {
         return this.reader.next();
@@ -497,6 +613,12 @@ public class HtmlBufferedReaderTest {
         this.input = new PushbackAndPositionReaderMock(new LinkedList<>(input));
         this.parser = new HtmlDataParserMock(data);
         
+        this.reader = new HtmlBufferedReader(this.parser);
+        this.reader.setReader(this.input);
+    }
+    
+    private void setException(ParsingException err) throws IOException {
+        this.parser.setException(err);
         this.reader = new HtmlBufferedReader(this.parser);
         this.reader.setReader(this.input);
     }
