@@ -2,7 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
 import java.io.IOException;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTagNames;
+import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
@@ -32,7 +32,10 @@ public class HtmlElementParser extends HtmlUtilityParser {
     }
     
     protected boolean validateChar(char c) throws IOException {
-        return super.validateChar(c) && !this.isWhitespace(c) && !this.isComment();
+        return super.validateChar(c) && 
+                this.NonClosingAttribute() &&
+                !this.isWhitespace(c) && 
+                !this.isComment();
     }
     
     private boolean isComment() throws IOException {
@@ -40,5 +43,13 @@ public class HtmlElementParser extends HtmlUtilityParser {
         
         return name.length() == COMMENT_NAME.length() && 
                name.startsWith(COMMENT_NAME);
+    }
+    
+    protected boolean NonClosingAttribute() throws IOException {
+        if (super.isClosingAttribute()) {
+            this.unread();
+            return false;
+        }
+        return true;
     }
 }

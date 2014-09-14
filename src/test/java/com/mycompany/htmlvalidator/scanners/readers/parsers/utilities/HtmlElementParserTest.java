@@ -15,6 +15,7 @@ public class HtmlElementParserTest {
     private static final char CLOSING_TAG = MarkupTag.CLOSING_TAG.toChar();
     private static final char OPENING_TAG = MarkupTag.OPENING_TAG.toChar();
     private static final String COMMENT_OPENING = MarkupTagNames.COMMENT_TAG.getBeginName();
+    private static final String CLOSING_ATTR = MarkupTag.CLOSING_ATTRIBUTE.toString();
     
     private static final String WHITESPACE_START_STR = " abcdefg";
     private static final String WHITESPACE_CENTER_STR = "abcd efg";
@@ -122,41 +123,80 @@ public class HtmlElementParserTest {
     }
     
     @Test
-    public void testParse_WithValidelementName_CommentNameInCenterOfStr_ReturnsHtmlDataWithExpectedName() throws IOException {
+    public void testParse_WithValidElementName_CommentNameInCenterOfStr_ReturnsHtmlDataWithExpectedName() throws IOException {
         // Test
         this.testParse_ValidElement_ReturnedDataNameMatches("abcdefg" + COMMENT_OPENING + "hijlmnopqrstuvwxyz ");
         
     }
     
     @Test
-    public void testParse_WithValidelementName_CommentNameInCenterOfStr_StoredDataNameMatches() throws IOException {
+    public void testParse_WithValidElementName_CommentNameInCenterOfStr_StoredDataNameMatches() throws IOException {
         // Test
         this.testParse_ValidElement_StoredDataNameMatches("abcdefg" + COMMENT_OPENING + "hijlmnopqrstuvwxyz ");
     }
     
     @Test
-    public void testParse_WithValidelementName_CommentNameInCenterOfStr_RemainingDataMatchesExpected() throws IOException {
+    public void testParse_WithValidElementName_CommentNameInCenterOfStr_RemainingDataMatchesExpected() throws IOException {
         
         // Test
         this.testParse_ValidElement_ConsumesElementNameFromInput("abcdefg" + COMMENT_OPENING + "hijlmnopqrstuvwxyz ");
     }
     
-    public void testParse_WithValidelementName_CommentNameAtEndOfStr_ReturnsHtmlDataWithExpectedName() throws IOException {
+    public void testParse_WithValidElementName_CommentNameAtEndOfStr_ReturnsHtmlDataWithExpectedName() throws IOException {
         // Test
         this.testParse_ValidElement_ReturnedDataNameMatches("abcdefghijlmnopqrstuvwxyz" + COMMENT_OPENING + " ");
         
     }
     
     @Test
-    public void testParse_WithValidelementName_CommentNameAtEndOfStr_StoredDataNameMatches() throws IOException {
+    public void testParse_WithValidElementName_CommentNameAtEndOfStr_StoredDataNameMatches() throws IOException {
         // Test
         this.testParse_ValidElement_StoredDataNameMatches("abcdefghijlmnopqrstuvwxyz" + COMMENT_OPENING + " ");
     }
     
     @Test
-    public void testParse_WithValidelementName_CommentNameAtEndOfStr_RemainingDataMatchesExpected() throws IOException {
+    public void testParse_WithValidElementName_CommentNameAtEndOfStr_RemainingDataMatchesExpected() throws IOException {
         // Test
         this.testParse_ValidElement_ConsumesElementNameFromInput("abcdefghijlmnopqrstuvwxyz" + COMMENT_OPENING + " ");
+    }
+    
+    @Test
+    public void testParse_WithValidElementName_ClosingAttrAtEndOfStr_ReturnsHtmlDataWithExpectedName() throws IOException {
+        // Arrange
+        String expData = "abcdefghijklmnopqrstuvwxyz";
+        this.setState(expData + CLOSING_ATTR);
+        
+        // Apply
+        HtmlData htmlData = this.parser.parse(this.input, this.result);
+        
+        // Assert
+        assertEquals(expData, htmlData.getName());
+    }
+    
+    @Test
+    public void testParse_WithValidElementName_ClosingAttrAtEndOfStr_StoredDataNameMatches() throws IOException {
+        // Arrange
+        String expData = "abcdefghijklmnopqrstuvwxyz";
+        this.setState(expData + CLOSING_ATTR);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        
+        // Assert
+        assertEquals(expData, this.result.getName());
+    }
+    
+    @Test
+    public void testParse_WithValidElementName_ClosingAttrAtEndOfStr_RemainingDataMatchesExpected() throws IOException {
+        // Arrange
+        String expData = CLOSING_ATTR + " ";
+        this.setState("abcdefghijklmnopqrstuvwyxz"+ expData);
+        
+        // Apply
+        this.parser.parse(this.input, this.result);
+        
+        // Assert
+        assertEquals(expData, this.input.getRemainingData());
     }
     
     private void testParse_ValidElement_ReturnedDataNameMatches(String str) throws IOException {
