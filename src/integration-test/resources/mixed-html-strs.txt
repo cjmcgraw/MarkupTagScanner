@@ -1,0 +1,706 @@
+==================================================================
+Section One: Tags with names only
+==================================================================
+
+This area represents tags that only have names, and opening or
+closing values. Nothing more. So there will be three potential types
+to display here:
+
+1.  Tags with opening, closing and a name
+2.  Tags with opening, no closing and a name
+3.  Tags with no opening, a closing, and a name
+4.  Tags with opening, closing and no name
+5.  Tags with whitespace after name
+6.  Tags with whitespace before name, should be parsed
+    as an attribute in the tag and not a name
+7.  Tags with whitespace both before and after name. Should
+    also be parsed as an attribute in the tag
+
+the name "fillerTag" will be used to represent data that is
+used as a buffer just to ensure that processing occurs as
+expected both before and after a tag. This will used as needed.
+
+test data:
+--------------------------------------------------------------------
+    <fillerTag>
+    
+    We begin with the simple<nameTag1> which is just a
+    standard tag. Next we try a tag without a closing bracket
+    this cannot be followed by any text so we will use a filler
+    tag to allow it to be parsed properly. Otherwise any text
+    following it would be interpreted as attributes in the
+    tag.<nameTag2<fillerTag>
+    
+    Next I will try a tag without an opening tag. This tag will be
+    given a leading filler to reduce confusion, but any text from
+    this tag won't actually be parsed. Instead the parser will notice
+    the closing tag and treat it as a tag without any data.
+    <fillerTag>nameTag3><fillerTag> 
+    
+    Then we follow with #4, an actual empty tag <>. Which
+    should have a similar result to #3. The difference though
+    is that the #4 actually has a well defined opening and closing
+    brackets, where #3 should be viewed as not containing either.
+    
+    move onto some of the stranger cases <nameTag5       >
+    all of the trailing whitespace should be ignored by the
+    parser.
+    
+    However this won't be the same case with leading
+    whitespace. Since tag names are differentiated from
+    attributes by how close they are to the opening tag, 
+    this tag <        nameTag6> should show the name as
+    an attribute instead. The name will itself be blank. 
+    
+    <fillerTag>
+    
+    Then we try #7, which should be parsed as containing
+    the same data as #6. <      nameTag7       >
+    
+    <fillerTag>
+--------------------------------------------------------------------
+
+====================================================================
+Section Two: Tags with Closing Tags
+====================================================================
+
+This area represents tags that are closing tags. Meaning that they
+have leading "/"s before their names. The potential possibilities
+here are:
+
+1.  Tags with no closing before name
+2.  Tags with closing before name
+3.  Tags with no opening bracket and closing
+4.  Tags with no closing bracket, and closing
+5.  Tags with no name, and closing
+6.  Tag with name and closing, with trailing whitespace
+7.  Tag with no name, with closing and trailing whitespace
+8.  Tag with name and closing with leading whitespace.
+9.  Tag with no name, with closing and leading whitespace
+
+test data:
+-------------------------------------------------------------------
+    <fillerTag>
+    
+    Starting with the uninteresting case of just a name.
+    <fillerTag><closingTag1><fillerTag>
+    
+    We then move forward to the more interesting case of a tag
+    with an actual closing slash in front of it.</closingTag2>
+    <fillerTag>
+    
+    From there we check the case where there is no opening tag
+    /closingTag3> which should actually register as an empty tag.
+    
+    
+    Our next tag, #4 should be missing its closing bracket instead
+    </closingTag4 <fillerTag> With a filler tag at the end just to
+    allow for more text to be displayed.
+    
+    #5 is a tag without anything but a closing slash. </>
+    
+    #6 is a tag with trailing whitespace, this should be ignored
+    by the parser. </closingTag6                >
+    
+    #7 is a tag with no name, and trailing whitespace which should
+    have an identical result to #5 </                  >
+    
+    #8 is where it starts to get kind of weird. This is a tag with
+    a name and closing but with leading whitespace. This means that
+    we would expect that our tag now has some attribute which is
+    represented by its name with a slash in front of it. This however
+    won't exactly be the case. Instead the parser should consider
+    any "/" characters it finds to be "self closing tags" so we should
+    instead have the result of a tag with two attributes, the first
+    being the self closing, the second being the name. Lets see what
+    we get, shall we? <      /closingTag8>
+    
+    #9 is exactly like #8 only we should see only the self closing tag
+    in the result and not the additional name attribute. <   /    >
+    
+    <fillerTag>
+--------------------------------------------------------------------
+
+====================================================================
+Section Three: Self Closing Tags
+====================================================================
+
+This area represents the tags that are self closing tags. Meaning that
+they have a self closing attribute of "/" associated with them.
+
+The potential tags in this section are:
+
+1.  tag with name and self closing attr
+2.  tag with name and self closing attr, no space after name
+3.  tag with no name and self closing attr
+4.  tag with name and self closing attr and missing opening bracket
+5.  tag with name and self closing attr and missing closing bracket
+6.  tag with additional trailing whitespace
+7.  tag with additional leading whitespace
+
+Test data:
+---------------------------------------------------------------------
+    <fillerTag>
+    
+    #1 is the simplest case. Just a tag with a name and a closing attr.
+    Represented here: <selfClosingTag1 /> That is rather simple.
+    
+    #2 is slightly more complicated because the lack of discernible space
+    between the name and the tag. This should be parsed correctly though
+    <selfClosingTag2/>
+    
+    #3 is the same as the previous, only its missing its name property
+    < />
+    
+    #4 doesn't have a closing bracket. <selfClosingTag4 /     <fillerTag>
+    
+    While #5 doesn't have an opening <fillerTag> selfClosingTag5 />
+    
+    #6 has additional trailing whitespace behind the closing attribute,
+    but it should be identical to the results of the other tags. So here
+    goes: <selfClosingTag6 /             >
+    
+    #7 has additional leading whitespace, this is basically the same as
+    #3. <           /   >
+    
+    <fillerTag>
+---------------------------------------------------------------------
+
+=====================================================================
+Section Four: Attribute Flags
+=====================================================================
+
+This section is dedicated to handling all non quoted attribute values
+that may be presented to a tag.
+
+1.  Tag with single attribute flag
+2.  Tag with two attribute flags
+3.  Tag with three attribute flags
+4.  Tag with space after attribute flags
+5.  Tag with no name, and three attribute flags
+6.  Tag with additional whitespace between attribute flags
+7.  Tag with attr flags and no opening bracket
+8.  Tag with attr flags and no closing bracket
+
+Test data:
+---------------------------------------------------------------------
+    <fillerTag>
+    
+    First we begin with the standard tag with a single attribute flag.
+    This should be no problem <attributeTag1 flag1>
+    
+    Next we have the same thing only with two flags:
+    <attributeTag2 flag1 flag2>
+    
+    Then we have the three-fer: <attributeTag3 flag1 flag2 flag3>
+    
+    Now a simple case which I imagine could be a problem, that is simply
+    when we have a single whitespace after the last flag.
+    <attributeTag4 flag1 flag2 flag3 >
+    
+    The strange case of a tag with no name but flags < flag1 flag2 flag3>
+    
+    Then our tag with a lot of whitespace in between the flags,
+    this should parse to be the same as other tags as well <attributeTag6                 flag1                           flag2                     flag3                         >
+    
+    <fillerTag> attributeTag7 flag1 flag2 flag3><fillerTag> has no opening 
+    bracket and should be a simple empty tag with only a closing bracket.
+    
+    Then the next one is missing its closing bracket. But it should contain
+    all of its data regardless. <fillerTag><attributeTag8 flag1 flag2 flag3
+    <fillerTag>
+    
+    <fillerTag>
+---------------------------------------------------------------------
+
+=====================================================================
+Section Five: Attribute Flags single-quotes
+=====================================================================
+
+This section is dedicated attribute flags in single-quotes. Simple 
+these are attributes that are represented only as some string in
+single-quotes
+
+1.  Tag with attribute in single-quotes
+2.  Tag with two attributes in single-quotes
+3.  Tag with three attributes in single-quotes
+4.  Tag with attribute in single-quotes and no opening bracket
+5.  Tag with attribute in single-quotes and no closing bracket
+6.  Tag with attributes in single-quotes separated by whitespace
+7.  Tag with attribute in single-quote, no beginning single-quote
+8.  Tag with attribute, single-quoted data inside of attribute.
+9.  Tag with closing tag inside single-quoted attribute, doesn't 
+    end tag
+10. Tag with closing tag inside of single-quoted attribute
+    ends tag
+
+Test data:
+---------------------------------------------------------------------
+    <fillerTag>
+    
+    <singleQuoteAttribute1 'attr1'>
+    <singleQuoteAttribute2 'attr1' 'attr2'> 
+    <singleQuoteAttribute3 'attr1' 'attr2' 'attr3'>.
+     singleQuoteAttribute4 'attr1'> 
+    <singleQuoteAttribute5 'attr1' <fillerTag>
+    <singleQuoteAttribute6      'attr1'             'attr2'          'attr3'      >
+    <singleQuoteAttribute7 attr'1>
+    <singleQuoteAttribute8 attr'1'>
+    <singleQuoteAttribute9 'attr>' >
+    <singleQuoteAttribute10 attr'>'
+    
+    <fillerTag>
+---------------------------------------------------------------------
+
+=====================================================================
+Section Six: Attribute Flags double-quotes
+=====================================================================
+
+This section is dedicated to tags with attribute flags that are in
+double-quotes. This section is very similar to the single-quote
+section.
+
+1.  Tag with attribute in double-quotes
+2.  Tag with two attributes in double-quotes
+3.  Tag with three attributes in double-quotes
+4.  Tag with attribute in double-quotes and no opening bracket
+5.  Tag with attribute in double-quotes and no closing bracket
+6.  Tag with attributes in double-quotes separated by whitespace
+7.  Tag with attribute in double-quote, no beginning double-quote
+8.  Tag with attribute, double-quoted data inside of attribute.
+9.  Tag with closing tag inside double-quoted attribute, doesn't 
+    end tag
+10. Tag with closing tag inside of double-quoted attribute
+    ends tag
+
+Test data:
+---------------------------------------------------------------------
+    <fillerTag>
+
+    <doubleQuoteAttribute1 "attr1">
+    <doubleQuoteAttribute2 "attr1" "attr2">
+    <doubleQuoteAttribute3 "attr1" "attr2" "attr3">
+     doubleQuoteAttribute4 "attr1">
+    <doubleQuoteAttribute5 "attr1"
+    <doubleQuoteAttribute6 "attr1"      >
+    <doubleQuoteAttribute7 attr1">
+    <doubleQuoteAttribute8 attr"1">
+    <doubleQuoteAttribute9 "attr1>">
+    <doubleQuoteAttribute10 attr"1>"
+
+    <fillerTag>
+---------------------------------------------------------------------
+
+=====================================================================
+Section Seven: Attribute values
+=====================================================================
+
+This section represents tags with attributes with values.
+
+1.  Tag with single attr/val
+2.  Tag with two attr/vals
+3.  Tag with three attr/vals
+4.  Tag with attr/vals with trailing whitespace
+5.  Tag with attr/val and no opening
+6.  Tag with attr/val and no closing
+7.  Tag with attr/vals whitespace in between attr/vals
+8.  Tag with attr/vals whitespace in between '='
+9.  Tag with attr/vals whitespace between both
+
+Tag data:
+---------------------------------------------------------------------
+    <fillerTag>
+    
+    <attrValTag1 attr1=val1>
+    <attrValTag2 attr1=val1 attr2=val2>
+    <attrValTag3 attr1=val1 attr2=val2 attr3=val3>
+    <attrValTag4 attr1=val1 attr2=val2 attr3=val3 >
+     attrValTag5 attr1=val1>
+    <attrValTag6 attr1=val1
+    <attrValTag7        attr1=val1          attr2=val2        attr3=val3>
+    <attrValTag8 attr1   =    val1 attr2        =   val2 attr3 =       val3>
+    <attrValTag9      attr1     =  val1      attr2             =                  val2  attr3  =  val3           >
+
+    <fillerTag>
+---------------------------------------------------------------------
+
+=====================================================================
+Section Eight: Attribute values in single-quotes
+=====================================================================
+
+This section represents tags with attributes and values in single
+quotes.
+
+1.  Tag with single attr/val
+2.  Tag with two attr/vals
+3.  Tag with three attrs/vals
+4.  Tag with attr/vals with trailing whitespace
+5.  Tag with attr/val and no opening bracket
+6.  Tag with attr/val and no closing bracket
+7.  Tag with attr/vals with whitespace in between attrs
+8.  Tag with attr/vals with whitespace in between '='
+9.  Tag with attr/vals with whitespace in between both
+10. Tag with single-quotes in attr with non-quoted value
+11. Tag with both single-quoted attr and value
+12. Tag with attr with single-quotes pair in mid-string
+13. Tag with val with single-quotes pair in mid-string
+14. Tag with attr with single-quote open mid-string, non-terminated
+15. Tag with val with single-quote open mid-string, non-terminated
+16. Tag with attr in single-quotes, contains closing bracket
+17. Tag with val in single-quotes, contains closing bracket
+18. Tag with attr in single-quote, open mid-string, contains closing
+    bracket, non-terminated
+19. Tag with val in single-quote, open mid-string, contains clossing
+    bracket, non-terminated
+
+Test data:
+----------------------------------------------------------------------
+    <fillerTag>
+    
+    <singleQuoteAttrValTag1 attr1='val1'>
+    <singleQuoteAttrValTag2 attr1='val1' attr2='val2'>
+    <singleQuoteAttrValTag3 attr1='val1' attr2='val2' attr3='val3'>
+    <singleQuoteAttrValTag4 attr1='val1' attr2='val2' attr3='val3' >
+     singleQuoteAttrValTag5 attr1='val1'>
+    <singleQuoteAttrValTag6 attr1='val1'
+    <singleQuoteAttrValTag7     attr1='val1'        attr2='val2'  attr3='val3'>
+    <singleQuoteAttrValTag8 attr1   =     'val1' attr2              =                   'val2' attr3  =                                     'val3'>
+    <singleQuoteAttrValTag9         attr1       =   'val1'     attr2   =  'val2'     attr3  =               'val3'>
+    <singleQuoteAttrValTag10 'attr1'=val1>
+    <singleQuoteAttrValTag11 'attr1'='val1'>
+    <singleQuoteAttrValTag12 attr'1'=val1>
+    <singleQuoteAttrValTag13 attr1=val'1'>
+    <singleQuoteAttrValTag14 attr'1=val1>
+    <singleQuoteAttrValTag15 attr1=val'1>
+    <singleQuoteAttrValTag16 'attr1>'=val1>
+    <singleQuoteAttrValTag17 attr1='val1>'>
+    <singleQuoteAttrValTag18 attr'1>
+     '=val1>
+    <singleQuoteAttrValTag19 attr1=val'1>
+     '>
+    <fillerTag>
+----------------------------------------------------------------------
+
+=====================================================================
+Section Nine: Attribute values in double-quotes
+=====================================================================
+
+This section represents tags with attributes and values in double
+quotes.
+
+1.  Tag with double attr/val
+2.  Tag with two attr/vals
+3.  Tag with three attrs/vals
+4.  Tag with attr/vals with trailing whitespace
+5.  Tag with attr/val and no opening bracket
+6.  Tag with attr/val and no closing bracket
+7.  Tag with attr/vals with whitespace in between attrs
+8.  Tag with attr/vals with whitespace in between '='
+9.  Tag with attr/vals with whitespace in between both
+10. Tag with double-quotes in attr with non-quoted value
+11. Tag with both double-quoted attr and value
+12. Tag with attr with double-quotes pair in mid-string
+13. Tag with val with double-quotes pair in mid-string
+14. Tag with attr with double-quote open mid-string, non-terminated
+15. Tag with val with double-quote open mid-string, non-terminated
+16. Tag with attr in double-quotes, contains closing bracket
+17. Tag with val in double-quotes, contains closing bracket
+18. Tag with attr in double-quote, open mid-string, contains closing
+    bracket, non-terminated
+19. Tag with val in double-quote, open mid-string, contains clossing
+    bracket, non-terminated
+
+Test data:
+----------------------------------------------------------------------
+    <fillerTag>
+    
+    <doubleQuoteAttrValTag1 attr1="val1">
+    <doubleQuoteAttrValTag2 attr1="val1" attr2="val2">
+    <doubleQuoteAttrValTag3 attr1="val1" attr2="val2" attr3="val3">
+    <doubleQuoteAttrValTag4 attr1="val1" attr2="val2" attr3="val3" >
+     doubleQuoteAttrValTag5 attr1="val1">
+    <doubleQuoteAttrValTag6 attr1="val1"
+    <doubleQuoteAttrValTag7     attr1="val1"        attr2="val2"  attr3="val3">
+    <doubleQuoteAttrValTag8 attr1   =     "val1" attr2              =                   "val2" attr3  =                                     "val3">
+    <doubleQuoteAttrValTag9         attr1       =   "val1"     attr2   =  "val2"     attr3  =               "val3">
+    <doubleQuoteAttrValTag10 "attr1"=val1>
+    <doubleQuoteAttrValTag11 "attr1"="val1">
+    <doubleQuoteAttrValTag12 attr"1"=val1>
+    <doubleQuoteAttrValTag13 attr1=val"1">
+    <doubleQuoteAttrValTag14 attr"1=val1>
+    <doubleQuoteAttrValTag15 attr1=val"1>
+    <doubleQuoteAttrValTag16 "attr1>"=val1>
+    <doubleQuoteAttrValTag17 attr1="val1>">
+    <doubleQuoteAttrValTag18 attr"1>
+     "=val1>
+    <doubleQuoteAttrValTag19 attr1=val"1>
+     ">
+    <fillerTag>
+----------------------------------------------------------------------
+
+
+=====================================================================
+Section Ten: Comment tags
+=====================================================================
+
+This section represents different representations and issues with
+comment tags that can occur
+
+1.  Standard comment tag with opening and closing as expected
+2.  Standard comment tag with space leading comment
+3.  Standard comment tag with space trailing comment
+4.  Standard comment tag with both trailing and leading whitespace
+6.  Standard comment tag with whitespace inbetween comment data
+7.  Standard comment tag with all types of whitespace
+8.  Standard comment tag with "- -" multiiple times in comment data
+9.  Invalid comment tag with "--" in comment data, should close comment (missing closing)
+10. Invalid comment tag with no opening tag or name, should be empty comment
+
+Tag data:
+---------------------------------------------------------------------
+    <fillerTag>
+    
+    <!--comment tag data-->
+    <!--       comment data with leading whitespace-->
+    <!--comment data with trailing whitespace         -->
+    <!--      comment data with both leading and trailing whitespace     -->
+    <!--           comment      data       with     whitespace                   -->
+    <!--comment data - - with - - some - - extra dashes -->
+    <!--comment data with premature --
+    close -->
+    <fillerTag>
+---------------------------------------------------------------------
+=====================================================================
+Section Eleven: Tags with lots of whitespace!!
+=====================================================================
+
+This section represents tags with alot of whitespace. Generally this means 
+new lines separating tags, but can be anything else.
+
+1.  Tag with newline separating name and closing
+2.  Tag with newline and spaces separating name and closing
+3.  Tag with newline separating single attr flag
+4.  Tag with newline separating single attr flag and closing
+5.  Tag with newline and spaces separating single attr flag
+6.  Tag with newline and spaces separating single attr flag and closing
+7.  Tag with newline separating two attr flags
+8.  Tag with newline separating two attr flags, with closing on newline
+9.  Tag with newline and spaces separating two attr flags
+10. Tag with newline and spaces separating two attr flags and closing
+11. Tag with newline separating three attr flags
+12. Tag with newline separating three attr flags, with closing on newline
+13. Tag with newline and spaces separating three attr flags
+14. Tag with newline and spaces separating three attr flags and closing
+15. Tag with newline separating each attr, single attr with val
+16. Tag with newline separating each attr, two attrs with vals
+17. Tag with newline separating each attr, three attrs with vals
+18. Tag with newline and spaces separating each attr, single attr with val
+19. Tag with newline and spaces separating each attr, two attrs with vals
+20. Tag with newline and spaces separating each attr, three attrs with vals
+21. Tag with newline separating inside attr, single attr with val
+22. Tag with newline and spaces separating inside attr, single attr with val
+23. Tag with newline separating inside attr, single-quote attr
+24. Tag with newline separating inside attr, attr with single-quote value
+25. Tag with newline separating inside attr, double-quote attr
+26. Tag with newline separating inside attr, attr with double-quote-value
+27. Comment Tag with newline between opening and closing tags
+28. Comment Tag with newline between all spaces
+
+Tag data:
+----------------------------------------------------------------------
+    <fillerTag>
+    
+    <whitespaceTag1
+    
+    >
+    <whitespaceTag2
+    
+    >
+    <whitespaceTag3
+    
+    attr1>
+    
+    <whitespaceTag4
+    
+    attr1
+    
+    >
+    <whitespaceTag5
+    
+      attr1 >
+      
+    <whitespaceTag6
+    
+       attr1
+       
+       >
+       
+    <whitespaceTag7
+    
+    attr1
+    attr2>
+    
+    <whitespaceTag8
+    
+    attr1
+    
+    attr2
+    
+    >
+    
+    <whitespaceTag9
+    
+      attr1
+      
+          attr2>
+    <whitespaceTag10
+          
+            attr1
+          
+                attr2
+          
+          
+          >
+   
+    <whitespaceTag11
+    attr1
+    attr2
+    attr3>
+    
+    <whitespaceTag12
+    
+    attr1
+    
+    
+    
+    attr2
+    attr3
+    
+    
+    >
+    
+    <whitespaceTag13
+    
+              attr1
+         attr2
+         
+         
+                 attr3>
+                 
+    <whitespaceTag14
+    
+    
+       attr1
+          attr2
+          
+          
+                 attr3
+            >
+    <whitespaceTag15
+    
+    attr1=val1>
+    
+    <whitespaceTag16
+    
+    attr1=val1
+    
+    
+    attr2=val2>
+    
+    <whitespaceTag17
+    
+    attr1=val1
+    
+    attr2=val2
+    
+    
+    
+    attr3=val3>
+    
+    <whitespaceTag18
+    
+       attr1=val1>
+       
+    <whitespaceTag19
+                                attr1=val1
+              attr2=val2>
+              
+    <whitespaceTag20
+               attr1=val1
+           attr2=val2
+           
+                            attr3=val3>
+    <whitespaceTag21
+    
+    
+    attr1
+    
+    =
+    
+    
+    val1>
+    
+    <whitespaceTag22
+                  attr1
+             =
+                                    val1>
+                                    
+    <whitespaceTag23 
+
+'
+a
+t
+t
+r
+1
+'>
+    
+    <whitespaceTag24
+    attr1='
+
+
+
+
+v
+a
+l
+1
+
+
+
+
+'>
+    <whitespaceTag25
+    
+"
+a
+t
+t
+r
+1
+">
+    <whitespaceTag26 
+        attr1=
+"
+v
+a
+l
+1
+">
+    <!--
+    
+    
+    
+    
+    
+    
+    -->
+    
+    <!--
+comment 
+data 
+
+-->
+    
+    <fillerTag>
+----------------------------------------------------------------------
