@@ -32,6 +32,12 @@ public class HtmlBufferedReader implements HtmlReader{
         this.parser = parser;
     }
     
+    public HtmlBufferedReader(InputStream stream) throws IOException {
+        this();
+        Reader reader = new BufferedReader(new InputStreamReader(stream));
+        this.setReader(new PushbackAndNewLineConsumerReader(reader));
+    }
+    
     public HtmlBufferedReader(File file) throws FileNotFoundException, IOException {
         this();
         Reader reader = new BufferedReader(new FileReader(file));
