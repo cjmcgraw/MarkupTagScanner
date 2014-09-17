@@ -10,6 +10,8 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.ParsingException;
 
 public class MutableHtmlTag implements HtmlTag{
+    private static final long serialVersionUID = -8390601543763145398L;
+
     public final static Set<String> SELF_CLOSING_TAGS = new HashSet<String>(
             Arrays.asList("area","base", "br", "col", "command", "hr", "img",
                           "input", "keygen","link", "meta", "param", "source", 

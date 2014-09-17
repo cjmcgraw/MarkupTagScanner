@@ -1,6 +1,7 @@
 package com.mycompany.htmlvalidator.interfaces;
 
-import com.mycompany.htmlvalidator.interfaces.HtmlTag;
+import com.mycompany.htmlvalidator.scanners.tokens.HtmlTag;
+
 
 public interface HtmlValidator {
     
