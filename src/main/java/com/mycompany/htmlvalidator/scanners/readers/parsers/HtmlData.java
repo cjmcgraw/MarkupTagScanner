@@ -1,8 +1,9 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface HtmlData {
+public interface HtmlData extends Serializable{
     
     public String getName();
     

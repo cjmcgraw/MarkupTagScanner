@@ -7,6 +7,7 @@ import java.util.List;
 import com.mycompany.htmlvalidator.scanners.*;
 
 public class MutableHtmlData implements HtmlData{
+    private static final long serialVersionUID = -1778059172938272360L;
     private final static String COMMENT_START = MarkupTagNames.COMMENT_TAG.getBeginName();
     private final static String COMMENT_END = MarkupTagNames.COMMENT_TAG.getEndName();
     
