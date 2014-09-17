@@ -1,0 +1,46 @@
+tagWithMissingOpeningTag>
+tagWithMissingOpeningTagWithAttrFlag flag>
+tagWithMissingOpeningTagWithTwoAttrFlags flag1 flag2>
+tagWithMissingOpeningTagWithMultiAttrFlags flag1 flag2 flag3>
+tagWithMissingOpeningTagWithAttrAndVal attr=val>
+tagWithMissingOpeningTagWithTwoAttrsAndVals attr1=val1 attr2=val2>
+tagWithMissingOpeningTagWithMultiAttrsAndVals attr1=val1 attr2=val2 attr3=val3>
+tagWithMissingOpeningTagWithAttrAndValueInSingleQuotes attr='val'>
+tagWithMissingOpeningTagWithTwoAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2'>
+tagWithMissingOpeningTagWithMultiAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2' attr3='val3'>
+tagWithMissingOpeningTagWithAttrAndValueInDoubleQuotes attr="val">
+tagWithMissingOpeningTagWithTwoAttrsAndValuesInDoubleQuotes attr1="val1" attr2="val2">
+tagWithMissingOpeningTagWithMultiAttrsAndValuesInDoubleQuotes attr1="val1" attr2="val2" attr3="val3">
+<tagWithOpeningInsteadOfClosing<
+<tagWithOpeningInsteadOfClosingWithAttrFlag flag<
+<tagWithOpeningInsteadOfClosingWithTwoAttrFlags flag1 flag2<
+<tagWithOpeningInsteadOfClosingWithMultiAttrFlags flag1 flag2 flag3<
+<tagWithOpeningInsteadOfClosingWithAttrAndVal attr=val<
+<tagWithOpeningInsteadOfClosingWithTwoAttrsAndVals attr1=val1 attr2=val2<
+<tagWithOpeningInsteadOfClosingWithMultiAttrsAndVals attr1=val1 attr2=val2 attr3=val3<
+<tagWithOpeningInsteadOfClosingWithAttrAndValueInSingleQuotes attr='val'<
+<tagWithOpeningInsteadOfClosingWithTwoAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2'<
+<tagWithOpeningInsteadOfClosingWithMultiAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2' attr3='val3'<
+<tagWithOpeningInsteadOfClosingWithAttrAndValueInDoubleQuotes attr="val"<
+<tagWithOpeningInsteadOfClosingWithTwoAttrsAndValuesInDoubleQuotes attr1="val1" attr2="val2"<
+<tagWithOpeningInsteadOfClosingWithMultiAttrsAndValuesInDoubleQuotes attr1="val1" attr2="val2" attr3="val3"<
+><tagWithClosingBeforeOpening>
+><tagWithClosingBeforeOpeningWithAttrFlag flag>
+><tagWithClosingBeforeOpeningWithTwoAttrFlags flag1 flag2>
+><tagWithClosingBeforeOpeningWithMultiAttrFlags flag1 flag2 flag3>
+><tagWithClosingBeforeOpeningWithAttrAndVal attr=val>
+><tagWithClosingBeforeOpeningWithTwoAttrsAndVals attr1=val1 attr2=val2>
+><tagWithClosingBeforeOpeningWithMultiAttrsAndVals attr1=val1 attr2=val2 attr3=val3>
+><tagWithClosingBeforeOpeningWithAttrAndValueInSingleQuotes attr='val'>
+><tagWithClosingBeforeOpeningWithTwoAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2'>
+><tagWithClosingBeforeOpeningWithMultiAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2' attr3='val3'>
+><tagWithClosingBeforeOpeningWithAttrAndValueInDoubleQuotes attr="val">
+><tagWithClosingBeforeOpeningWithTwoAttrsAndValuesInDoubleQuotes attr1="val1" attr2="val2">
+><tagWithClosingBeforeOpeningWithMultiAttrsAndValuesInDoubleQuotes attr1="val1" attr2="val2" attr3="val3">
+< >
+<>
+<tag attr= >
+<tag "</>" >
+<tag '</>' >
+<tag attr="</>" >
+<tag attr='</>' >
