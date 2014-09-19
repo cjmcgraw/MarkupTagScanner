@@ -1,3 +1,3 @@
 HtmlValidator
 =============
-![build notifier](https://travis-ci.org/cjmcgraw/HtmlValidator.svg?branch=Iss%232)
+[![Build Status](https://travis-ci.org/cjmcgraw/HtmlValidator.svg?branch=master)](https://travis-ci.org/cjmcgraw/HtmlValidator)
