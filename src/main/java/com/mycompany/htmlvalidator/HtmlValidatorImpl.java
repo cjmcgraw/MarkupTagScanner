@@ -1,12 +1,12 @@
 package com.mycompany.htmlvalidator;
 
 import com.mycompany.htmlvalidator.interfaces.HtmlValidator;
-import com.mycompany.htmlvalidator.scanners.tokens.HtmlTag;
+import com.mycompany.htmlvalidator.scanners.tokens.*;
 
 public class HtmlValidatorImpl implements HtmlValidator {
 
     @Override
-    public void addTag(HtmlTag tag) {
+    public void addTag(Tag tag) {
         // TODO Auto-generated method stub
         
     }
