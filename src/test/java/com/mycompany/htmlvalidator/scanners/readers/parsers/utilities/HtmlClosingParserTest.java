@@ -196,6 +196,26 @@ public class HtmlClosingParserTest {
     }
     
     @Test
+    public void testParse_WithOpeningAngleBracket_ExceptionHtmlDataMatchesExpected() throws IOException {
+        // Arrange
+        this.setState(Arrays.asList(OPENING_TAG, 'A', 'B', 'C'));
+        
+        HtmlData exp = new HtmlData();
+        HtmlData data = null;
+        
+        // Apply
+        try {
+            this.parser.parse(this.input, this.result);
+        } catch (UnclosedTagParsingException e) {
+            data = e.getHtmlData();
+            exp.getErrorReporter().addError(e);
+        }
+        
+        // Apply
+        assertEquals(exp, data);
+    }
+    
+    @Test
     public void testParse_WithOpeningAngleBracket_ConsumesNoElementsAndUnreadsOpeningAngleBracket() throws IOException {
         // Arrange
         this.setState(Arrays.asList(OPENING_TAG , 'A', 'B', 'C'));
