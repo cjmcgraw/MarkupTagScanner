@@ -1,11 +1,10 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
-import java.io.Serializable;
-
 import com.mycompany.htmlvalidator.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
-public class HtmlAttribute extends HtmlErrorReporter implements Serializable{
+public class HtmlAttribute extends MarkupErrorReporter implements Attribute{
     private static final long serialVersionUID = 8687072175358271927L;
     public static final String DEFAULT_CLOSING_NAME = "self-closing";
     public static final String DEFAULT_EMPTY_VALUES = "";
@@ -28,6 +27,10 @@ public class HtmlAttribute extends HtmlErrorReporter implements Serializable{
     
     public String getName() {
         return this.attributeName;
+    }
+    
+    public ErrorReporter getErrorReporter() {
+        return this;
     }
     
     public void setName(String name) {

@@ -3,13 +3,12 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlClosingParser extends HtmlUtilityParser {
     
     @Override
-    public HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException {
+    public HtmlData parse(PushbackAndPositionReader input, HtmlData result) throws IOException {
         this.setState(input, result);
         this.readClosingCharLocation();
         this.confirmClosingTag();

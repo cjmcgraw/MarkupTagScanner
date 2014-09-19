@@ -24,7 +24,7 @@ public class HtmlElementParserTest {
     private HtmlElementParser parser = new HtmlElementParser();
     private PushbackAndPositionReaderMock input;
     private LinkedList<Character> inputData;
-    private MutableHtmlData result;
+    private HtmlData result;
     
     @Test
     public void testParse_WithValidElementName_WhitespaceStartStr_ReturnsHtmlDataWithExpectedName() throws IOException {
@@ -475,7 +475,7 @@ public class HtmlElementParserTest {
             this.inputData.add(data.charAt(i));
         
         this.input = new PushbackAndPositionReaderMock(inputData);
-        this.result = new MutableHtmlData();
+        this.result = new HtmlData();
     }
     
     @After

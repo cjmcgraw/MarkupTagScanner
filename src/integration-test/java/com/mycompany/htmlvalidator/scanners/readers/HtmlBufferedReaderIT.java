@@ -9,6 +9,7 @@ import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.scanners.tokens.Tag;
 
 public class HtmlBufferedReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");
@@ -295,7 +296,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagOnlyHasName_HasClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTag");
+        HtmlData exp = generateData("tagWithClosingTag");
         exp.setIsClosing(true);
         
         // Test
@@ -305,7 +306,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrFlag_HasClosingTag__ResultMatchesExpected() throws IOException {
         // Setup
-        MutableHtmlData exp = generateData("tagWithClosingTagWithAttrFlag", DEFAULT_FLAGS[0]);
+        HtmlData exp = generateData("tagWithClosingTagWithAttrFlag", DEFAULT_FLAGS[0]);
         exp.setIsClosing(true);
         
         // Test
@@ -315,7 +316,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsFlags_HasClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithTwoAttrFlags", DEFAULT_FLAGS[0], DEFAULT_FLAGS[1]);
+        HtmlData exp = generateData("tagWithClosingTagWithTwoAttrFlags", DEFAULT_FLAGS[0], DEFAULT_FLAGS[1]);
         exp.setIsClosing(true);
         
         // Test
@@ -326,7 +327,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrsFlags_HasClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithMultiAttrFlags", DEFAULT_FLAGS);
+        HtmlData exp = generateData("tagWithClosingTagWithMultiAttrFlags", DEFAULT_FLAGS);
         exp.setIsClosing(true);
         
         // Test
@@ -336,7 +337,7 @@ public class HtmlBufferedReaderIT {
     
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithAttrAndVal", DEFAULT_ATTRS[0]);
+        HtmlData exp = generateData("tagWithClosingTagWithAttrAndVal", DEFAULT_ATTRS[0]);
         exp.setIsClosing(true);
         
         // Test
@@ -347,7 +348,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsWithValues_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithTwoAttrsAndVals",
+        HtmlData exp = generateData("tagWithClosingTagWithTwoAttrsAndVals",
                                            DEFAULT_ATTRS[0], DEFAULT_ATTRS[1]);
         exp.setIsClosing(true);
         
@@ -359,7 +360,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMutliAttrsWithValues_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithMultiAttrsAndVals", DEFAULT_ATTRS);
+        HtmlData exp = generateData("tagWithClosingTagWithMultiAttrsAndVals", DEFAULT_ATTRS);
         exp.setIsClosing(true);
         
         // Test
@@ -370,7 +371,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInSingleQuotes_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithAttrAndValueInSingleQuotes", SINGLE_QUOTE_ATTRS[0]);
+        HtmlData exp = generateData("tagWithClosingTagWithAttrAndValueInSingleQuotes", SINGLE_QUOTE_ATTRS[0]);
         exp.setIsClosing(true);
         
         // Test
@@ -381,7 +382,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInSingleQuotes_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithTwoAttrsAndValuesInSingleQuotes",
+        HtmlData exp = generateData("tagWithClosingTagWithTwoAttrsAndValuesInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS[0], SINGLE_QUOTE_ATTRS[1]);
         exp.setIsClosing(true);
         
@@ -393,7 +394,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInSingleQuotes_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithMultiAttrsAndValuesInSingleQuotes",
+        HtmlData exp = generateData("tagWithClosingTagWithMultiAttrsAndValuesInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS);
         exp.setIsClosing(true);
         
@@ -405,7 +406,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInDoubleQuotes_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithAttrAndValueInDoubleQuotes",
+        HtmlData exp = generateData("tagWithClosingTagWithAttrAndValueInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS[0]);
         exp.setIsClosing(true);
         
@@ -417,7 +418,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInDoubleQuotes_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithTwoAttrsAndValuesInDoubleQuotes",
+        HtmlData exp = generateData("tagWithClosingTagWithTwoAttrsAndValuesInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS[0], DOUBLE_QUOTE_ATTRS[1]);
         exp.setIsClosing(true);
         // Test
@@ -428,7 +429,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInDoubleQuotes_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithClosingTagWithMultiAttrsAndValuesInDoubleQuotes",
+        HtmlData exp = generateData("tagWithClosingTagWithMultiAttrsAndValuesInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS);
         exp.setIsClosing(true);
         
@@ -439,7 +440,7 @@ public class HtmlBufferedReaderIT {
     
     public void testNext_ValidTag_TagOnlyHasName_HasSelfClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttribute", CLOSING_ATTR);
+        HtmlData exp = generateData("tagWithSelfClosingAttribute", CLOSING_ATTR);
         
         // Test
         testReadTagAndDataMatches("<tagWithSelfClosingAttribute />", exp);
@@ -448,7 +449,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrFlag_HasSelfClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrFlag", 
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrFlag", 
                                            DEFAULT_FLAGS[0], CLOSING_ATTR);
         
         // Test
@@ -459,7 +460,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsFlags_HasSelfClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrFlags",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrFlags",
                                             DEFAULT_FLAGS[0], DEFAULT_FLAGS[1], CLOSING_ATTR);
         
         // TEst
@@ -470,7 +471,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrsFlags_HasSelfClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrFlags",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrFlags",
                                            DEFAULT_FLAGS);
         exp.updateAttributes(CLOSING_ATTR);
         
@@ -481,7 +482,7 @@ public class HtmlBufferedReaderIT {
     
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrAndVal",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrAndVal",
                                            DEFAULT_ATTRS[0], CLOSING_ATTR);
         
         // Test
@@ -492,7 +493,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsWithValues_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrsAndVals",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrsAndVals",
                                            DEFAULT_ATTRS[0], DEFAULT_ATTRS[1], CLOSING_ATTR);
         
         // Test
@@ -503,7 +504,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMutliAttrsWithValues_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrsAndVals", DEFAULT_ATTRS);
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrsAndVals", DEFAULT_ATTRS);
         exp.updateAttributes(CLOSING_ATTR);
         
         // Test
@@ -514,7 +515,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInSingleQuotes_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrAndValueInSingleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrAndValueInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS[0], CLOSING_ATTR);
         
         // Test
@@ -525,7 +526,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInSingleQuotes_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrsAndValuesInSingleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrsAndValuesInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS[0], SINGLE_QUOTE_ATTRS[1], CLOSING_ATTR);
         
         // Test
@@ -536,7 +537,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInSingleQuotes_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrsAndValuesInSingleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrsAndValuesInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS);
         exp.updateAttributes(CLOSING_ATTR);
         
@@ -549,7 +550,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInDoubleQuotes_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrAndValueInDoubleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrAndValueInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS[0], CLOSING_ATTR);
         
         // Test
@@ -560,7 +561,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInDoubleQuotes_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrsAndValuesInDoubleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithTwoAttrsAndValuesInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS[0], DOUBLE_QUOTE_ATTRS[1], CLOSING_ATTR);
         
         // Test
@@ -571,7 +572,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInDoubleQuotes_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrsAndValuesInDoubleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeWithMultiAttrsAndValuesInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS);
         exp.updateAttributes(CLOSING_ATTR);
         
@@ -583,7 +584,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagOnlyHasName_HasSelfClosingTagNoSpace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfter", CLOSING_ATTR);
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfter", CLOSING_ATTR);
         
         // Test
         testReadTagAndDataMatches("<tagWithSelfClosingAttributeNoSpaceAfter/>", exp);
@@ -592,7 +593,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrFlag_HasSelfClosingTagNoSpace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrFlag", 
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrFlag", 
                                             DEFAULT_FLAGS[0], CLOSING_ATTR);
         
         // Test
@@ -603,7 +604,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsFlags_HasSelfClosingTagNoSpace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrFlags", 
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrFlags", 
                                            DEFAULT_FLAGS[0], DEFAULT_FLAGS[1], CLOSING_ATTR);
         
         // Test
@@ -614,7 +615,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrsFlags_HasSelfClosingTagNoSpace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrFlags", DEFAULT_FLAGS);
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrFlags", DEFAULT_FLAGS);
         exp.updateAttributes(CLOSING_ATTR);
         
         // Test
@@ -624,7 +625,7 @@ public class HtmlBufferedReaderIT {
     
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrAndVal",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrAndVal",
                                            DEFAULT_ATTRS[0], CLOSING_ATTR);
         
         // Test
@@ -635,7 +636,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsWithValues_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrsAndVals",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrsAndVals",
                                            DEFAULT_ATTRS[0], DEFAULT_ATTRS[1], CLOSING_ATTR);
         
         // Test
@@ -646,7 +647,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMutliAttrsWithValues_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrsAndVals",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrsAndVals",
                                            DEFAULT_ATTRS);
         exp.updateAttributes(CLOSING_ATTR);
         
@@ -658,7 +659,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInSingleQuotes_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrAndValueInSingleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrAndValueInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS[0], CLOSING_ATTR);
         
         // Test
@@ -669,7 +670,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInSingleQuotes_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrsAndValuesInSingleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrsAndValuesInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS[0], SINGLE_QUOTE_ATTRS[1], CLOSING_ATTR);
         
         // Test
@@ -680,7 +681,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInSingleQuotes_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrsAndValuesInSingleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrsAndValuesInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS);
         exp.updateAttributes(CLOSING_ATTR);
         
@@ -692,7 +693,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInDoubleQuotes_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrAndValueInDoubleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrAndValueInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS[0], CLOSING_ATTR);
         
         // Test
@@ -703,7 +704,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInDoubleQuotes_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrsAndValuesInDoubleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithTwoAttrsAndValuesInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS[0], DOUBLE_QUOTE_ATTRS[1], CLOSING_ATTR);
         
         // Test
@@ -714,7 +715,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInDoubleQuotes_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrsAndValuesInDoubleQuotes",
+        HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrsAndValuesInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS);
         exp.updateAttributes(CLOSING_ATTR);
         
@@ -725,7 +726,7 @@ public class HtmlBufferedReaderIT {
     
     public void testNext_ValidTag_TagOnlyHasName_HasAdditionalWhitespace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespace");
+        HtmlData exp = generateData("tagWithAdditionalWhitespace");
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespace >".replace(" ", W), exp);
@@ -734,7 +735,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrFlag_HasAdditionalWhitespace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrFlag", DEFAULT_FLAGS[0]);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrFlag", DEFAULT_FLAGS[0]);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithAttrFlag flag1 >".replace(" ", W),
@@ -744,7 +745,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsFlags_HasAdditionalWhitespace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrFlags",
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrFlags",
                                            DEFAULT_FLAGS[0], DEFAULT_FLAGS[1]);
         
         // Test
@@ -755,7 +756,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrsFlags_HasAdditionalWhitespace__ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrFlags", DEFAULT_FLAGS);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrFlags", DEFAULT_FLAGS);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithMultiAttrFlags flag1 flag2 flag3 >".replace(" ", W),
@@ -764,7 +765,7 @@ public class HtmlBufferedReaderIT {
     
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrAndVal", DEFAULT_ATTRS[0]);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrAndVal", DEFAULT_ATTRS[0]);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithAttrAndVal attr1 = val1 >".replace(" ", W), 
@@ -774,7 +775,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrsWithValues_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrsAndVals", DEFAULT_ATTRS[0], DEFAULT_ATTRS[1]);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrsAndVals", DEFAULT_ATTRS[0], DEFAULT_ATTRS[1]);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithTwoAttrsAndVals attr1 = val1 attr2 = val2 >".replace(" ",  W),
@@ -784,7 +785,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMutliAttrsWithValues_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrsAndVals", DEFAULT_ATTRS);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrsAndVals", DEFAULT_ATTRS);
         
         // TEst
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithMultiAttrsAndVals attr1 = val1 attr2 = val2 attr3 = val3 >".replace(" ", W), 
@@ -794,7 +795,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInSingleQuotes_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrAndValueInSingleQuotes", SINGLE_QUOTE_ATTRS[0]);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrAndValueInSingleQuotes", SINGLE_QUOTE_ATTRS[0]);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithAttrAndValueInSingleQuotes attr1 = 'val1' >".replace(" ", W),
@@ -804,7 +805,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInSingleQuotes_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrsAndValuesInSingleQuotes",
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrsAndValuesInSingleQuotes",
                                            SINGLE_QUOTE_ATTRS[0], SINGLE_QUOTE_ATTRS[1]);
         
         // Test
@@ -815,7 +816,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInSingleQuotes_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrsAndValuesInSingleQuotes", SINGLE_QUOTE_ATTRS);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrsAndValuesInSingleQuotes", SINGLE_QUOTE_ATTRS);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithMultiAttrsAndValuesInSingleQuotes attr1 = 'val1' attr2 = 'val2' attr3 = 'val3' >".replace(" ", W),
@@ -825,7 +826,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValueInDoubleQuotes_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrAndValueInDoubleQuotes", DOUBLE_QUOTE_ATTRS[0]);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrAndValueInDoubleQuotes", DOUBLE_QUOTE_ATTRS[0]);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithAttrAndValueInDoubleQuotes attr1 = \"val1\" >".replace(" ", W),
@@ -835,7 +836,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndTwoAttrAndValueInDoubleQuotes_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrsAndValuesInDoubleQuotes",
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithTwoAttrsAndValuesInDoubleQuotes",
                                            DOUBLE_QUOTE_ATTRS[0], DOUBLE_QUOTE_ATTRS[1]);
         
         // Test
@@ -846,7 +847,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_TagHasNameAndMultiAttrAndValueInDoubleQuotes_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrsAndValuesInDoubleQuotes", DOUBLE_QUOTE_ATTRS);
+        HtmlData exp = generateData("tagWithAdditionalWhitespaceWithMultiAttrsAndValuesInDoubleQuotes", DOUBLE_QUOTE_ATTRS);
         
         // Test
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithMultiAttrsAndValuesInDoubleQuotes attr1 = \"val1\" attr2 = \"val2\" attr3 = \"val3\" >".replace(" ", W),
@@ -856,7 +857,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_CommentTag_IsEmptyCommentTag_ResultMatchesExpceted() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("!--");
+        HtmlData exp = generateData("!--");
         
         // Test
         testReadTagAndDataMatches("<!---->", exp);
@@ -865,7 +866,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_CommentTag_HasCommentData_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("!--", new HtmlAttribute(" some comment data "));
+        HtmlData exp = generateData("!--", new HtmlAttribute(" some comment data "));
         
         // Test
         testReadTagAndDataMatches("<!-- some comment data -->", exp);
@@ -874,7 +875,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_CommentTag_HasAlternateCommentData_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData("!--", new HtmlAttribute("some other comment data"));
+        HtmlData exp = generateData("!--", new HtmlAttribute("some other comment data"));
         
         // Test
         testReadTagAndDataMatches("<!--some other comment data-->", exp);
@@ -884,7 +885,7 @@ public class HtmlBufferedReaderIT {
     public void testNext_ValidTag_CommentTag_HasAlotOfWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
         String sub = W.replace(String.format("%n"), "");
-        MutableHtmlData exp = generateData("!--", new HtmlAttribute(" comment with lots of whitespace ".replace(" ", sub)));
+        HtmlData exp = generateData("!--", new HtmlAttribute(" comment with lots of whitespace ".replace(" ", sub)));
         
         // Test
         testReadTagAndDataMatches("<!-- comment with lots of whitespace -->".replace(" ", W), exp);
@@ -933,7 +934,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagHasAttrIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrFlag", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrFlag", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         
         // Test
@@ -952,7 +953,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagHasTwoAttrsIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrFlags", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrFlags", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         exp.updateAttributes(DEFAULT_FLAGS[1]);
         
@@ -973,7 +974,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagMultiAttrsIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrFlags", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrFlags", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         exp.updateAttributes(DEFAULT_FLAGS[1]);
         exp.updateAttributes(DEFAULT_FLAGS[2]);
@@ -995,7 +996,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagAttrAndValIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrAndVal", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrAndVal", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         
         // Test
@@ -1015,7 +1016,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithTwoAttrAndValsIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrsAndVals", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrsAndVals", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(DEFAULT_ATTRS[1]);
         
@@ -1036,7 +1037,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithMultiAttrsWithValsIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrsAndVals", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrsAndVals", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(DEFAULT_ATTRS[1]);
         exp.updateAttributes(DEFAULT_ATTRS[2]);
@@ -1058,7 +1059,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithAttrAndValsInSingleQuotesIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrAndValueInSingleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrAndValueInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         
         // Test
@@ -1078,7 +1079,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithTwoAttrsAndValsInSingleQuotesIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrsAndValuesInSingleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrsAndValuesInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[1]);
         
@@ -1099,7 +1100,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithMultiAttrsAndValsInSingleQuotesIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrsAndValuesInSingleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrsAndValuesInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[1]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[2]);
@@ -1121,7 +1122,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithAttrAndValsInDoubleQuotesIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrAndValueInDoubleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithAttrAndValueInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         
         // Test
@@ -1141,7 +1142,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithTwoAttrsAndValsInDoubleQuotesIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrsAndValuesInDoubleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithTwoAttrsAndValuesInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[1]);
         
@@ -1162,7 +1163,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithMultiAttrsAndValsInDoubleQuotesIsMissingClosingBracket_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrsAndValuesInDoubleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithMissingClosingTagWithMultiAttrsAndValuesInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[1]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[2]);
@@ -1184,7 +1185,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFAfterClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "", false);
+        HtmlData exp = generateData(true, "", false);
         exp.setIsClosing(true);
         
         // Test
@@ -1203,7 +1204,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFInCommentTag_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "!--", false);
+        HtmlData exp = generateData(true, "!--", false);
         exp.updateAttributes(new HtmlAttribute("some comment data"));
         
         // Test
@@ -1222,7 +1223,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFInSingleQuoteAttr_ResultMatchesExpected() throws IOException {
         // Arrange
-        MutableHtmlData exp = generateData(true, "tagWithEOFInSingleQuoteAttr", false);
+        HtmlData exp = generateData(true, "tagWithEOFInSingleQuoteAttr", false);
         exp.updateAttributes(new HtmlAttribute("'someAttr"));
         
         // Test
@@ -1241,7 +1242,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFInDoubleQuoteAttr_ResultMatchesExpected() throws IOException {
         // Arrange
-        MutableHtmlData exp = generateData(true, "tagWithEOFInDoubleQuoteAttr", false);
+        HtmlData exp = generateData(true, "tagWithEOFInDoubleQuoteAttr", false);
         exp.updateAttributes(new HtmlAttribute("\"someAttr"));
         
         // Test
@@ -1260,7 +1261,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFAfterSingleAttrAtEquals_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithEOFWithAttrWithVal", false);
+        HtmlData exp = generateData(true, "tagWithEOFWithAttrWithVal", false);
         exp.updateAttributes(new HtmlAttribute("attr1"));
         
         // Test
@@ -1279,7 +1280,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFAfterTwoAttrAtEquals_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithEOFWithTwoAttrsWithVals", false);
+        HtmlData exp = generateData(true, "tagWithEOFWithTwoAttrsWithVals", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(new HtmlAttribute("attr2"));
         
@@ -1299,7 +1300,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFAfterThreeAttrAtEquals_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithEOFWithThreeAttrsWithVals", false);
+        HtmlData exp = generateData(true, "tagWithEOFWithThreeAttrsWithVals", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(DEFAULT_ATTRS[1]);
         exp.updateAttributes(new HtmlAttribute("attr3"));
@@ -1320,7 +1321,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFAfterSingleAttrWithValInSingleQuotes_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithEOFWithAttrWithVal", false);
+        HtmlData exp = generateData(true, "tagWithEOFWithAttrWithVal", false);
         exp.updateAttributes(new HtmlAttribute("attr", "'someVal"));
         
         // Test
@@ -1339,7 +1340,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_TagWithEOFAfterSingleAttrWithValInDoubleQuotes_ResultMatchesExpected() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithEOFWithAttrWithVal", false);
+        HtmlData exp = generateData(true, "tagWithEOFWithAttrWithVal", false);
         exp.updateAttributes(new HtmlAttribute("attr", "\"someVal"));
         
         // Test
@@ -1424,7 +1425,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosing", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosing", false);
         
         //Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosing<", exp);
@@ -1433,7 +1434,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithAttrFlagWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrFlag", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrFlag", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrFlag flag1<", exp);
@@ -1442,7 +1443,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithTwoAttrFlagsWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrFlags", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrFlags", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         exp.updateAttributes(DEFAULT_FLAGS[1]);
         
@@ -1453,7 +1454,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrFlagsWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrFlags", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrFlags", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         exp.updateAttributes(DEFAULT_FLAGS[1]);
         exp.updateAttributes(DEFAULT_FLAGS[2]);
@@ -1465,7 +1466,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithAttrWithValWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithVal", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithVal", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         
         // Test
@@ -1475,7 +1476,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithTwoAttrsWithValsWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithVals", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithVals", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(DEFAULT_ATTRS[1]);
         
@@ -1486,7 +1487,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrsWithValsWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrsWithVals", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrsWithVals", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(DEFAULT_ATTRS[1]);
         exp.updateAttributes(DEFAULT_ATTRS[2]);
@@ -1498,7 +1499,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithAttrWithValInSingleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithValInSingleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithValInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         
         // Test
@@ -1508,7 +1509,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithTwoAttrsWithValsInSingleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInSingleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[1]);
         
@@ -1519,7 +1520,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrsWithValsInSingleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInSingleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[1]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[2]);
@@ -1531,7 +1532,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithAttrWithValInDoubleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithValInDoubleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithValInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         
         // Test
@@ -1541,7 +1542,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithTwoAttrsWithValsInDoubleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInDoubleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[1]);
         
@@ -1552,7 +1553,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrsWithValsInDoubleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
-        MutableHtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInDoubleQuotes", false);
+        HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[1]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[2]);
@@ -1584,28 +1585,28 @@ public class HtmlBufferedReaderIT {
         while(data.hasNext()) {
             i++;
             HtmlData e = exp.next();
-            HtmlData q = data.next();
+            Tag q = data.next();
             assertEquals(e, q);
         }
         data.close();
         assertTrue(i > 0);
     }
     
-    private MutableHtmlData generateEmptyData(boolean hasOpening, boolean hasClosing) {
-        MutableHtmlData result = new MutableHtmlData();
+    private HtmlData generateEmptyData(boolean hasOpening, boolean hasClosing) {
+        HtmlData result = new HtmlData();
         if(hasOpening) result.confirmOpeningTag();
         if(hasClosing) result.confirmClosingTag();
         return result;
     }
     
-    private MutableHtmlData generateData(boolean hasOpening, String name, boolean hasClosing) {
-        MutableHtmlData data = generateEmptyData(hasOpening, hasClosing);
+    private HtmlData generateData(boolean hasOpening, String name, boolean hasClosing) {
+        HtmlData data = generateEmptyData(hasOpening, hasClosing);
         data.setName(name);
         return data;
     }
     
-    private MutableHtmlData generateData(String name, HtmlAttribute...attrs) {
-        MutableHtmlData data = generateData(true, name, true);
+    private HtmlData generateData(String name, HtmlAttribute...attrs) {
+        HtmlData data = generateData(true, name, true);
         
         for (HtmlAttribute attr : attrs)
             data.updateAttributes(attr);
@@ -1614,7 +1615,7 @@ public class HtmlBufferedReaderIT {
     
     private void testReadTagAndDataMatches(String s, HtmlData exp) throws IOException {
         // Arrange
-        HtmlData data;
+        Tag data;
         this.setState(s);
         
         // Apply

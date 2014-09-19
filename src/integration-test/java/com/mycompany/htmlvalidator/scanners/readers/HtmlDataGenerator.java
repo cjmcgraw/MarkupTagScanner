@@ -46,12 +46,12 @@ public class HtmlDataGenerator {
                     .getSystemResourceAsStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(stream);
             return (List<HtmlData>) ois.readObject();
+            
         } catch (IOException E) {
-            throw new RuntimeException(
-                    "Unable to load stored HtmlData. IO Error!");
+            throw new RuntimeException("Unable to load stored HtmlData. IO Error!");
+            
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(
-                    "Class wasn't found to deserialize HtmlData!");
+            throw new RuntimeException("Class wasn't found to deserialize HtmlData!");
         }
     }
 }

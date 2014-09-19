@@ -7,13 +7,14 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.*;
+import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
-public class MutableHtmlDataTest {
+public class HtmlDataTest {
     public static final String DEFAULT_NAME = "someElement";
-    public static final HtmlAttribute[] DEFAULT_ATTR = {new HtmlAttribute("someData", "SomeValue"), 
-                                                        new HtmlAttribute("otherData", "\"OtherValue\""),
-                                                        new HtmlAttribute("otherData", "\'other value\'"),
-                                                        new HtmlAttribute("lastData", "last Value")};
+    public static final Attribute[] DEFAULT_ATTR = {new HtmlAttribute("someData", "SomeValue"), 
+                                                    new HtmlAttribute("otherData", "\"OtherValue\""),
+                                                    new HtmlAttribute("otherData", "\'other value\'"),
+                                                    new HtmlAttribute("lastData", "last Value")};
     public static final boolean DEFAULT_OPENING = true;
     public static final boolean DEFAULT_CLOSING = true;
     public static final boolean DEFAULT_IS_CLOSING = false;
@@ -23,12 +24,12 @@ public class MutableHtmlDataTest {
     public static final HtmlAttribute DEFAULT_EMPTY_ATTR = new HtmlAttribute();
     
     private String defaultName;
-    private List<HtmlAttribute> defaultAttr;
+    private List<Attribute> defaultAttr;
     private boolean defaultOpening;
     private boolean defaultClosing;
     private boolean isClosing;
     private boolean isSelfClosing;
-    private MutableHtmlData data;
+    private HtmlData data;
     
     @Before
     public void defaultState() {
@@ -142,7 +143,7 @@ public class MutableHtmlDataTest {
         this.setDataFromState();
         
         // Assert
-        assertEquals(expValue, this.data.hasOpeningTag());
+        assertEquals(expValue, this.data.hasOpeningBracket());
     }
     
     @Test
@@ -153,7 +154,7 @@ public class MutableHtmlDataTest {
         
         // Apply
         this.data.confirmOpeningTag();
-        data = this.data.hasOpeningTag();
+        data = this.data.hasOpeningBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -177,7 +178,7 @@ public class MutableHtmlDataTest {
         this.setDataFromState();
         
         // Assert
-        assertEquals(expValue, this.data.hasClosingTag());
+        assertEquals(expValue, this.data.hasClosingBracket());
     }
     
     @Test
@@ -188,7 +189,7 @@ public class MutableHtmlDataTest {
         
         // Apply
         this.data.confirmClosingTag();
-        data = this.data.hasClosingTag();
+        data = this.data.hasClosingBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -196,7 +197,7 @@ public class MutableHtmlDataTest {
     
     @Test
     public void testGetAttributes_EmptyList() {
-        this.testGetAttribute(new ArrayList<HtmlAttribute>());
+        this.testGetAttribute(new ArrayList<Attribute>());
     }
     
     @Test
@@ -207,7 +208,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testGetAttributes_OtherAttrs() {
         // Set up
-        List<HtmlAttribute> expData = new ArrayList<>();
+        List<Attribute> expData = new ArrayList<>();
         expData.add(new HtmlAttribute("attr1", "val1"));
         expData.add(new HtmlAttribute("attr2", "val2"));
         expData.add(new HtmlAttribute("attr3", "val3"));
@@ -216,7 +217,7 @@ public class MutableHtmlDataTest {
         this.testGetAttribute(expData);
     }
     
-    private void testGetAttribute(List<HtmlAttribute> expValue) {
+    private void testGetAttribute(List<Attribute> expValue) {
         // Arrange
         this.defaultAttr = expValue;
         this.setDataFromState();
@@ -228,7 +229,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetAttributes_EmptyList_ImplicitlyTestGetAttribute() {
         // Test
-        this.testSetAttributes(new ArrayList<HtmlAttribute>());
+        this.testSetAttributes(new ArrayList<Attribute>());
     }
     
     @Test
@@ -252,7 +253,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetAttributes_OtherAttrValues_ImplicitlyTestGetAttribute() {
         // Arrange
-        List<HtmlAttribute> expData = new ArrayList<>();
+        List<Attribute> expData = new ArrayList<>();
         expData.add(new HtmlAttribute("attr1", "val1"));
         expData.add(new HtmlAttribute("attr2", "val2"));
         expData.add(new HtmlAttribute("attr3", "val3"));
@@ -261,7 +262,7 @@ public class MutableHtmlDataTest {
         this.testSetAttributes(expData);
     }
     
-    private void testSetAttributes(List<HtmlAttribute> expValue) {
+    private void testSetAttributes(List<Attribute> expValue) {
         // Apply
         this.data.setAttributes(expValue);
         
@@ -285,7 +286,7 @@ public class MutableHtmlDataTest {
     
     private void testUpdateAttributes_SingleAttr(HtmlAttribute... attrs) {
         // Arrange + Apply
-        List<HtmlAttribute> expData = new ArrayList<>(defaultAttr);
+        List<Attribute> expData = new ArrayList<>(defaultAttr);
         
         
         for (HtmlAttribute attr : attrs) {
@@ -348,7 +349,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testUpdateAttributes_ListOfAttributes_SingleAttribute() {
         // Set up
-        List<HtmlAttribute> expData = new ArrayList<>();
+        List<Attribute> expData = new ArrayList<>();
         expData.add(new HtmlAttribute("some new attr"));
         
         // Test
@@ -358,7 +359,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testUpdateAttributes_ListOfAttributes_MultipleAttributes() {
         // Set up
-        List<HtmlAttribute> expData = new ArrayList<>();
+        List<Attribute> expData = new ArrayList<>();
         expData.add(new HtmlAttribute("attr1"));
         expData.add(new HtmlAttribute("attr2"));
         expData.add(new HtmlAttribute("attr3"));
@@ -367,9 +368,9 @@ public class MutableHtmlDataTest {
         this.testUpdateAttributes_ListOfAttrs(expData);
     }
     
-    private void testUpdateAttributes_ListOfAttrs(List<HtmlAttribute> attrs) {
+    private void testUpdateAttributes_ListOfAttrs(List<Attribute> attrs) {
         // Arrange
-        List<HtmlAttribute> expData = new ArrayList<>(defaultAttr);
+        List<Attribute> expData = new ArrayList<>(defaultAttr);
         expData.addAll(attrs);
         
         // Apply
@@ -382,7 +383,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testUpdateAttributes_ListOfAttributes_SingleNullAttribute_ListShouldBeUnchanged() {
         // Set up
-        List<HtmlAttribute> attrs = new ArrayList<>();
+        List<Attribute> attrs = new ArrayList<>();
         attrs.add(null);
         
         // Test
@@ -392,7 +393,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testUpdateAttributes_ListOfAttributes_MultipleNullAttributes_ListShouldBeUnchanged() {
         // Set up
-        List<HtmlAttribute> attrs = this.generateAttributeListWithNullValues();
+        List<Attribute> attrs = this.generateAttributeListWithNullValues();
         
         // Test
         this.testUpdateAttributes_UnchangedList(attrs);
@@ -401,8 +402,8 @@ public class MutableHtmlDataTest {
     @Test
     public void testUpdateAttributes_ListOfAttributes_ContainsNormalAttributesAndNullAttributes_ListShouldContainValidAttributes() {
         // Set up
-        List<HtmlAttribute> allAttrs = this.generateAttributeListWithNullValues();
-        List<HtmlAttribute> validAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> allAttrs = this.generateAttributeListWithNullValues();
+        List<Attribute> validAttrs = this.generateAttributeListWithDefaultValues();
         
         allAttrs.addAll(validAttrs);
         
@@ -412,7 +413,7 @@ public class MutableHtmlDataTest {
     
     public void testUpdateAttributes_ListOfAttributes_SingleEmptyAttribute_ListShouldBeUnchanged() {
         // Set up
-        List<HtmlAttribute> attrs = new ArrayList<>();
+        List<Attribute> attrs = new ArrayList<>();
         attrs.add(DEFAULT_EMPTY_ATTR);
         
         // Test
@@ -422,7 +423,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testUpdateAttributes_ListOfAttributes_MultipleEmptyAttributes_ListShouldBeUnchanged() {
         // Set up
-        List<HtmlAttribute> attrs = this.generateAttributeListWithEmptyAttrs();
+        List<Attribute> attrs = this.generateAttributeListWithEmptyAttrs();
         
         // Test
         this.testUpdateAttributes_UnchangedList(attrs);
@@ -431,8 +432,8 @@ public class MutableHtmlDataTest {
     @Test
     public void testUpdateAttributes_ListOfAttributes_ContainsNormalAttributesAndEmptyAttributes_ListShouldContainValidAttributes() {
         // Set up
-        List<HtmlAttribute> allAttrs = this.generateAttributeListWithEmptyAttrs();
-        List<HtmlAttribute> validAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> allAttrs = this.generateAttributeListWithEmptyAttrs();
+        List<Attribute> validAttrs = this.generateAttributeListWithDefaultValues();
         
         allAttrs.addAll(validAttrs);
         
@@ -440,7 +441,7 @@ public class MutableHtmlDataTest {
         this.testUpdateAttributes_MixedValidAndInvalid(allAttrs, validAttrs);
     }
     
-    private void testUpdateAttributes_UnchangedList(List<HtmlAttribute> attrs) {
+    private void testUpdateAttributes_UnchangedList(List<Attribute> attrs) {
         // Arrange
         int expData = this.defaultAttr.size();
         
@@ -451,8 +452,8 @@ public class MutableHtmlDataTest {
         assertEquals(expData, this.defaultAttr.size());
     }
     
-    private void testUpdateAttributes_MixedValidAndInvalid(List<HtmlAttribute> allAttrs, 
-                                                           List<HtmlAttribute> validAttrs) {
+    private void testUpdateAttributes_MixedValidAndInvalid(List<Attribute> allAttrs, 
+                                                           List<Attribute> validAttrs) {
         // Apply
         this.defaultAttr = new ArrayList<>();
         this.setDataFromState();
@@ -609,7 +610,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_NonSelfClosingAttrs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         
         // Apply
         this.data.updateAttributes(attrs);
@@ -621,7 +622,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_NullAttrs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithNullValues();
+        List<Attribute> attrs = this.generateAttributeListWithNullValues();
         
         // Apply
         this.data.updateAttributes(attrs);
@@ -633,7 +634,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_EmptyAttrs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithEmptyAttrs();
+        List<Attribute> attrs = this.generateAttributeListWithEmptyAttrs();
         
         // Apply
         this.data.updateAttributes(attrs);
@@ -645,7 +646,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_FirstValueIsSelfClosingAttr_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.add(0, DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -658,7 +659,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_LastValueIsSelfClosingAttr_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.add(DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -671,7 +672,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_MiddleValueIsSelfClosingAttr_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.set(attrs.size() / 2, DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -684,7 +685,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_MultipleUpdates_FirstNot_SecondNot_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         // Apply
         this.data.updateAttributes(attrs);
         this.data.updateAttributes(attrs);
@@ -696,7 +697,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_MultipleUpdates_FirstIs_SecondNot_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.add(DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -712,7 +713,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_MultipleUpdates_FirstNot_SecondIs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         // Apply
         this.data.updateAttributes(attrs);
         
@@ -726,7 +727,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_FromUpdateAttributes_AttrList_MultipleUpdates_FirstIs_SecondIs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.add(DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -740,7 +741,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_NonSelfClosingAttrs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         
         // Apply
         this.data.setAttributes(attrs);
@@ -752,7 +753,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_NullAttrs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithNullValues();
+        List<Attribute> attrs = this.generateAttributeListWithNullValues();
         
         // Apply
         this.data.setAttributes(attrs);
@@ -764,7 +765,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_EmptyAttrs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithEmptyAttrs();
+        List<Attribute> attrs = this.generateAttributeListWithEmptyAttrs();
         
         // Apply
         this.data.setAttributes(attrs);
@@ -776,7 +777,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_FirstIndexIsSelfClosing_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.set(0, DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -789,7 +790,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_LastIndexIsSelfClosing_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.add(DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -802,7 +803,7 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_MiddleIndexIsSelfClosing_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> attrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> attrs = this.generateAttributeListWithDefaultValues();
         attrs.set(attrs.size() / 2, DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -815,8 +816,8 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_MultipleSets_FirstNot_SecondNot_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> firstAttrs = this.generateAttributeListWithDefaultValues();
-        List<HtmlAttribute> scndAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> firstAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> scndAttrs = this.generateAttributeListWithDefaultValues();
         
         // Apply
         this.data.setAttributes(firstAttrs);
@@ -829,9 +830,9 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_MultipleSets_FirstIs_SecondNot_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> firstAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> firstAttrs = this.generateAttributeListWithDefaultValues();
         firstAttrs.add(DEFAULT_SELF_CLOSING_ATTR);
-        List<HtmlAttribute> scndAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> scndAttrs = this.generateAttributeListWithDefaultValues();
         
         
         // Apply
@@ -845,8 +846,8 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_MultipleSets_FirstNot_SecondIs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> firstAttrs = this.generateAttributeListWithDefaultValues();
-        List<HtmlAttribute> scndAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> firstAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> scndAttrs = this.generateAttributeListWithDefaultValues();
         scndAttrs.add(DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -860,9 +861,9 @@ public class MutableHtmlDataTest {
     @Test
     public void testSetSelfClosing_SetAttributes_MultipleSets_FirstIs_SecondIs_ImplicitlyTestIsSelfClosing() {
         // Arrange
-        List<HtmlAttribute> firstAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> firstAttrs = this.generateAttributeListWithDefaultValues();
         firstAttrs.add(DEFAULT_SELF_CLOSING_ATTR);
-        List<HtmlAttribute> scndAttrs = this.generateAttributeListWithDefaultValues();
+        List<Attribute> scndAttrs = this.generateAttributeListWithDefaultValues();
         scndAttrs.add(DEFAULT_SELF_CLOSING_ATTR);
         
         // Apply
@@ -937,7 +938,8 @@ public class MutableHtmlDataTest {
     @Test
     public void testToString_AlteredAttributeData_WithSingleAttribute() {
         // Set up
-        this.defaultAttr = Arrays.asList(new HtmlAttribute("newAttribute"));
+        this.defaultAttr = new ArrayList<>();
+        this.defaultAttr.add(new HtmlAttribute("newAttribute"));
         
         // Test
         this.testToString("<" + this.defaultName + " newAttribute" + ">");
@@ -946,15 +948,15 @@ public class MutableHtmlDataTest {
     @Test
     public void testToString_AlteredAttributeData_MorethanMaxAttributes() {
         // Set up
-        this.defaultAttr = new ArrayList<HtmlAttribute>();
+        this.defaultAttr = new ArrayList<Attribute>();
         
-        for (int i = 0; i <= MutableHtmlData.MAX_NUM_ATTR_IN_STRING; i++) {
+        for (int i = 0; i <= HtmlData.MAX_NUM_ATTR_IN_STRING; i++) {
             HtmlAttribute attr = new HtmlAttribute("attr" + i, "value" + i);
             this.defaultAttr.add(attr);
         }
         
         // Test
-        this.testToString("<" + this.defaultName + " " + MutableHtmlData.ELIPSIS + ">");
+        this.testToString("<" + this.defaultName + " " + HtmlData.ELIPSIS + ">");
     }
     
     @Test
@@ -983,7 +985,7 @@ public class MutableHtmlDataTest {
         boolean data;
         
         this.setDataFromState();
-        MutableHtmlData other = this.generateData();
+        HtmlData other = this.generateData();
         
         // Apply
         data = this.getSymmetricPositiveEquals(this.data, other);
@@ -1022,7 +1024,8 @@ public class MutableHtmlDataTest {
     @Test
     public void testEquals_DiffAttrValues_ResultIsFalse() {
         // Set up
-        this.defaultAttr = Arrays.asList(new HtmlAttribute("otherAttr", "otherName"));
+        this.defaultAttr = new ArrayList<>();
+        this.defaultAttr.add(new HtmlAttribute("otherAttr", "otherName"));
         
         // Test
         this.testNegativeEquals();
@@ -1039,13 +1042,13 @@ public class MutableHtmlDataTest {
     
     private void testNegativeEquals() {
         // Arrange
-        MutableHtmlData other = this.generateData();
+        HtmlData other = this.generateData();
         
         // Assert
         assertEquals(false, this.getSymmetricNegativeEquals(this.data, other));
     }
     
-    private boolean getSymmetricPositiveEquals(MutableHtmlData current, MutableHtmlData other) {
+    private boolean getSymmetricPositiveEquals(HtmlData current, HtmlData other) {
         boolean result = true;
         
         HtmlData currentHtmlData = current;
@@ -1072,7 +1075,7 @@ public class MutableHtmlDataTest {
         return result;
     }
     
-    private boolean getSymmetricNegativeEquals(MutableHtmlData current, MutableHtmlData other) {
+    private boolean getSymmetricNegativeEquals(HtmlData current, HtmlData other) {
         boolean result = false;
         
         HtmlData currentHtmlData = current;
@@ -1103,8 +1106,8 @@ public class MutableHtmlDataTest {
         this.data = generateData();
     }
     
-    private MutableHtmlData generateData() {
-        return new MutableHtmlData(defaultName,
+    private HtmlData generateData() {
+        return new HtmlData(defaultName,
                                    isClosing,
                                    defaultOpening,
                                    defaultClosing,
@@ -1115,14 +1118,14 @@ public class MutableHtmlDataTest {
     private String parseAttributesToString() {
         String result = "";
         
-        for (HtmlAttribute data : this.defaultAttr)
+        for (Attribute data : this.defaultAttr)
             result += data.toString() + " ";
         
         return result.trim();
     }
     
-    private List<HtmlAttribute> generateAttributeListWithDefaultValues() {
-        List<HtmlAttribute> result = new ArrayList<>();
+    private List<Attribute> generateAttributeListWithDefaultValues() {
+        List<Attribute> result = new ArrayList<>();
         
         for (int i = 0; i < DEFAULT_ATTR.length; i++)
             result.add(DEFAULT_ATTR[i]);
@@ -1130,8 +1133,8 @@ public class MutableHtmlDataTest {
         return result;
     }
     
-    private List<HtmlAttribute> generateAttributeListWithNullValues() {
-        List<HtmlAttribute> result = new ArrayList<>();
+    private List<Attribute> generateAttributeListWithNullValues() {
+        List<Attribute> result = new ArrayList<>();
         
         for (int i = 0; i < DEFAULT_ATTR.length; i++)
             result.add(null);
@@ -1139,8 +1142,8 @@ public class MutableHtmlDataTest {
         return result;
     }
     
-    private List<HtmlAttribute> generateAttributeListWithEmptyAttrs() {
-        List<HtmlAttribute> result = new ArrayList<>();
+    private List<Attribute> generateAttributeListWithEmptyAttrs() {
+        List<Attribute> result = new ArrayList<>();
         
         for (int i = 0; i < DEFAULT_ATTR.length; i++)
             result.add(DEFAULT_EMPTY_ATTR);

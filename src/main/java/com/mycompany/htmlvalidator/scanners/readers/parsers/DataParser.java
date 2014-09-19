@@ -8,7 +8,7 @@ import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositio
 public abstract class DataParser extends MarkupParser<HtmlData> {
     private static final String CLASS_NAME = "DataParser";
     private static final String FIELD_NAME = "result";
-    protected MutableHtmlData result;
+    protected HtmlData result;
     
     protected char read() throws IOException {
         try {
@@ -45,10 +45,10 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
     
     @Override
     protected void setState(PushbackAndPositionReader input) {
-        this.setState(input, new MutableHtmlData());
+        this.setState(input, new HtmlData());
     }
     
-    protected void setState(PushbackAndPositionReader input, MutableHtmlData result) {
+    protected void setState(PushbackAndPositionReader input, HtmlData result) {
         super.setState(input);
         this.result = result;
     }
@@ -58,7 +58,7 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
         this.result = null;
     }
     
-    protected MutableHtmlData getResult() {
+    protected HtmlData getResult() {
         this.validateState();
         return this.result;
     }

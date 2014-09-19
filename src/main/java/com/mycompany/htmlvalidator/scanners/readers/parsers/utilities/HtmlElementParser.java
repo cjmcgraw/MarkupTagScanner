@@ -4,14 +4,13 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlElementParser extends HtmlUtilityParser {
     private static final String COMMENT_NAME = MarkupTagNames.COMMENT_TAG.getBeginName();
     
     @Override
-    public HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException {
+    public HtmlData parse(PushbackAndPositionReader input, HtmlData result) throws IOException {
         this.setState(input, result);
         this.parseData();
         this.clearState();

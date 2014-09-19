@@ -3,19 +3,19 @@ package com.mycompany.htmlvalidator.exceptions;
 import java.util.*;
 
 import com.mycompany.htmlvalidator.exceptions.MarkupError;
-import com.mycompany.htmlvalidator.exceptions.MarkupErrorReporter;
+import com.mycompany.htmlvalidator.exceptions.ErrorReporter;
 
-public class HtmlErrorReporterMock implements MarkupErrorReporter {
+public class MarkupErrorReporterMock implements ErrorReporter {
     private ArrayList<MarkupError> data;
     private ArrayList<MarkupError> added;
     private boolean iteratorCalled;
     private boolean addCalled;
     
-    public HtmlErrorReporterMock() {
+    public MarkupErrorReporterMock() {
         this(new ArrayList<MarkupError>());
     }
     
-    public HtmlErrorReporterMock(ArrayList<MarkupError> data) {
+    public MarkupErrorReporterMock(ArrayList<MarkupError> data) {
         this.data = data;
         this.added = new ArrayList<>();
         this.iteratorCalled = false;
@@ -85,7 +85,7 @@ public class HtmlErrorReporterMock implements MarkupErrorReporter {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        HtmlErrorReporterMock other = (HtmlErrorReporterMock) obj;
+        MarkupErrorReporterMock other = (MarkupErrorReporterMock) obj;
         if (addCalled != other.addCalled) return false;
         if (data == null) {
             if (other.data != null) return false;

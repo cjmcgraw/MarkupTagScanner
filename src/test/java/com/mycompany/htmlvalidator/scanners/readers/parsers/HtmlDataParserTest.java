@@ -18,6 +18,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlAttrib
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlClosingParserMock;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlElementParserMock;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
+import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
 public class HtmlDataParserTest {
     public static final List<Character> DEFAULT_INPUT = Arrays.asList('<', '>', '<', 'o', 't', 'h', 'e', 'r', 'd', 'a', 't', 'a', '>');
@@ -27,8 +28,16 @@ public class HtmlDataParserTest {
     public static final String DEFAULT_EXP_REMAINING_INPUT = "<otherdata>";
     public static final String INTERRUPT_EXP_REMAINING_INPUT = DEFAULT_INPUT.get(1) + DEFAULT_EXP_REMAINING_INPUT;
     public static final String DEFAULT_ELEMENT = "someElementName";
-    public static final List<HtmlAttribute> DEFAULT_ATTR = Arrays.asList(new HtmlAttribute("someName", "someData"),
-                                                                         new HtmlAttribute("otherName", "otherData"));
+    public static final List<Attribute> DEFAULT_ATTR = listify(new HtmlAttribute("someName", "someData"), 
+                                                               new HtmlAttribute("otherName", "otherData"));
+    
+    private static List<Attribute> listify(Attribute... attrs) {
+        List<Attribute> result = new ArrayList<>();
+        for (Attribute attr : attrs)
+            result.add(attr);
+        
+        return result;
+    }
     
     private HtmlClosingParserMock closingParser;
     private HtmlElementParserMock elementParser;
@@ -106,7 +115,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_ClosingParser_ThrowsExpectedException_EndOfInputParsingException_ExceptionResultMatchesExpected() {
         // Arrange 
-        MutableHtmlData expData = this.createDataFromException();
+        HtmlData expData = this.createDataFromException();
         expData.setIsClosing(true);
         
         HtmlData data = null;
@@ -164,7 +173,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_ClosingParser_UnclosedTagParsingExceptionCaught_ResultMatchesExpected()  {
         // Arrange
-        MutableHtmlData expData = this.createDataFromException();
+        HtmlData expData = this.createDataFromException();
         expData.setIsClosing(true);
         
         HtmlData data = null;
@@ -321,7 +330,7 @@ public class HtmlDataParserTest {
     @Test 
     public void testParse_ElementParser_ThrowsExpectedException_EndOfInputParsingException_ExceptionResultMatchesExpected()  {
         // Arrange
-        MutableHtmlData expData = this.createDataFromException();
+        HtmlData expData = this.createDataFromException();
         expData.setName(DEFAULT_ELEMENT);
         
         HtmlData data = null;
@@ -379,7 +388,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_ElementParser_UnclosedTagParsingExceptionCaught_ResultMatchesExpected()  {
         // Arrange
-        MutableHtmlData expData = this.createDataFromException();
+        HtmlData expData = this.createDataFromException();
         expData.setName(DEFAULT_ELEMENT);
         
         HtmlData data;
@@ -459,8 +468,8 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_AttributeParser_ResultIsEmptyAttributeData()  {
         // Arrange
-        List<HtmlAttribute> expData = new ArrayList<>();
-        List<HtmlAttribute> data;
+        List<Attribute> expData = new ArrayList<>();
+        Iterable<Attribute> data;
         
         this.attributeParser.setData(expData);
         
@@ -475,8 +484,8 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_AttributeParser_ResultIsDefaultAttributeData()  {
         // Arrange
-        List<HtmlAttribute> expData = DEFAULT_ATTR;
-        List<HtmlAttribute> data;
+        List<Attribute> expData = DEFAULT_ATTR;
+        Iterable<Attribute> data;
         
         this.attributeParser.setData(expData);
         
@@ -502,7 +511,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_AttributeParser_ThrowsExpectedException_EndOfInputParsingException_ExceptionResultMatchesExpected() {
         // Arrange
-        MutableHtmlData expData = this.createDataFromException();
+        HtmlData expData = this.createDataFromException();
         expData.updateAttributes(DEFAULT_ATTR);
         
         HtmlData data = null;
@@ -559,7 +568,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_AttributeParser_UnclosedTagParsingExceptionCaugt_ResultMatchesExpected() {
         // Arrange
-        MutableHtmlData expData = this.createDataFromException();
+        HtmlData expData = this.createDataFromException();
         expData.setAttributes(DEFAULT_ATTR);
         
         HtmlData data = null;
@@ -598,8 +607,8 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_AttributeParser_UnexpectedCloseTagExceptionCaught_ResultIsDefaultAttributeData() {
         // Arrange
-        List<HtmlAttribute> expData = DEFAULT_ATTR;
-        List<HtmlAttribute> data;
+        List<Attribute> expData = DEFAULT_ATTR;
+        Iterable<Attribute> data;
         
         ParsingException exception = this.createException("UnexpectedClose");
         this.attributeParser = new HtmlAttributeParserMock(exception);
@@ -635,7 +644,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_HasOpeningAndClosingTag_ResultIsEmptyHtmlData() {
         // Arrange
-        MutableHtmlData expData = new MutableHtmlData();
+        HtmlData expData = new HtmlData();
         expData.confirmOpeningTag();
         expData.confirmClosingTag();
         HtmlData data;
@@ -655,7 +664,7 @@ public class HtmlDataParserTest {
         
         // Apply
         HtmlData result = this.parse();
-        data = result.hasOpeningTag();
+        data = result.hasOpeningBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -669,7 +678,7 @@ public class HtmlDataParserTest {
         
         // Apply
         HtmlData result = this.parse();
-        data = result.hasClosingTag();
+        data = result.hasClosingBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -690,7 +699,7 @@ public class HtmlDataParserTest {
         try {
             this.parse();
         } catch (EndOfInputParsingException e) {
-            data = e.getHtmlData().hasOpeningTag();
+            data = e.getHtmlData().hasOpeningBracket();
         }
         
         // Assert
@@ -712,7 +721,7 @@ public class HtmlDataParserTest {
         try {
             this.parse();
         } catch (EndOfInputParsingException e) {
-            data = e.getHtmlData().hasClosingTag();
+            data = e.getHtmlData().hasClosingBracket();
         }
         
         // Assert
@@ -732,7 +741,7 @@ public class HtmlDataParserTest {
         
         // Apply
         HtmlData result = this.parse();
-        data = result.hasOpeningTag();
+        data = result.hasOpeningBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -751,7 +760,7 @@ public class HtmlDataParserTest {
         
         // Apply
         HtmlData result = this.parse();
-        data = result.hasClosingTag();
+        data = result.hasClosingBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -770,7 +779,7 @@ public class HtmlDataParserTest {
         
         // Apply
         HtmlData result = this.parse();
-        data = result.hasOpeningTag();
+        data = result.hasOpeningBracket();
         // Assert
         assertEquals(expData, data);
     }
@@ -788,7 +797,7 @@ public class HtmlDataParserTest {
         
         // Apply
         HtmlData result = this.parse();
-        data = result.hasClosingTag();
+        data = result.hasClosingBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -813,7 +822,7 @@ public class HtmlDataParserTest {
         
         // Apply
         HtmlData result = this.parse();
-        data = result.hasOpeningTag();
+        data = result.hasOpeningBracket();
         
         // Assert
         assertEquals(expData, data);
@@ -847,7 +856,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_MissingClosingTag_MissingEnclosureParsingExceptionCaught_ResultMatchesExpected() {
         // Arrange
-        MutableHtmlData expData = this.createDataFromException();
+        HtmlData expData = this.createDataFromException();
         expData.setIsClosing(true);
         expData.setName(DEFAULT_ELEMENT);
         expData.setAttributes(DEFAULT_ATTR);
@@ -937,8 +946,8 @@ public class HtmlDataParserTest {
         return this.input.getRemainingData();
     }
     
-    private MutableHtmlData createDataFromException() {
-        MutableHtmlData data = new MutableHtmlData();
+    private HtmlData createDataFromException() {
+        HtmlData data = new HtmlData();
         data.confirmOpeningTag();
         
         return data;

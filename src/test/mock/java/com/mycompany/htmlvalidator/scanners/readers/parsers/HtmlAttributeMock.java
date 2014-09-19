@@ -6,7 +6,8 @@ import java.util.*;
 import com.mycompany.htmlvalidator.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 
-public class HtmlAttributeMock extends HtmlAttribute implements MarkupErrorReporter {
+@SuppressWarnings("serial")
+public class HtmlAttributeMock extends HtmlAttribute implements ErrorReporter {
     private static final List<MarkupError> DEFAULT_DATA = generateMarkupErrors();
     
     private static List<MarkupError> generateMarkupErrors() {

@@ -16,12 +16,12 @@ public class DataParserTest extends DataParser {
     private static final char SOME_CHAR = 'X';
     
     private PushbackAndPositionReader inputData;
-    private MutableHtmlData resultData;
+    private HtmlData resultData;
     
     @Before
     public void setUp() {
         this.inputData = new PushbackAndPositionReaderMock(new LinkedList<Character>());
-        this.resultData = new MutableHtmlData();
+        this.resultData = new HtmlData();
         this.resultData.setName(DEFAULT_NAME);
     }
     
@@ -189,8 +189,8 @@ public class DataParserTest extends DataParser {
     @Test
     public void testSetState_InputSetOnly_ContainsNewEmptyResult() {
         // Arrange
-        MutableHtmlData expData = new MutableHtmlData();
-        MutableHtmlData data;
+        HtmlData expData = new HtmlData();
+        HtmlData data;
         
         // Apply
         this.setState(this.inputData);
@@ -203,8 +203,8 @@ public class DataParserTest extends DataParser {
     @Test
     public void testSetState_InputAndResult_ContainsMatchingResult() {
         // Arrange
-        MutableHtmlData expData = this.resultData;
-        MutableHtmlData data;
+        HtmlData expData = this.resultData;
+        HtmlData data;
         
         // Apply
         this.setState(this.inputData, this.resultData);
@@ -218,7 +218,7 @@ public class DataParserTest extends DataParser {
     public void testClearState_ResultIsNullAfterClearState() {
         // Arrange
         Object expData = null;
-        MutableHtmlData data;
+        HtmlData data;
         
         this.result = this.resultData;
         
@@ -233,8 +233,8 @@ public class DataParserTest extends DataParser {
     @Test
     public void testGetResult_ValidResult_ReturnedResultMatches() {
         // Arrange
-        MutableHtmlData expData = this.resultData;
-        MutableHtmlData data;
+        HtmlData expData = this.resultData;
+        HtmlData data;
         
         this.result = expData;
         

@@ -57,7 +57,7 @@ public class HtmlAttributesParserTest {;
     
     private PushbackAndPositionReaderMock input;
     private HtmlAttributesParser parser;
-    private MutableHtmlData result;
+    private HtmlData result;
     
     
     @BeforeClass()
@@ -81,7 +81,7 @@ public class HtmlAttributesParserTest {;
                                                this.attributeParser,
                                                this.commentParser,
                                                this.whitespaceConsumer);
-        this.result = new MutableHtmlData();
+        this.result = new HtmlData();
     }
     
     @Test
@@ -580,7 +580,7 @@ public class HtmlAttributesParserTest {;
     @Test
     public void testParse_OpeningTag_ExceptionResultMatchesStoredResult_ThrowsException() {
         // Set up
-        MutableHtmlData exp = new MutableHtmlData();
+        HtmlData exp = new HtmlData();
         exp.updateAttributes(new HtmlAttribute(ATTR_DATA));
         exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
         exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
@@ -639,7 +639,7 @@ public class HtmlAttributesParserTest {;
          * In this case an empty HtmlData object is expected. Because no attributes
          * have been added.
          */
-        this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult("", new MutableHtmlData());
+        this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult("", new HtmlData());
     }
     
     @Test(expected=EndOfInputParsingException.class)
@@ -695,7 +695,7 @@ public class HtmlAttributesParserTest {;
          * attribute that caused the error, and then re-package the thrown error
          * as a "EndOfInputParsingException". Thus the expected result for this
          * test is a HtmlData object that contains the "attr" as the only attribute*/
-        MutableHtmlData expected = new MutableHtmlData();
+        HtmlData expected = new HtmlData();
         expected.updateAttributes(ATTR_EOF_DATA);
         
         /* State is set with "STANDARD_STR" which is a default character that
@@ -718,7 +718,7 @@ public class HtmlAttributesParserTest {;
          * This is to ensure that previous attributes were not effected by the
          * error occurring in the parsing of a different attribute
          */
-        MutableHtmlData expected = new MutableHtmlData();
+        HtmlData expected = new HtmlData();
         // "QUOTE_ATTR" chosen because "enclosureParser" component is not set
         // to throw an exception
         expected.updateAttributes(QUOTE_ATTR);
@@ -775,7 +775,7 @@ public class HtmlAttributesParserTest {;
         String state = FILLER_DATA;
         
         // expected data is set up with expected name and attr
-        MutableHtmlData expected = new MutableHtmlData();
+        HtmlData expected = new HtmlData();
         expected.setName(MarkupTagNames.COMMENT_TAG.getBeginName());
         expected.updateAttributes(ATTR_EOF_DATA);
         
@@ -826,7 +826,7 @@ public class HtmlAttributesParserTest {;
         String exceptionState = SINGLE_QUOTE;
         String state = fillerAttrs + exceptionState;
         
-        MutableHtmlData exp = new MutableHtmlData();
+        HtmlData exp = new HtmlData();
         exp.updateAttributes(STND_ATTR);
         exp.updateAttributes(STND_ATTR);
         exp.updateAttributes(STND_ATTR);
@@ -859,7 +859,7 @@ public class HtmlAttributesParserTest {;
         
         HtmlData data;
         
-        MutableHtmlData exp = new MutableHtmlData();
+        HtmlData exp = new HtmlData();
         exp.updateAttributes(COMPONENT_MISSINGCHAR_ATTR);
         exp.updateAttributes(STND_ATTR);
         exp.updateAttributes(STND_ATTR);
@@ -896,7 +896,7 @@ public class HtmlAttributesParserTest {;
         this.setState(SINGLE_QUOTE + STANDARD_STR + STANDARD_STR + CLOSING_TAG);
         
         HtmlData data;
-        MutableHtmlData exp = new MutableHtmlData();
+        HtmlData exp = new HtmlData();
         exp.updateAttributes(COMPONENT_UNEXPECTEDCHAR_ATTR);
         exp.updateAttributes(STND_ATTR);
         exp.updateAttributes(STND_ATTR);
@@ -990,7 +990,7 @@ public class HtmlAttributesParserTest {;
     @Test
     public void testParse_MissingClosingTag_ThrownExceptionMatchesExpectedResult() {
         // Arrange
-        MutableHtmlData expData = new MutableHtmlData();
+        HtmlData expData = new HtmlData();
         HtmlData data = null;
         
         expData.updateAttributes(STND_ATTR);
@@ -1013,7 +1013,7 @@ public class HtmlAttributesParserTest {;
     @Test
     public void testParse_MissingClosingTag_ArgResultMatchesExpectedResult() {
         // Arrange
-        MutableHtmlData expData = new MutableHtmlData();
+        HtmlData expData = new HtmlData();
         HtmlData data = null;
         
         expData.updateAttributes(STND_ATTR);

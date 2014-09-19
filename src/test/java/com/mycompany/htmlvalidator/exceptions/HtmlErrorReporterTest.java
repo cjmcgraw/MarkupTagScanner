@@ -22,7 +22,7 @@ public class HtmlErrorReporterTest {
         return result;
     }
     
-    private HtmlErrorReporter reporter;
+    private MarkupErrorReporter reporter;
     private List<MarkupError> data;
     
     @Test
@@ -256,7 +256,7 @@ public class HtmlErrorReporterTest {
         
         this.setState(ERRORS);
         
-        HtmlErrorReporter other = this.reporter;
+        MarkupErrorReporter other = this.reporter;
         
         // Apply
         data = this.symmetricEquals_Positive(other);
@@ -273,7 +273,7 @@ public class HtmlErrorReporterTest {
         
         this.setState(ERRORS);
         
-        HtmlErrorReporter other = new HtmlErrorReporter(ERRORS);
+        MarkupErrorReporter other = new MarkupErrorReporter(ERRORS);
         
         // Apply
         data =  this.symmetricEquals_Positive(other);
@@ -290,7 +290,7 @@ public class HtmlErrorReporterTest {
         
         this.setState(FIRST_ERROR);
         
-        HtmlErrorReporter other = new HtmlErrorReporter();
+        MarkupErrorReporter other = new MarkupErrorReporter();
         other.addError(SECOND_ERROR);
         
         // Apply
@@ -308,7 +308,7 @@ public class HtmlErrorReporterTest {
         
         this.setState(ERRORS);
         
-        HtmlErrorReporter other = new HtmlErrorReporter();
+        MarkupErrorReporter other = new MarkupErrorReporter();
         other.addError(SECOND_ERROR);
         
         // Apply
@@ -326,7 +326,7 @@ public class HtmlErrorReporterTest {
         
         this.setState(FIRST_ERROR);
         
-        HtmlErrorReporter other = new HtmlErrorReporter(ERRORS);
+        MarkupErrorReporter other = new MarkupErrorReporter(ERRORS);
         
         // Apply
         data = this.symmetricEquals_Negative(other);
@@ -335,14 +335,14 @@ public class HtmlErrorReporterTest {
         assertEquals(expData, data);
     }
     
-    private boolean symmetricEquals_Positive(HtmlErrorReporter other) {
+    private boolean symmetricEquals_Positive(MarkupErrorReporter other) {
         return this.reporter.equals(other) &&
                other.equals(this.reporter) &&
                this.reporter.equals((Object) other) &&
                other.equals((Object) this.reporter);
     }
     
-    private boolean symmetricEquals_Negative(HtmlErrorReporter other) {
+    private boolean symmetricEquals_Negative(MarkupErrorReporter other) {
         return this.reporter.equals(other) ||
                other.equals(this.reporter) ||
                this.reporter.equals((Object) other) ||
@@ -382,7 +382,7 @@ public class HtmlErrorReporterTest {
     }
     
     private void setState(List<MarkupError> data) {
-        this.reporter = new HtmlErrorReporter(data);
+        this.reporter = new MarkupErrorReporter(data);
         this.data = data;
     }
     

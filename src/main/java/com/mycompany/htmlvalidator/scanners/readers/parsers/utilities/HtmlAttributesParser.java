@@ -42,7 +42,7 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     }
     
     @Override
-    public HtmlData parse(PushbackAndPositionReader input, MutableHtmlData result) throws IOException {
+    public HtmlData parse(PushbackAndPositionReader input, HtmlData result) throws IOException {
         this.setState(input, result);
         this.parseAttributes();
         return result;

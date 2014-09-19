@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.MutableHtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
@@ -29,7 +28,7 @@ public class HtmlClosingParserTest {
     private HtmlClosingParser parser = new HtmlClosingParser();
     private PushbackAndPositionReaderMock input;
     private LinkedList<Character> inputData;
-    private MutableHtmlData result;
+    private HtmlData result;
     
     @Before
     public void setUp() {
@@ -218,7 +217,7 @@ public class HtmlClosingParserTest {
     private void setState(List<Character> data) {
         this.inputData = new LinkedList<>(data);
         this.input = new PushbackAndPositionReaderMock(this.inputData);
-        this.result = new MutableHtmlData();
+        this.result = new HtmlData();
     }
     
     @After
