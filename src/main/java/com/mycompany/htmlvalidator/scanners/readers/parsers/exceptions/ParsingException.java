@@ -1,11 +1,13 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions;
 
 import java.awt.Point;
+
+import com.mycompany.htmlvalidator.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 
-public class ParsingException extends RuntimeException {
+public class ParsingException extends MarkupError{
     private static final long serialVersionUID = 7976665383247960546L;
-    private static final String errorMsg = "-----> PARSING ERROR  at [%s, %s] tinput = %s%n\t%s at %s";
+    private static final String errorMsg = "Parsing Exception at [%s, %s] input = %s%n\t%s at %s";
     private static final int numOfMsgArgs = 5;
     
     private Point position;
@@ -15,7 +17,7 @@ public class ParsingException extends RuntimeException {
     private String msg;
     
     public ParsingException(Point position, HtmlData htmlData, char errorChar, String msg) {
-        super();
+        super(String.format(errorMsg, position.x, position.y, htmlData, msg, errorChar));
         this.position = position;
         this.htmlData = htmlData;
         this.errorChar = errorChar;

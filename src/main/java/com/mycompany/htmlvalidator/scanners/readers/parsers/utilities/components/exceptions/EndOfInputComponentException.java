@@ -2,7 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.component
 
 public class EndOfInputComponentException extends ComponentException {
     private static final long serialVersionUID = 5802533142904660152L;
-    private static final String MSG = "ERROR: End of input detected after after [%s]";
+    private static final String MSG = "End of input detected after after [%s]";
     
     private String data;
     

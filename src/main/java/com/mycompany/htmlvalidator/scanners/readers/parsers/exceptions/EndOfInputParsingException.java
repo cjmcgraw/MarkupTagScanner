@@ -12,5 +12,4 @@ public class EndOfInputParsingException extends FatalParsingException {
     public EndOfInputParsingException(Point position, HtmlData result) {
         super(position, result, endOfInput, defaultMsg);
     }
-    
 }

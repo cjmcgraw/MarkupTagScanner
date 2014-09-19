@@ -1,8 +1,10 @@
 package com.mycompany.htmlvalidator.exceptions;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class MarkupErrorReporter implements ErrorReporter{
+public class MarkupErrorReporter implements ErrorReporter, Serializable{
+    private static final long serialVersionUID = 8255260749083572783L;
     private Collection<MarkupError> markupErrors;
     
     public MarkupErrorReporter() {

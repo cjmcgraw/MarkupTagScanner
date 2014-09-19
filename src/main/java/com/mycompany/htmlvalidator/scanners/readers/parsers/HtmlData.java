@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.mycompany.htmlvalidator.exceptions.ErrorReporter;
+import com.mycompany.htmlvalidator.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.tokens.*;
 
@@ -15,6 +15,8 @@ public class HtmlData implements Tag{
     
     public final static String ELIPSIS = "[...]";
     public final static int MAX_NUM_ATTR_IN_STRING = 10;
+    
+    private ErrorReporter reporter;
     
     private boolean hasOpeningTag;
     private boolean hasClosingTag;
@@ -36,6 +38,8 @@ public class HtmlData implements Tag{
         this.hasClosingTag = hasClosing;
         this.selfClosing = selfClosing;
         this.isClosing = isClosing;
+        
+        this.reporter = new MarkupErrorReporter();
     }
     
     public String getName() {
@@ -43,7 +47,7 @@ public class HtmlData implements Tag{
     }
     
     public ErrorReporter getErrorReporter() {
-        return null;
+        return reporter;
     }
     
     public void confirmOpeningTag() {
@@ -151,32 +155,50 @@ public class HtmlData implements Tag{
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((attributes == null) ? 0 : attributes.hashCode());
+        result = prime * result
+                + ((attributes == null) ? 0 : attributes.hashCode());
         result = prime * result + (hasClosingTag ? 1231 : 1237);
         result = prime * result + (hasOpeningTag ? 1231 : 1237);
         result = prime * result + (isClosing ? 1231 : 1237);
-        result = prime * result + (selfClosing ? 1231 : 1237);
         result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result
+                + ((reporter == null) ? 0 : reporter.hashCode());
+        result = prime * result + (selfClosing ? 1231 : 1237);
         return result;
     }
 
+    @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Tag)
-            return equals((Tag) obj);
-        else
-            return super.equals(obj);
-      
-    }
-    
-    public boolean equals(Tag other) {
-        boolean result = (
-                this.getName().equals(other.getName()) &&
-                this.getAttributes().equals(other.getAttributes()) &&
-                this.isClosing == other.isClosing() && 
-                this.hasClosingTag == other.hasClosingBracket() &&
-                this.hasOpeningTag == other.hasOpeningBracket()
-                );
-        
-        return result;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        HtmlData other = (HtmlData) obj;
+        if (attributes == null) {
+            if (other.attributes != null)
+                return false;
+        } else if (!attributes.equals(other.attributes))
+            return false;
+        if (hasClosingTag != other.hasClosingTag)
+            return false;
+        if (hasOpeningTag != other.hasOpeningTag)
+            return false;
+        if (isClosing != other.isClosing)
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!getName().equals(other.getName()))
+            return false;
+        if (reporter == null) {
+            if (other.reporter != null)
+                return false;
+        } else if (!reporter.equals(other.reporter))
+            return false;
+        if (selfClosing != other.selfClosing)
+            return false;
+        return true;
     }
 }

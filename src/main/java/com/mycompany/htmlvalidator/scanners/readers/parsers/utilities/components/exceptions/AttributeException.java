@@ -3,9 +3,9 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.component
 import com.mycompany.htmlvalidator.exceptions.MarkupError;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
 
-public abstract class AttributeException extends RuntimeException implements MarkupError{
+public abstract class AttributeException extends MarkupError{
     private static final long serialVersionUID = 2298941335061905710L;
-    protected static final String DEFAULT_ERROR_MSG = "ERROR: Exception during attribute parsing -> %s";
+    protected static final String DEFAULT_ERROR_MSG = "Exception during attribute parsing -> %s";
     
     protected AttributeException(String msg) {
         super(msg);

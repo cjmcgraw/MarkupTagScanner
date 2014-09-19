@@ -42,8 +42,7 @@ public class HtmlDataGenerator {
     @SuppressWarnings("unchecked")
     private static List<HtmlData> deserializeFile(String fileName) {
         try {
-            InputStream stream = ClassLoader
-                    .getSystemResourceAsStream(fileName);
+            InputStream stream = ClassLoader.getSystemResourceAsStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(stream);
             return (List<HtmlData>) ois.readObject();
             
