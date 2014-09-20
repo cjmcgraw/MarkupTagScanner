@@ -963,14 +963,14 @@ public class HtmlDataParserTest {
     }
     
     private ParsingException createEndOfInputException() {
-        return new EndOfInputParsingException(new Point(0,0), null);
+        return new EndOfInputParsingException(new Point(0,0), new HtmlData());
     }
     
     private ParsingException createUnexpectedCloseTagException() {
-        return new UnexpectedCloseTagParsingException(new Point(0,0), null);
+        return new UnexpectedCloseTagParsingException(new Point(0,0), new HtmlData());
     }
     
     private ParsingException createUnclosedTagException() {
-        return new UnclosedTagParsingException(new Point(0,0), null);
+        return new UnclosedTagParsingException(new Point(0,0), new HtmlData());
     }
 }
