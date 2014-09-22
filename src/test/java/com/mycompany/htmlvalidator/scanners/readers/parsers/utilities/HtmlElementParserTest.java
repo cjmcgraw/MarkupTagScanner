@@ -7,7 +7,6 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
