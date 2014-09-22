@@ -1,6 +1,6 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
 import java.io.IOException;
@@ -8,13 +8,12 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.mycompany.htmlvalidator.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
-import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
+import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlAttributesParserTest {;
     private static final String ATTR_DATA = "someAttrData";
@@ -590,12 +589,6 @@ public class HtmlAttributesParserTest {;
     }
     
     @Test
-    public void testParse_OpeningTag_BeforeFirstAttr_ExceptionStoredInReporter() {
-        // Test
-        this.testParse_ThrowsException_ThrownExceptionContainedInReporter(OPENING_TAG + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
-    }
-    
-    @Test
     public void testParse_OpeningTag_BeforeFirstAttr_ResultContainsExpectedAttrs() {
         // Set up
         List<HtmlAttribute> attrs = this.generateAttrList();
@@ -632,12 +625,6 @@ public class HtmlAttributesParserTest {;
         
         // Test
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE, exp);
-    }
-    
-    @Test
-    public void testParse_OpeningTag_InbetweenAttrs_ExceptionStoredInReporter() {
-        // Test
-        this.testParse_ThrowsException_ThrownExceptionContainedInReporter(STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE);
     }
     
     @Test
@@ -678,12 +665,6 @@ public class HtmlAttributesParserTest {;
         
         // Test
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + OPENING_TAG, exp);
-    }
-    
-    @Test
-    public void testParse_OpeningTag_AfterLastAttr_ExceptionStoredInReporter() {
-        // Test
-        this.testParse_ThrowsException_ThrownExceptionContainedInReporter(STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + OPENING_TAG);
     }
     
     @Test
@@ -1053,25 +1034,6 @@ public class HtmlAttributesParserTest {;
         // Assert
         assertEquals(exp, data);
         assertEquals(this.result, data);
-    }
-    
-    private void testParse_ThrowsException_ThrownExceptionContainedInReporter(String state) {
-        // Arrange
-        List<MarkupError> exp = new ArrayList<>();
-        HtmlData data = null;
-        
-        this.setState(state);
-        
-        // Apply
-        try {
-            this.parse();
-        } catch (ParsingException e) {
-            exp.add(e);
-            data = e.getHtmlData();
-        }
-        
-        // Assert
-        assertEquals(exp, data.getErrorReporter().getErrors());
     }
     
     private void testParse_ThrowsException_ResultContainsExpectedAttrs(String str, List<HtmlAttribute> attrs) {

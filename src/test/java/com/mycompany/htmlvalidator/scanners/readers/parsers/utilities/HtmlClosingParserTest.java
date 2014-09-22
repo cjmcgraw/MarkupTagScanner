@@ -12,7 +12,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
 import com.mycompany.htmlvalidator.scanners.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
@@ -194,46 +193,6 @@ public class HtmlClosingParserTest {
         
         // Apply
         assertEquals(expData, data);
-    }
-    
-    @Test
-    public void testParse_WithOpeningAngleBracket_ExceptionHtmlDataMatchesExpected() throws IOException {
-        // Arrange
-        this.setState(Arrays.asList(OPENING_TAG, 'A', 'B', 'C'));
-        
-        HtmlData exp = new HtmlData();
-        HtmlData data = null;
-        
-        // Apply
-        try {
-            this.parser.parse(this.input, this.result);
-        } catch (UnclosedTagParsingException e) {
-            data = e.getHtmlData();
-            exp.getErrorReporter().addError(e);
-        }
-        
-        // Apply
-        assertEquals(exp, data);
-    }
-    
-    @Test
-    public void testParse_WithOpeningAngleBracket_ExceptionContainedWithinHtmlData() throws IOException {
-        // Arrange
-        this.setState(Arrays.asList(OPENING_TAG, 'A', 'B', 'C'));
-        
-        List<MarkupError> exp = new ArrayList<>();
-        HtmlData result = null;
-        
-        // Apply
-        try {
-            this.parser.parse(this.input, this.result);
-        } catch (UnclosedTagParsingException e) {
-            exp.add(e);
-            result = e.getHtmlData();
-        }
-        
-        // Apply
-        assertEquals(exp, result.getErrorReporter().getErrors());
     }
     
     @Test

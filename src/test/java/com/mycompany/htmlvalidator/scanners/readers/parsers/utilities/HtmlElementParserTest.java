@@ -332,16 +332,6 @@ public class HtmlElementParserTest {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_START_STR, OPENING_TAG);
     }
     
-    @Test
-    public void testParse_WithInvalidElementName_StrStartsWithOpeningTag_ExceptionDataMatchesExpected() throws IOException {
-        this.testParse_InvalidElement_UnexpectedTag_ExceptionDataMatchesExpectedData(WHITESPACE_START_STR, OPENING_TAG);
-    }
-    
-    @Test
-    public void testParse_WithInvalidElementName_StrStartsWithOpeningTag_ExceptionDataErrorReporterContainsExpectedError() throws IOException {
-        this.testParse_InvalidElement_UnexpectedTag_ExceptionDataContainsExpectedExceptionInReporter(WHITESPACE_START_STR, OPENING_TAG);
-    }
-    
     @Test(expected=UnclosedTagParsingException.class)
     public void testParse_WithInvalidElementName_StrCenterOpeningTag_ThrowsExpectedException() throws IOException {
         // Test
@@ -365,16 +355,6 @@ public class HtmlElementParserTest {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_CENTER_STR, OPENING_TAG);
     }
     
-    @Test
-    public void testParse_WithInvalidElementName_StrCenterOpeningTag_ExceptionDataMatchesExpected() throws IOException {
-        this.testParse_InvalidElement_UnexpectedTag_ExceptionDataMatchesExpectedData(WHITESPACE_CENTER_STR, OPENING_TAG);
-    }
-    
-    @Test
-    public void testParse_WithInvalidElementName_StrCenterOpeningTag_ExceptionDataErrorReporterContainsExpectedError() throws IOException {
-        this.testParse_InvalidElement_UnexpectedTag_ExceptionDataContainsExpectedExceptionInReporter(WHITESPACE_CENTER_STR, OPENING_TAG);
-    }
-    
     @Test(expected=UnclosedTagParsingException.class)
     public void testParse_WithInvalidElementName_StrEndsWithOpeningTag_ThrowsExpectedException() throws IOException {
         // Test
@@ -396,16 +376,6 @@ public class HtmlElementParserTest {
     @Test
     public void testParse_WithInvalidElementName_StrEndsWithOpeningTag_ConsumesOnlyExpectedInput() throws IOException {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_END_STR, OPENING_TAG);
-    }
-    
-    @Test
-    public void testParse_WithInvalidElementName_StrEndsWithOpeningTag_ExceptionDataMatchesExpected() throws IOException {
-        this.testParse_InvalidElement_UnexpectedTag_ExceptionDataMatchesExpectedData(WHITESPACE_END_STR, OPENING_TAG);
-    }
-    
-    @Test
-    public void testParse_WithInvalidElementName_StrEndsWithOpeningTag_ExceptionDataErrorReporterContainsExpectedError() throws IOException {
-        this.testParse_InvalidElement_UnexpectedTag_ExceptionDataContainsExpectedExceptionInReporter(WHITESPACE_END_STR, OPENING_TAG);
     }
     
     private void testParse_InvalidElementName_UnexpectedTag_ThrowsException(String str, char invalidChar) throws IOException {
@@ -468,46 +438,6 @@ public class HtmlElementParserTest {
         
         // Assert
         assertEquals(expData, this.input.getRemainingData());
-    }
-    
-    private void testParse_InvalidElement_UnexpectedTag_ExceptionDataMatchesExpectedData(String str, char invalidChar) throws IOException {
-        // Arrange
-        HtmlData exp = new HtmlData();
-        HtmlData result = null;
-        
-        exp.setName(str.split(" ", 2)[0]);
-        
-        this.setState(str.replace(' ', invalidChar));
-        
-        // Apply
-        try {
-            this.parser.parse(this.input, this.result);
-        } catch (ParsingException e) {
-            result = e.getHtmlData();
-            exp.getErrorReporter().addError(e);
-        }
-        
-        // Assert
-        assertEquals(exp, result);
-    }
-    
-    private void testParse_InvalidElement_UnexpectedTag_ExceptionDataContainsExpectedExceptionInReporter(String str, char invalidChar) throws IOException {
-        // Arrange
-        List<MarkupError> exp = new ArrayList<>();
-        HtmlData result = null;
-        
-        this.setState(str.replace(' ', invalidChar));
-        
-        // Apply
-        try {
-            this.parser.parse(this.input, this.result);
-        } catch (ParsingException e) {
-            result = e.getHtmlData();
-            exp.add(e);
-        }
-        
-        // Assert
-        assertEquals(exp, result.getErrorReporter().getErrors());
     }
     
     @Test(expected=EndOfInputParsingException.class)

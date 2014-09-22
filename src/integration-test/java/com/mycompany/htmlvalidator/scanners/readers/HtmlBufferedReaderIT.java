@@ -16,6 +16,7 @@ import com.mycompany.htmlvalidator.scanners.tokens.Tag;
 public class HtmlBufferedReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");
     private static final MarkupError UNCLOSED_TAG_ERROR = new UnclosedTagParsingException(new Point(0,0), new HtmlData());
+    private static final MarkupError MISSING_ENCLOSURE_ERROR = new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', new HtmlData());
     private static final HtmlAttribute CLOSING_ATTR = new HtmlAttribute("/");
     
     private static final HtmlAttribute[] DEFAULT_FLAGS = {new HtmlAttribute("flag1"), 
@@ -1420,6 +1421,7 @@ public class HtmlBufferedReaderIT {
     private void testReadTagAndDataMatches_MissingOpening(String s) throws IOException {
         // Set up
         HtmlData exp = generateEmptyData(false, true);
+        exp.getErrorReporter().addError(MISSING_ENCLOSURE_ERROR);
         
         // Test
         testReadTagAndDataMatches(s, exp);
@@ -1458,7 +1460,6 @@ public class HtmlBufferedReaderIT {
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrFlags flag1 flag2<", exp);
     }
     
-    
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrFlagsWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
@@ -1472,7 +1473,6 @@ public class HtmlBufferedReaderIT {
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrFlags flag1 flag2 flag3<", exp);
     }
     
-    
     @Test
     public void testNext_InvalidTag_tagWithAttrWithValWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
@@ -1483,7 +1483,6 @@ public class HtmlBufferedReaderIT {
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrWithVal attr1=val1<", exp);
     }
-    
     
     @Test
     public void testNext_InvalidTag_tagWithTwoAttrsWithValsWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
@@ -1496,7 +1495,6 @@ public class HtmlBufferedReaderIT {
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrsWithVals attr1=val1 attr2=val2<", exp);
     }
-    
     
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrsWithValsWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
@@ -1511,7 +1509,6 @@ public class HtmlBufferedReaderIT {
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrsWithVals attr1=val1 attr2=val2 attr3=val3<", exp);
     }
     
-    
     @Test
     public void testNext_InvalidTag_tagWithAttrWithValInSingleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
@@ -1522,7 +1519,6 @@ public class HtmlBufferedReaderIT {
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrWithValInSingleQuotes attr1='val1'<", exp);
     }
-    
     
     @Test
     public void testNext_InvalidTag_tagWithTwoAttrsWithValsInSingleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
@@ -1535,7 +1531,6 @@ public class HtmlBufferedReaderIT {
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInSingleQuotes attr1='val1' attr2='val2'<", exp);
     }
-    
     
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrsWithValsInSingleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
@@ -1550,7 +1545,6 @@ public class HtmlBufferedReaderIT {
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInSingleQuotes attr1='val1' attr2='val2' attr3='val3'<", exp);
     }
     
-    
     @Test
     public void testNext_InvalidTag_tagWithAttrWithValInDoubleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
@@ -1561,7 +1555,6 @@ public class HtmlBufferedReaderIT {
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrWithValInDoubleQuotes attr1=\"val1\"<", exp);
     }
-    
     
     @Test
     public void testNext_InvalidTag_tagWithTwoAttrsWithValsInDoubleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
@@ -1575,7 +1568,6 @@ public class HtmlBufferedReaderIT {
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInDoubleQuotes attr1=\"val1\" attr2=\"val2\"<", exp);
     }
     
-    
     @Test
     public void testNext_InvalidTag_tagWithMultiAttrsWithValsInDoubleQuotesWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
@@ -1588,7 +1580,6 @@ public class HtmlBufferedReaderIT {
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInDoubleQuotes attr1=\"val1\" attr2=\"val2\" attr3=\"val3\"<", exp);
     }
-    
     
     @Ignore("Ignoring for Branch Iss #5, when ready data needs to be re-serialized to allow this test to pass")
     @Test
@@ -1604,7 +1595,6 @@ public class HtmlBufferedReaderIT {
         data.close();
         assertTrue(i > 0);
     }
-    
     
     @Ignore("Ignoring for Branch Iss #5, when ready data needs to be re-serialized to allow this test to pass")
     @Test

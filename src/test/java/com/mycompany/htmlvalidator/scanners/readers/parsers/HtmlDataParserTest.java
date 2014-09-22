@@ -182,6 +182,8 @@ public class HtmlDataParserTest {
         this.closingParser = new HtmlClosingParserMock(exception);
         this.closingParser.setData(expData.isClosing());
         
+        expData.getErrorReporter().addError(exception);
+        
         this.setState(DEFAULT_INPUT);
         
         // Apply
@@ -397,6 +399,8 @@ public class HtmlDataParserTest {
         this.elementParser = new HtmlElementParserMock(exception);
         this.elementParser.setElement(expData.getName());
         
+        expData.getErrorReporter().addError(exception);
+        
         this.setState(DEFAULT_INPUT);
         
         // Apply
@@ -576,6 +580,8 @@ public class HtmlDataParserTest {
         ParsingException exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeParserMock(exception);
         this.attributeParser.setData(DEFAULT_ATTR);
+        
+        expData.getErrorReporter().addError(exception);
         
         this.setState(DEFAULT_INPUT);
         
@@ -861,6 +867,8 @@ public class HtmlDataParserTest {
         expData.setName(DEFAULT_ELEMENT);
         expData.setAttributes(DEFAULT_ATTR);
         
+        expData.getErrorReporter().addError(this.createException("missingenclosure"));
+        
         HtmlData data = null;
         
         this.closingParser.setData(expData.isClosing());
@@ -958,6 +966,7 @@ public class HtmlDataParserTest {
             case "endofinput"       :   return this.createEndOfInputException();
             case "unexpectedclose"  :   return this.createUnexpectedCloseTagException();
             case "unclosedtag"      :   return this.createUnclosedTagException();
+            case "missingenclosure"  :   return this.createMissingEnclosureTagException();
         }
         return null;
     }
@@ -972,5 +981,9 @@ public class HtmlDataParserTest {
     
     private ParsingException createUnclosedTagException() {
         return new UnclosedTagParsingException(new Point(0,0), new HtmlData());
+    }
+    
+    private ParsingException createMissingEnclosureTagException() {
+        return new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', new HtmlData());
     }
 }
