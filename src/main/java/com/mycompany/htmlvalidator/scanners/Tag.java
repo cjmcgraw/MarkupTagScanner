@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.scanners.tokens;
+package com.mycompany.htmlvalidator.scanners;
 
 import java.io.Serializable;
 

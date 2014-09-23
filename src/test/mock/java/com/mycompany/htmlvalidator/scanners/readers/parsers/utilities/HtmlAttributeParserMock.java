@@ -3,8 +3,8 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mycompany.htmlvalidator.scanners.Attribute;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.ParsingException;
-import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
 public class HtmlAttributeParserMock extends HtmlTypeParserMock {
     private List<Attribute> data;

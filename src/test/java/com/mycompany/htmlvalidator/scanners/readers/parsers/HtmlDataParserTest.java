@@ -13,12 +13,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.mycompany.htmlvalidator.scanners.Attribute;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlAttributeParserMock;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlClosingParserMock;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.HtmlElementParserMock;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
-import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
 public class HtmlDataParserTest {
     public static final List<Character> DEFAULT_INPUT = Arrays.asList('<', '>', '<', 'o', 't', 'h', 'e', 'r', 'd', 'a', 't', 'a', '>');

@@ -5,8 +5,8 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.enums.*;
-import com.mycompany.htmlvalidator.scanners.tokens.*;
 
 public class HtmlData implements Tag{
     private static final long serialVersionUID = -1778059172938272360L;

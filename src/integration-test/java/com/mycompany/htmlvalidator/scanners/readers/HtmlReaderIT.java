@@ -9,9 +9,9 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.exceptions.MarkupError;
+import com.mycompany.htmlvalidator.scanners.Tag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
-import com.mycompany.htmlvalidator.scanners.tokens.Tag;
 
 public class HtmlReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");

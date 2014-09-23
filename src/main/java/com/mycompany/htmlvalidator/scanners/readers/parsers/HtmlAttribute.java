@@ -1,8 +1,8 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.scanners.Attribute;
 import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
-import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
 public class HtmlAttribute extends MarkupErrorReporter implements Attribute{
     private static final long serialVersionUID = 8687072175358271927L;
