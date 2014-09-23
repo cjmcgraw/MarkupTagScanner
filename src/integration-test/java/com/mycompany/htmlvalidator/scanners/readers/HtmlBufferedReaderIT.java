@@ -31,7 +31,7 @@ public class HtmlBufferedReaderIT {
     private static final HtmlAttribute[] DOUBLE_QUOTE_ATTRS = {new HtmlAttribute("attr1", "\"val1\""),
                                                                new HtmlAttribute("attr2", "\"val2\""),
                                                                new HtmlAttribute("attr3", "\"val3\"")};
-    private HtmlReader reader;
+    private MarkupReader reader;
     
     public void setState(String s) throws IOException {
         this.reader = new HtmlBufferedReader(s);
@@ -1583,7 +1583,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_EntireFileWithTags_ResultsMatchExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getInvalidHtmlDataIterator();
-        HtmlReader data = new HtmlBufferedReader(HtmlDataGenerator.getInvalidHtmlStream());
+        MarkupReader data = new HtmlBufferedReader(HtmlDataGenerator.getInvalidHtmlStream());
         
         int i = 0;
         while(data.hasNext()) {
@@ -1597,7 +1597,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidAndInvalidTags_EntireFileWithMixedTags_ResultsMatchExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getMixedHtmlDataIterator();
-        HtmlReader data = new HtmlBufferedReader(HtmlDataGenerator.getMixedHtmlStream());
+        MarkupReader data = new HtmlBufferedReader(HtmlDataGenerator.getMixedHtmlStream());
         
         int i = 0;
         while(data.hasNext()) {

@@ -8,7 +8,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
-public class HtmlBufferedReader implements HtmlReader{
+public class HtmlBufferedReader implements MarkupReader{
     private PushbackAndPositionReader reader;
     private boolean emptyReader;
     private DataParser parser;

@@ -5,7 +5,7 @@ import java.util.*;
 
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 
-public class HtmlReaderMock implements HtmlReader {
+public class HtmlReaderMock implements MarkupReader {
     private Queue<HtmlData> data;
     private boolean exceptionState;
     private boolean closed;

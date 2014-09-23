@@ -5,5 +5,5 @@ import java.util.Iterator;
 
 import com.mycompany.htmlvalidator.scanners.tokens.Tag;
 
-public interface HtmlReader extends Iterator<Tag>, Closeable{
+public interface MarkupReader extends Iterator<Tag>, Closeable{
 }
