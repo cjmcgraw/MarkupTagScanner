@@ -895,7 +895,6 @@ public class HtmlBufferedReaderIT {
         
     }
     
-    @Ignore("Ignoring for Branch Iss #5, when ready data needs to be re-serialized to allow this test to pass")
     @Test
     public void testNext_ValidTag_EntireFileWithMultipleTags_ResultMatchesExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getValidHtmlDataIterator();
@@ -1581,7 +1580,6 @@ public class HtmlBufferedReaderIT {
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInDoubleQuotes attr1=\"val1\" attr2=\"val2\" attr3=\"val3\"<", exp);
     }
     
-    @Ignore("Ignoring for Branch Iss #5, when ready data needs to be re-serialized to allow this test to pass")
     @Test
     public void testNext_InvalidTag_EntireFileWithTags_ResultsMatchExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getInvalidHtmlDataIterator();
@@ -1596,7 +1594,6 @@ public class HtmlBufferedReaderIT {
         assertTrue(i > 0);
     }
     
-    @Ignore("Ignoring for Branch Iss #5, when ready data needs to be re-serialized to allow this test to pass")
     @Test
     public void testNext_ValidAndInvalidTags_EntireFileWithMixedTags_ResultsMatchExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getMixedHtmlDataIterator();
@@ -1613,15 +1610,10 @@ public class HtmlBufferedReaderIT {
         assertTrue(i > 0);
     }
     
-    /*    
+    /*
     @Test
     public void SANITY_CHECK() throws IOException {
         // Sanity Check can be performed here
-        String sanityCheckStr = "";
-        HtmlData expected = new HtmlData();
-        Tag result;
-        
-        result = reader.next();
 
     }
     */
