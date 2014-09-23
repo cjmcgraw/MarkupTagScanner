@@ -45,7 +45,9 @@ public class HtmlDataParser extends DataParser{
             this.readCloseTag();
             return this.getResult();
         } catch (NonFatalParsingException e) {
-            return e.getHtmlData();
+            HtmlData data = e.getHtmlData();
+            data.getErrorReporter().addError(e);
+            return data;
         }
     }
     
@@ -64,8 +66,9 @@ public class HtmlDataParser extends DataParser{
     private void readOpenTag() throws IOException {
         char c = this.read();
         
-        if (!isOpeningTag(c))
-            throw this.invalidOpeningTagRead();
+        if (!isOpeningTag(c)) {
+           throw this.invalidOpeningTagRead();
+        }
         this.getResult().confirmOpeningTag();
     }
     

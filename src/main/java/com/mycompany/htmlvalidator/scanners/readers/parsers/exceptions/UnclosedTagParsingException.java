@@ -11,5 +11,10 @@ public class UnclosedTagParsingException extends NonFatalParsingException {
     
     public UnclosedTagParsingException(Point position, HtmlData result) {
         super(position, result, MarkupTag.OPENING_TAG.toChar(), defaultMsg);
+        //logError(result.getErrorReporter());
+    }
+    
+    public boolean equals(Object other) {
+        return getClass() == other.getClass();
     }
 }

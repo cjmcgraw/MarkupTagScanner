@@ -12,4 +12,8 @@ public class MissingEnclosureParsingException extends NonFatalParsingException {
     public MissingEnclosureParsingException(Point position, char expChar, char errorChar, HtmlData result) {
         super(position, result, errorChar, String.format(defaultMsg, expChar));
     }
+    
+    public boolean equals(Object other) {
+        return getClass() == other.getClass();
+    }
 }

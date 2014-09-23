@@ -2,18 +2,21 @@ package com.mycompany.htmlvalidator.scanners.readers;
 
 import static org.junit.Assert.*;
 
+import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
 import org.junit.*;
 
+import com.mycompany.htmlvalidator.exceptions.MarkupError;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.tokens.Tag;
 
 public class HtmlBufferedReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");
-    
+    private static final MarkupError UNCLOSED_TAG_ERROR = new UnclosedTagParsingException(new Point(0,0), new HtmlData());
+    private static final MarkupError MISSING_ENCLOSURE_ERROR = new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', new HtmlData());
     private static final HtmlAttribute CLOSING_ATTR = new HtmlAttribute("/");
     
     private static final HtmlAttribute[] DEFAULT_FLAGS = {new HtmlAttribute("flag1"), 
@@ -1417,6 +1420,7 @@ public class HtmlBufferedReaderIT {
     private void testReadTagAndDataMatches_MissingOpening(String s) throws IOException {
         // Set up
         HtmlData exp = generateEmptyData(false, true);
+        exp.getErrorReporter().addError(MISSING_ENCLOSURE_ERROR);
         
         // Test
         testReadTagAndDataMatches(s, exp);
@@ -1426,6 +1430,7 @@ public class HtmlBufferedReaderIT {
     public void testNext_InvalidTag_tagWithOpeningInsteadOfClosing_ResultIsExpectedData() throws IOException {
         // Set up
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosing", false);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         //Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosing<", exp);
@@ -1436,6 +1441,8 @@ public class HtmlBufferedReaderIT {
         // Set up
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrFlag", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
+        
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrFlag flag1<", exp);
     }
@@ -1446,6 +1453,7 @@ public class HtmlBufferedReaderIT {
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrFlags", false);
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         exp.updateAttributes(DEFAULT_FLAGS[1]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrFlags flag1 flag2<", exp);
@@ -1458,6 +1466,7 @@ public class HtmlBufferedReaderIT {
         exp.updateAttributes(DEFAULT_FLAGS[0]);
         exp.updateAttributes(DEFAULT_FLAGS[1]);
         exp.updateAttributes(DEFAULT_FLAGS[2]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrFlags flag1 flag2 flag3<", exp);
@@ -1468,6 +1477,7 @@ public class HtmlBufferedReaderIT {
         // Set up
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithVal", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrWithVal attr1=val1<", exp);
@@ -1479,6 +1489,7 @@ public class HtmlBufferedReaderIT {
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithVals", false);
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(DEFAULT_ATTRS[1]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrsWithVals attr1=val1 attr2=val2<", exp);
@@ -1491,6 +1502,7 @@ public class HtmlBufferedReaderIT {
         exp.updateAttributes(DEFAULT_ATTRS[0]);
         exp.updateAttributes(DEFAULT_ATTRS[1]);
         exp.updateAttributes(DEFAULT_ATTRS[2]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrsWithVals attr1=val1 attr2=val2 attr3=val3<", exp);
@@ -1501,6 +1513,7 @@ public class HtmlBufferedReaderIT {
         // Set up
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithValInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrWithValInSingleQuotes attr1='val1'<", exp);
@@ -1512,6 +1525,7 @@ public class HtmlBufferedReaderIT {
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInSingleQuotes", false);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[1]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInSingleQuotes attr1='val1' attr2='val2'<", exp);
@@ -1524,6 +1538,7 @@ public class HtmlBufferedReaderIT {
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[1]);
         exp.updateAttributes(SINGLE_QUOTE_ATTRS[2]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInSingleQuotes attr1='val1' attr2='val2' attr3='val3'<", exp);
@@ -1534,6 +1549,7 @@ public class HtmlBufferedReaderIT {
         // Set up
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithAttrWithValInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithAttrWithValInDoubleQuotes attr1=\"val1\"<", exp);
@@ -1545,6 +1561,7 @@ public class HtmlBufferedReaderIT {
         HtmlData exp = generateData(true, "tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInDoubleQuotes", false);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[1]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithTwoAttrsWithValsInDoubleQuotes attr1=\"val1\" attr2=\"val2\"<", exp);
@@ -1557,6 +1574,7 @@ public class HtmlBufferedReaderIT {
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[0]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[1]);
         exp.updateAttributes(DOUBLE_QUOTE_ATTRS[2]);
+        exp.getErrorReporter().addError(UNCLOSED_TAG_ERROR);
         
         // Test
         testReadTagAndDataMatches("<tagWithOpeningInsteadOfClosingWithMultiAttrsWithValsInDoubleQuotes attr1=\"val1\" attr2=\"val2\" attr3=\"val3\"<", exp);
@@ -1591,6 +1609,14 @@ public class HtmlBufferedReaderIT {
         data.close();
         assertTrue(i > 0);
     }
+    
+    /*
+    @Test
+    public void SANITY_CHECK() throws IOException {
+        // Sanity Check can be performed here
+
+    }
+    */
     
     private HtmlData generateEmptyData(boolean hasOpening, boolean hasClosing) {
         HtmlData result = new HtmlData();

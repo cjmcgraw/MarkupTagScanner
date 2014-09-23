@@ -3,7 +3,8 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.*;
+
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.*;

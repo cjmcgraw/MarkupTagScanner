@@ -1,7 +1,8 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.util.*;
 
@@ -12,7 +13,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
-import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
+import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlAttributesParserTest {;
     private static final String ATTR_DATA = "someAttrData";
@@ -561,14 +562,89 @@ public class HtmlAttributesParserTest {;
     }
     
     @Test(expected=UnclosedTagParsingException.class)
-    public void testParse_OpeningTag_ThrowsExpectedException() {
+    public void testParse_OpeningTag_BeforeFirstAttr_ThrowsExpectedException() {
+        // Arrange
+        this.setState(OPENING_TAG + " " + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_OpeningTag_BeforeFirstAttr_RemainingInputMatchesExpected_ThrowsException() {
+        // Set up
+        String remaining = OPENING_TAG + " " + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE;
+        String str = OPENING_TAG + " " + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE ;
+        
+        // Test
+        this.testParse_ThrowsException_RemainingInputMatchesExpected(str, remaining);
+    }
+    
+    @Test
+    public void testParse_OpeningTag_BeforeFirstAttr_ExceptionResultMatchesStoredResult_ThrowsException() {
+        // Set up
+        HtmlData exp = new HtmlData();
+        new UnclosedTagParsingException(new Point(0,0), exp);
+        
+        // Test
+        this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(OPENING_TAG + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE, exp);
+    }
+    
+    @Test
+    public void testParse_OpeningTag_BeforeFirstAttr_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList();
+        String str = OPENING_TAG + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE;
+        
+        this.testParse_ThrowsException_ResultContainsExpectedAttrs(str, attrs);
+    }
+    
+    @Test(expected=UnclosedTagParsingException.class)
+    public void testParse_OpeningTag_InbetweenAttrs_ThrowsExpectedException() {
+        // Arrange
+        this.setState(STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE);
+        this.parse();
+    }
+    
+    @Test
+    public void testParse_OpeningTag_InbetweenAttrs_RemainingInputMatchesExpected_ThrowsException() {
+        // Set up
+        String remaining = OPENING_TAG + " " + DOUBLE_QUOTE;
+        String str = STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE;
+        
+        // Test
+        this.testParse_ThrowsException_RemainingInputMatchesExpected(str, remaining);
+    }
+    
+    @Test
+    public void testParse_OpeningTag_InbetweenAttrs_ExceptionResultMatchesStoredResult_ThrowsException() {
+        // Set up
+        HtmlData exp = new HtmlData();
+        exp.updateAttributes(new HtmlAttribute(ATTR_DATA));
+        exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
+        
+        new UnclosedTagParsingException(new Point(0,0), exp);
+        
+        // Test
+        this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE, exp);
+    }
+    
+    @Test
+    public void testParse_OpeningTag_InbetweenAttrs_ResultContainsExpectedAttrs() {
+        // Set up
+        List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR);
+        String str = STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE;
+        
+        this.testParse_ThrowsException_ResultContainsExpectedAttrs(str, attrs);
+    }
+    
+    @Test(expected=UnclosedTagParsingException.class)
+    public void testParse_OpeningTag_AfterLastAttr_ThrowsExpectedException() {
         // Arrange
         this.setState(STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE +" " + OPENING_TAG);
         this.parse();
     }
     
     @Test
-    public void testParse_OpeningTag_RemainingInputMatchesExpected_ThrowsException() {
+    public void testParse_OpeningTag_AfterLastAttr_RemainingInputMatchesExpected_ThrowsException() {
         // Set up
         String remaining = OPENING_TAG + "abcdefghijklmnopqrstuvwxyz";
         String str = STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + remaining;
@@ -578,19 +654,21 @@ public class HtmlAttributesParserTest {;
     }
     
     @Test
-    public void testParse_OpeningTag_ExceptionResultMatchesStoredResult_ThrowsException() {
+    public void testParse_OpeningTag_AfterLastAttr_ExceptionResultMatchesStoredResult_ThrowsException() {
         // Set up
         HtmlData exp = new HtmlData();
         exp.updateAttributes(new HtmlAttribute(ATTR_DATA));
         exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
         exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
         
+        new UnclosedTagParsingException(new Point(0,0), exp);
+        
         // Test
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + OPENING_TAG, exp);
     }
     
     @Test
-    public void testParse_OpeningTag_ResultContainsExpectedAttrs() {
+    public void testParse_OpeningTag_AfterLastAttr_ResultContainsExpectedAttrs() {
         // Set up
         List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR, QUOTE_ATTR);
         String str = STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + OPENING_TAG;
