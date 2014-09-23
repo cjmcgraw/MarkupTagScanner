@@ -2,7 +2,6 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities;
 
 import java.io.IOException;
 
-import com.mycompany.htmlvalidator.scanners.*;
 import com.mycompany.htmlvalidator.scanners.enums.MarkupTagNames;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
