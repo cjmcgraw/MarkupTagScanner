@@ -8,7 +8,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 
-public class HtmlBufferedReader implements MarkupReader{
+public class HtmlReader implements MarkupReader{
     private PushbackAndPositionReader reader;
     private boolean emptyReader;
     private DataParser parser;
@@ -20,31 +20,31 @@ public class HtmlBufferedReader implements MarkupReader{
     
     private char currChar;
     
-    public HtmlBufferedReader() throws IOException {
+    public HtmlReader() throws IOException {
         this.parser = new HtmlDataParser();
         this.currData = null;
         this.hasData = false;
         this.incomingException = null;
     }
     
-    public HtmlBufferedReader(DataParser parser) throws IOException {
+    public HtmlReader(DataParser parser) throws IOException {
         this();
         this.parser = parser;
     }
     
-    public HtmlBufferedReader(InputStream stream) throws IOException {
+    public HtmlReader(InputStream stream) throws IOException {
         this();
         Reader reader = new BufferedReader(new InputStreamReader(stream));
         this.setReader(new PushbackAndNewLineConsumerReader(reader));
     }
     
-    public HtmlBufferedReader(File file) throws FileNotFoundException, IOException {
+    public HtmlReader(File file) throws FileNotFoundException, IOException {
         this();
         Reader reader = new BufferedReader(new FileReader(file));
         this.setReader(new PushbackAndNewLineConsumerReader(reader));
     }
     
-    public HtmlBufferedReader(String data) throws IOException {
+    public HtmlReader(String data) throws IOException {
         this();
         Reader reader = new BufferedReader(new StringReader(data));
         this.setReader(new PushbackAndNewLineConsumerReader(reader));

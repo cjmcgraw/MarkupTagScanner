@@ -13,7 +13,7 @@ import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.tokens.Tag;
 
-public class HtmlBufferedReaderIT {
+public class HtmlReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");
     private static final MarkupError UNCLOSED_TAG_ERROR = new UnclosedTagParsingException(new Point(0,0), new HtmlData());
     private static final MarkupError MISSING_ENCLOSURE_ERROR = new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', new HtmlData());
@@ -34,7 +34,7 @@ public class HtmlBufferedReaderIT {
     private MarkupReader reader;
     
     public void setState(String s) throws IOException {
-        this.reader = new HtmlBufferedReader(s);
+        this.reader = new HtmlReader(s);
     }
     
     @Test
@@ -898,7 +898,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidTag_EntireFileWithMultipleTags_ResultMatchesExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getValidHtmlDataIterator();
-        HtmlBufferedReader data = new HtmlBufferedReader(HtmlDataGenerator.getValidHtmlStream());
+        HtmlReader data = new HtmlReader(HtmlDataGenerator.getValidHtmlStream());
         
         int i = 0;
         while(data.hasNext()) {
@@ -1583,7 +1583,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_InvalidTag_EntireFileWithTags_ResultsMatchExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getInvalidHtmlDataIterator();
-        MarkupReader data = new HtmlBufferedReader(HtmlDataGenerator.getInvalidHtmlStream());
+        MarkupReader data = new HtmlReader(HtmlDataGenerator.getInvalidHtmlStream());
         
         int i = 0;
         while(data.hasNext()) {
@@ -1597,7 +1597,7 @@ public class HtmlBufferedReaderIT {
     @Test
     public void testNext_ValidAndInvalidTags_EntireFileWithMixedTags_ResultsMatchExpected() throws IOException {
         Iterator<HtmlData> exp = HtmlDataGenerator.getMixedHtmlDataIterator();
-        MarkupReader data = new HtmlBufferedReader(HtmlDataGenerator.getMixedHtmlStream());
+        MarkupReader data = new HtmlReader(HtmlDataGenerator.getMixedHtmlStream());
         
         int i = 0;
         while(data.hasNext()) {
