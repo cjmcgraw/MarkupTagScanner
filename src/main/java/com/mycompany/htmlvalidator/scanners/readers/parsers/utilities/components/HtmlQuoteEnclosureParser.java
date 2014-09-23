@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import com.mycompany.htmlvalidator.scanners.*;
+import com.mycompany.htmlvalidator.scanners.enums.EnclosureTags;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReader;
 

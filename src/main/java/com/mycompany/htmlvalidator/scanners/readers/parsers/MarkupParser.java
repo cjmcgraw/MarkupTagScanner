@@ -1,6 +1,6 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 
 public abstract class MarkupParser<T> extends InputParser<T> {
     

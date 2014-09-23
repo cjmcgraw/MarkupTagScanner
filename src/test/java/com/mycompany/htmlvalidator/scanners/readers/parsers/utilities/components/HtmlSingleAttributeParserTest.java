@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.*;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;

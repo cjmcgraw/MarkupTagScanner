@@ -2,7 +2,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions;
 
 import java.awt.Point;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 
 public class UnexpectedCloseTagParsingException extends NonFatalParsingException {

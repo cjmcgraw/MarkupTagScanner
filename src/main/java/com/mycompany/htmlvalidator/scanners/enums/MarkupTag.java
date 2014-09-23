@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.scanners;
+package com.mycompany.htmlvalidator.scanners.enums;
 
 public enum MarkupTag {
     OPENING_TAG                     ('<'),

@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.component
 import java.io.IOException;
 import java.util.*;
 
-import com.mycompany.htmlvalidator.scanners.EnclosureTags;
+import com.mycompany.htmlvalidator.scanners.enums.EnclosureTags;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.ComponentException;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 

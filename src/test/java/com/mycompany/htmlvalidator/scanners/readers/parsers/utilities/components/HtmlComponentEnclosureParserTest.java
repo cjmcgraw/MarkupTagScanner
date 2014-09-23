@@ -7,7 +7,7 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.mycompany.htmlvalidator.scanners.EnclosureTags;
+import com.mycompany.htmlvalidator.scanners.enums.EnclosureTags;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 import org.junit.*;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.*;
 

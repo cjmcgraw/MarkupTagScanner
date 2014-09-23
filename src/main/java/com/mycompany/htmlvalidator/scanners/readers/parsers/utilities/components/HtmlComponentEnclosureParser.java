@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.Collection;
 
 import com.mycompany.htmlvalidator.scanners.*;
+import com.mycompany.htmlvalidator.scanners.enums.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.MarkupParser;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;

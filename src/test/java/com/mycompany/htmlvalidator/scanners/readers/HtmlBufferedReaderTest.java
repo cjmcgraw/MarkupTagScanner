@@ -9,6 +9,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.*;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.HtmlBufferedReader;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;

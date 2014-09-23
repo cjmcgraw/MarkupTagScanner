@@ -1,7 +1,7 @@
 package com.mycompany.htmlvalidator.scanners.readers.parsers;
 
 import com.mycompany.htmlvalidator.exceptions.*;
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
 public class HtmlAttribute extends MarkupErrorReporter implements Attribute{

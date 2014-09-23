@@ -7,6 +7,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.scanners.*;
+import com.mycompany.htmlvalidator.scanners.enums.*;
 import com.mycompany.htmlvalidator.scanners.tokens.Attribute;
 
 public class HtmlDataTest {

@@ -12,7 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.scanners.readers.utilities.PushbackAndPositionReaderMock;

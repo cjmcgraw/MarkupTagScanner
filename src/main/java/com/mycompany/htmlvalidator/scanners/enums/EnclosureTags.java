@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.scanners;
+package com.mycompany.htmlvalidator.scanners.enums;
 
 public enum EnclosureTags {
     HTML_ENCLOSURE          (MarkupTag.OPENING_TAG, MarkupTag.CLOSING_TAG),

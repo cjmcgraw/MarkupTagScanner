@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.component
 import java.io.*;
 
 import com.mycompany.htmlvalidator.exceptions.MarkupError;
-import com.mycompany.htmlvalidator.scanners.MarkupTag;
+import com.mycompany.htmlvalidator.scanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.InvalidStateException;
 import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.EndOfInputAttributeException;
