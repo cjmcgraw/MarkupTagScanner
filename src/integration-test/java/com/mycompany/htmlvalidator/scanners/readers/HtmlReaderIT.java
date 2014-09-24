@@ -6,12 +6,14 @@ import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import org.junit.*;
 
+import com.mycompany.htmlvalidator.MarkupTagScanners.Tag;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.exceptions.MarkupError;
-import com.mycompany.htmlvalidator.scanners.Tag;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
-import com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.*;
 
 public class HtmlReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");
@@ -337,7 +339,8 @@ public class HtmlReaderIT {
         testReadTagAndDataMatches("</tagWithClosingTagWithMultiAttrFlags flag1 flag2 flag3>", 
                 exp);
     }
-    
+
+    @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
         HtmlData exp = generateData("tagWithClosingTagWithAttrAndVal", DEFAULT_ATTRS[0]);
@@ -440,7 +443,8 @@ public class HtmlReaderIT {
         testReadTagAndDataMatches("</tagWithClosingTagWithMultiAttrsAndValuesInDoubleQuotes attr1=\"val1\" attr2=\"val2\" attr3=\"val3\">", 
                 exp);
     }
-    
+
+    @Test
     public void testNext_ValidTag_TagOnlyHasName_HasSelfClosingTag__ResultMatchesExpected() throws IOException {
         // Set up
         HtmlData exp = generateData("tagWithSelfClosingAttribute", CLOSING_ATTR);
@@ -482,7 +486,8 @@ public class HtmlReaderIT {
         testReadTagAndDataMatches("<tagWithSelfClosingAttributeWithMultiAttrFlags flag1 flag2 flag3 />", 
                 exp);
     }
-    
+
+    @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasSelfClosingTag_ResultMatchesExpected() throws IOException {
         // Set up
         HtmlData exp = generateData("tagWithSelfClosingAttributeWithAttrAndVal",
@@ -625,7 +630,8 @@ public class HtmlReaderIT {
         testReadTagAndDataMatches("<tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrFlags flag1 flag2 flag3/>", 
                 exp);
     }
-    
+
+    @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasSelfClosingTagNoSpace_ResultMatchesExpected() throws IOException {
         // Set up
         HtmlData exp = generateData("tagWithSelfClosingAttributeNoSpaceAfterWithAttrAndVal",
@@ -726,7 +732,8 @@ public class HtmlReaderIT {
         testReadTagAndDataMatches("<tagWithSelfClosingAttributeNoSpaceAfterWithMultiAttrsAndValuesInDoubleQuotes attr1=\"val1\" attr2=\"val2\" attr3=\"val3\"/>", 
                 exp);
     }
-    
+
+    @Test
     public void testNext_ValidTag_TagOnlyHasName_HasAdditionalWhitespace__ResultMatchesExpected() throws IOException {
         // Set up
         HtmlData exp = generateData("tagWithAdditionalWhitespace");
@@ -765,7 +772,8 @@ public class HtmlReaderIT {
         testReadTagAndDataMatches("<tagWithAdditionalWhitespaceWithMultiAttrFlags flag1 flag2 flag3 >".replace(" ", W),
                 exp);
     }
-    
+
+    @Test
     public void testNext_ValidTag_TagHasNameAndAttrAndValue_HasAdditionalWhitespace_ResultMatchesExpected() throws IOException {
         // Set up
         HtmlData exp = generateData("tagWithAdditionalWhitespaceWithAttrAndVal", DEFAULT_ATTRS[0]);
@@ -1609,15 +1617,15 @@ public class HtmlReaderIT {
         data.close();
         assertTrue(i > 0);
     }
-    
+
     /*
     @Test
     public void SANITY_CHECK() throws IOException {
         // Sanity Check can be performed here
-
+        HtmlDataGenerator.updateSerializedFiles();
     }
     */
-    
+
     private HtmlData generateEmptyData(boolean hasOpening, boolean hasClosing) {
         HtmlData result = new HtmlData();
         if(hasOpening) result.confirmOpeningTag();

@@ -1,9 +1,16 @@
 *.class
 
-# Include ignore for eclipse settings
+# Ignore eclipse settings
 *.project
 *.classpath
 *.settings
+
+# Ignore idea/intellij settings
+*.idea
+*.iml
+
+# Ignore clover settings
+*.clover
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

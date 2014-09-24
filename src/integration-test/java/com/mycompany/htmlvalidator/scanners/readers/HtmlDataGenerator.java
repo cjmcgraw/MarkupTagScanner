@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.scanners.readers;
 import java.io.*;
 import java.util.*;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 
 public class HtmlDataGenerator {
     private static final String DEFAULT_VALID_STR_FILE = "valid-html-strs.txt";
@@ -43,14 +43,57 @@ public class HtmlDataGenerator {
     private static List<HtmlData> deserializeFile(String fileName) {
         try {
             InputStream stream = ClassLoader.getSystemResourceAsStream(fileName);
-            ObjectInputStream ois = new ObjectInputStream(stream);
+            ObjectInputStream ois = createObjectInputStreamForDeserializing(stream);
             return (List<HtmlData>) ois.readObject();
             
-        } catch (IOException E) {
+        } catch (IOException e) {
+            e.printStackTrace();
             throw new RuntimeException("Unable to load stored HtmlData. IO Error!");
             
         } catch (ClassNotFoundException e) {
+            e.printStackTrace();
             throw new RuntimeException("Class wasn't found to deserialize HtmlData!");
+        }
+    }
+    
+    private static ObjectInputStream createObjectInputStreamForDeserializing(InputStream in) throws IOException {
+        return new ObjectInputStream(in) {
+            @Override
+            protected ObjectStreamClass readClassDescriptor() throws ClassNotFoundException, IOException {
+                ObjectStreamClass desc = super.readClassDescriptor();
+                /*
+                if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData"))
+                    return ObjectStreamClass.lookup(HtmlData.class);
+                else if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute"))
+                    return ObjectStreamClass.lookup(HtmlAttribute.class);
+                else if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.MissingEnclosureParsingException"))
+                    return ObjectStreamClass.lookup(com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.MissingEnclosureParsingException.class);
+                else if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.UnclosedTagParsingException"))
+                    return ObjectStreamClass.lookup(com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.UnclosedTagParsingException.class);
+                */
+                return desc;
+            }
+        };
+    }
+
+    public static void updateSerializedFiles() {
+        updateSerializedFile(DEFAULT_VALID_DATA_FILE);
+        updateSerializedFile(DEFAULT_INVALID_DATA_FILE);
+        updateSerializedFile(DEFAULT_MIXED_DATA_FILE);
+    }
+
+    private static void updateSerializedFile(String dataFile) {
+        try {
+            List<HtmlData> deserialized = deserializeFile(dataFile);
+
+            OutputStream stream = new FileOutputStream(dataFile);
+            ObjectOutputStream oos = new ObjectOutputStream(stream);
+            oos.writeObject(deserialized);
+            oos.flush();
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Unable to store HtmlData. IO ERROR!");
         }
     }
 }

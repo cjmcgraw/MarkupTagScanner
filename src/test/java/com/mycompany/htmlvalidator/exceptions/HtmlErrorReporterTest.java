@@ -7,7 +7,7 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.mycompany.htmlvalidator.scanners.readers.parsers.utilities.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
 
 public class HtmlErrorReporterTest {
     private static final MarkupError FIRST_ERROR = new MissingCharacterComponentException(' ', new Point(0, 0), "some data");
