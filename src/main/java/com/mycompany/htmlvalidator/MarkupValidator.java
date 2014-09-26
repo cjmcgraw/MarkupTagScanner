@@ -1,13 +1,13 @@
 package com.mycompany.htmlvalidator;
 
+import java.io.*;
+
 import com.mycompany.htmlvalidator.MarkupTagScanners.Tag;
 
 
 public interface MarkupValidator {
-    
-    public void addTag(Tag tag);
-    
-    public void removeAll(String element);
-    
-    public boolean validate();
+
+    public void addOutput(PrintStream output);
+
+    public void validate(Iterable<Tag> data);
 }
