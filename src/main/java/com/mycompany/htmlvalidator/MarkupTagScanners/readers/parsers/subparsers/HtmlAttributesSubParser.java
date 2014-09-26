@@ -10,7 +10,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlAttributesSubParser extends HtmlUtilityParser {
+public class HtmlAttributesSubParser extends HtmlSubParser {
     private static final String CLASS_NAME = "HtmlAttributeParser";
     private static final String FIRST_FIELD_NAME = "enclosureParser";
     private static final String SECOND_FIELD_NAME = "parser";

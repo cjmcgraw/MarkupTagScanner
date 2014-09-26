@@ -6,7 +6,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTagNames;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlElementSubParser extends HtmlUtilityParser {
+public class HtmlElementSubParser extends HtmlSubParser {
     private static final String COMMENT_NAME = MarkupTagNames.COMMENT_TAG.getBeginName();
     
     @Override

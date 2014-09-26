@@ -14,9 +14,9 @@ public class HtmlDataParser extends DataParser{
     private static final String SECOND_FIELD_NAME = "elementParser";
     private static final String THIRD_FIELD_NAME = "attributeParser";
     
-    private HtmlUtilityParser closingParser;
-    private HtmlUtilityParser elementParser;
-    private HtmlUtilityParser attributeParser;
+    private HtmlSubParser closingParser;
+    private HtmlSubParser elementParser;
+    private HtmlSubParser attributeParser;
     
     public HtmlDataParser() {
         this(new HtmlClosingSubParser(),
@@ -24,9 +24,9 @@ public class HtmlDataParser extends DataParser{
              new HtmlAttributesSubParser());
         }
     
-    public HtmlDataParser(HtmlUtilityParser closingParser, 
-                          HtmlUtilityParser elementParser, 
-                          HtmlUtilityParser attributeParser) {
+    public HtmlDataParser(HtmlSubParser closingParser,
+                          HtmlSubParser elementParser,
+                          HtmlSubParser attributeParser) {
         this.closingParser = closingParser;
         this.elementParser = elementParser;
         this.attributeParser = attributeParser;

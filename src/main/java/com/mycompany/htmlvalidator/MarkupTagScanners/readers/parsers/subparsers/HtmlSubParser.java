@@ -6,7 +6,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
-public abstract class HtmlUtilityParser extends DataParser{
+public abstract class HtmlSubParser extends DataParser{
 
     @Override
     public HtmlData parse(PushbackAndPositionReader input) throws IOException {

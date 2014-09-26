@@ -6,7 +6,7 @@ import java.util.List;
 import com.mycompany.htmlvalidator.MarkupTagScanners.Attribute;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.ParsingException;
 
-public class HtmlAttributeSubParserMock extends HtmlTypeParserMock {
+public class HtmlAttributeSubParserMock extends HtmlTypeSubParserMock {
     private List<Attribute> data;
     
     public HtmlAttributeSubParserMock(ParsingException exception) {

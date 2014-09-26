@@ -6,11 +6,11 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.Html
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.ParsingException;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
-public abstract class HtmlTypeParserMock extends HtmlUtilityParser {
+public abstract class HtmlTypeSubParserMock extends HtmlSubParser {
     protected ParsingException exception;
     protected HtmlData result;
     
-    protected HtmlTypeParserMock(ParsingException exception) {
+    protected HtmlTypeSubParserMock(ParsingException exception) {
         this.exception = exception;
     }
     

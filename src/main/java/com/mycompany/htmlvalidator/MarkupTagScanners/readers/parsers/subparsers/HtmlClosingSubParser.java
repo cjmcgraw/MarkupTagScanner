@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlClosingSubParser extends HtmlUtilityParser {
+public class HtmlClosingSubParser extends HtmlSubParser {
     
     @Override
     public HtmlData parse(PushbackAndPositionReader input, HtmlData result) throws IOException {
