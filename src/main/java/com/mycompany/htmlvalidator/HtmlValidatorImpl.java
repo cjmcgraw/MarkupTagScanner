@@ -5,21 +5,12 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.Tag;
 public class HtmlValidatorImpl implements HtmlValidator {
 
     @Override
-    public void addTag(Tag tag) {
-        // TODO Auto-generated method stub
-        
-    }
+    public void addTag(Tag tag) {}
 
     @Override
-    public void removeAll(String element) {
-        // TODO Auto-generated method stub
-        
-    }
+    public void removeAll(String element) {}
 
     @Override
-    public boolean validate() {
-        // TODO Auto-generated method stub
-        return false;
-    }
+    public boolean validate() {return false;}
     
 }

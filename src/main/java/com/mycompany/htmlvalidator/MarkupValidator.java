@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator;
 import com.mycompany.htmlvalidator.MarkupTagScanners.Tag;
 
 
-public interface HtmlValidator {
+public interface MarkupValidator {
     
     public void addTag(Tag tag);
     
