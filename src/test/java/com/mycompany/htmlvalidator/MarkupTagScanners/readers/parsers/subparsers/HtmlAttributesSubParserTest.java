@@ -16,7 +16,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
-public class HtmlAttributesParserTest {;
+public class HtmlAttributesSubParserTest {;
     private static final String ATTR_DATA = "someAttrData";
     private static final String CMNT_DATA = "someCommentData";
     private static final String QUOTE_DATA = "someQuoteData";
@@ -58,7 +58,7 @@ public class HtmlAttributesParserTest {;
     
     
     private PushbackAndPositionReaderMock input;
-    private HtmlAttributesParser parser;
+    private HtmlAttributesSubParser parser;
     private HtmlData result;
     
     
@@ -79,7 +79,7 @@ public class HtmlAttributesParserTest {;
         this.enclosureParser.setError(null);
         this.whitespaceConsumer.setError(null);
         
-        this.parser = new HtmlAttributesParser(this.enclosureParser,
+        this.parser = new HtmlAttributesSubParser(this.enclosureParser,
                                                this.attributeParser,
                                                this.commentParser,
                                                this.whitespaceConsumer);
@@ -509,7 +509,7 @@ public class HtmlAttributesParserTest {;
     @Test(expected=InvalidStateException.class)
     public void testParse_WithNullEnclosureParser_ThrowsExpectedException() {
         // Arrange
-        this.parser = new HtmlAttributesParser(null,
+        this.parser = new HtmlAttributesSubParser(null,
                                                this.attributeParser,
                                                this.commentParser,
                                                this.whitespaceConsumer);
@@ -520,7 +520,7 @@ public class HtmlAttributesParserTest {;
     @Test(expected=InvalidStateException.class)
     public void testParse_WithNullAttributeParser_ThrowsExpectedException() {
         // Arrange
-        this.parser = new HtmlAttributesParser(this.enclosureParser,
+        this.parser = new HtmlAttributesSubParser(this.enclosureParser,
                                                null,
                                                this.commentParser,
                                                this.whitespaceConsumer);
@@ -531,7 +531,7 @@ public class HtmlAttributesParserTest {;
     @Test(expected=InvalidStateException.class)
     public void testParse_WithNullCommentParser_ThrowsExpectedException() {
         // Arrange
-        this.parser = new HtmlAttributesParser(this.enclosureParser,
+        this.parser = new HtmlAttributesSubParser(this.enclosureParser,
                                                this.attributeParser,
                                                null,
                                                this.whitespaceConsumer);
@@ -542,7 +542,7 @@ public class HtmlAttributesParserTest {;
     @Test(expected=InvalidStateException.class)
     public void testParse_WithNullWhitespaceConsumer_ThrowsExpectedException() {
         // Arrange
-        this.parser = new HtmlAttributesParser(this.enclosureParser,
+        this.parser = new HtmlAttributesSubParser(this.enclosureParser,
                                                this.attributeParser,
                                                this.commentParser,
                                                null);
@@ -679,7 +679,7 @@ public class HtmlAttributesParserTest {;
     
     @Test(expected=EndOfInputParsingException.class)
     public void testParse_InvalidInput_EmptyInput_ThrowsExpection() {
-        /* Test that given an empty input the HtmlAttributesParser throws
+        /* Test that given an empty input the HtmlAttributesSubParser throws
          * an EndOfInputParsingException.
          * 
          * We need to load the state as empty.

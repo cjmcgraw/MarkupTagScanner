@@ -10,7 +10,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
-public class HtmlAttributesParser extends HtmlUtilityParser {
+public class HtmlAttributesSubParser extends HtmlUtilityParser {
     private static final String CLASS_NAME = "HtmlAttributeParser";
     private static final String FIRST_FIELD_NAME = "enclosureParser";
     private static final String SECOND_FIELD_NAME = "parser";
@@ -24,17 +24,17 @@ public class HtmlAttributesParser extends HtmlUtilityParser {
     private HtmlComponentAttributeParser commentParser;
     private Consumer whitespaceConsumer;
     
-    public HtmlAttributesParser() {
+    public HtmlAttributesSubParser() {
         this(new HtmlQuoteEnclosureParser(),
              new HtmlSingleAttributeParser(),
              new HtmlCommentAttributeParser(),
              new WhitespaceConsumer());
     }
     
-    public HtmlAttributesParser(HtmlComponentEnclosureParser enclosureParser,
-                                HtmlComponentAttributeParser attributeParser,
-                                HtmlComponentAttributeParser commentParser,
-                                Consumer whitespaceConsumer) {
+    public HtmlAttributesSubParser(HtmlComponentEnclosureParser enclosureParser,
+                                   HtmlComponentAttributeParser attributeParser,
+                                   HtmlComponentAttributeParser commentParser,
+                                   Consumer whitespaceConsumer) {
         super();
         this.enclosureParser = enclosureParser;
         this.attributeParser = attributeParser;

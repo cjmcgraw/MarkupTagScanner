@@ -41,7 +41,7 @@ public class HtmlDataParserTest {
     
     private HtmlClosingParserMock closingParser;
     private HtmlElementParserMock elementParser;
-    private HtmlAttributeParserMock attributeParser;
+    private HtmlAttributeSubParserMock attributeParser;
     
     private PushbackAndPositionReaderMock input;
     private HtmlDataParser parser;
@@ -50,7 +50,7 @@ public class HtmlDataParserTest {
     public void setUp() {
         this.closingParser = new HtmlClosingParserMock(null);
         this.elementParser = new HtmlElementParserMock(null);
-        this.attributeParser = new HtmlAttributeParserMock(null);
+        this.attributeParser = new HtmlAttributeSubParserMock(null);
         this.setState(DEFAULT_INPUT);
     }
     
@@ -505,7 +505,7 @@ public class HtmlDataParserTest {
     public void testParse_AttributeParser_ThrowsExpectedException_EndOfInputParsingException()  {
         // Arrange
         ParsingException exception =  this.createException("EndOfInput");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
@@ -521,7 +521,7 @@ public class HtmlDataParserTest {
         HtmlData data = null;
         
         ParsingException exception = this.createException("EndOfInput");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.attributeParser.setData(DEFAULT_ATTR);
         this.setState(DEFAULT_INPUT);
         
@@ -544,7 +544,7 @@ public class HtmlDataParserTest {
         String data = "";
         
         ParsingException exception = this.createException("EndOfInput");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
@@ -562,7 +562,7 @@ public class HtmlDataParserTest {
     public void testParse_AttributeParser_UnclosedTagParsingException_ExceptionIsCaught()  {
         //Arrange
         ParsingException exception = this.createException("UnclosedTag");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply + Apply
@@ -578,7 +578,7 @@ public class HtmlDataParserTest {
         HtmlData data = null;
         
         ParsingException exception = this.createException("UnclosedTag");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.attributeParser.setData(DEFAULT_ATTR);
         
         expData.getErrorReporter().addError(exception);
@@ -599,7 +599,7 @@ public class HtmlDataParserTest {
         String data = "";
         
         ParsingException exception = this.createException("UnclosedTag");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
@@ -617,7 +617,7 @@ public class HtmlDataParserTest {
         Iterable<Attribute> data;
         
         ParsingException exception = this.createException("UnexpectedClose");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.attributeParser.setData(expData);
         this.setState(DEFAULT_INPUT);
         
@@ -636,7 +636,7 @@ public class HtmlDataParserTest {
         String data;
         
         ParsingException exception = this.createException("UnexpectedClose");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Arrange
@@ -697,7 +697,7 @@ public class HtmlDataParserTest {
         boolean data = !expData;
         
         ParsingException exception = this.createException("EndOfInput");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         
@@ -719,7 +719,7 @@ public class HtmlDataParserTest {
         boolean data = !expData;
         
         ParsingException exception = this.createException("EndOfInput");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         
@@ -741,7 +741,7 @@ public class HtmlDataParserTest {
         boolean data = !expData;
         
         ParsingException exception = this.createException("UnclosedTag");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         
@@ -760,7 +760,7 @@ public class HtmlDataParserTest {
         boolean data = !expData;
         
         ParsingException exception = this.createException("UnclosedTag");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         
@@ -779,7 +779,7 @@ public class HtmlDataParserTest {
         boolean data;
         
         ParsingException exception = this.createException("UnexpectedClose");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         
@@ -797,7 +797,7 @@ public class HtmlDataParserTest {
         boolean data;
         
         ParsingException exception = this.createException("UnexpectedClose");
-        this.attributeParser = new HtmlAttributeParserMock(exception);
+        this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
         

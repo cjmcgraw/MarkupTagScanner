@@ -21,7 +21,7 @@ public class HtmlDataParser extends DataParser{
     public HtmlDataParser() {
         this(new HtmlClosingParser(), 
              new HtmlElementParser(), 
-             new HtmlAttributesParser());
+             new HtmlAttributesSubParser());
         }
     
     public HtmlDataParser(HtmlUtilityParser closingParser, 
