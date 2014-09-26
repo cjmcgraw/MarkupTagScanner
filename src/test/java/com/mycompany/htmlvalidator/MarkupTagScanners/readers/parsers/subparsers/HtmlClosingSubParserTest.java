@@ -17,7 +17,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.Html
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
-public class HtmlClosingParserTest {
+public class HtmlClosingSubParserTest {
     private static final char CLOSING_ATTR = MarkupTag.CLOSING_ATTRIBUTE.toChar();
     private static final char OPENING_TAG = MarkupTag.OPENING_TAG.toChar();
     private static final char CLOSING_TAG = MarkupTag.CLOSING_TAG.toChar();
@@ -25,7 +25,7 @@ public class HtmlClosingParserTest {
     private static final List<Character> defaultData = Arrays.asList(CLOSING_ATTR, 'A');
     private static final List<Character> additionalData = Arrays.asList('A', 'B');
     
-    private HtmlClosingParser parser = new HtmlClosingParser();
+    private HtmlClosingSubParser parser = new HtmlClosingSubParser();
     private PushbackAndPositionReaderMock input;
     private LinkedList<Character> inputData;
     private HtmlData result;

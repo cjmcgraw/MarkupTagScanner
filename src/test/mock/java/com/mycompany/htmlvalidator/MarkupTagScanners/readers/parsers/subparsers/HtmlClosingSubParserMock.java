@@ -2,10 +2,10 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.ParsingException;
 
-public class HtmlClosingParserMock extends HtmlTypeParserMock {    
+public class HtmlClosingSubParserMock extends HtmlTypeParserMock {
     private boolean data;
     
-    public HtmlClosingParserMock(ParsingException exception) {
+    public HtmlClosingSubParserMock(ParsingException exception) {
         super(exception);
     }
     
