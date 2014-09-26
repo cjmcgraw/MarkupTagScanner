@@ -4,32 +4,22 @@ import java.util.*;
 import java.io.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.Tag;
+import com.mycompany.htmlvalidator.printers.OutputPrinter;
+import com.mycompany.htmlvalidator.printers.Printer;
 
 public class HtmlValidator implements MarkupValidator {
-    private Set<PrintStream> printers;
+    public static final PrintStream DEFAULT_OUTPUT = System.out;
+
     private Stack<Tag> openedTags;
+    private Printer printer;
 
-    public HtmlValidator(Iterable<PrintStream> outputs) {
-        openedTags = new Stack<>();
-        printers = new HashSet<>();
-        setUpOutputs(outputs);
-    }
-
-    private void setUpOutputs(Iterable<PrintStream> outputs) {
-        for (PrintStream printer : outputs)
-            printers.add(printer);
+    public HtmlValidator(Printer printer) {
+        this.openedTags = new Stack<>();
+        this.printer = printer;
     }
 
     public HtmlValidator() {
-        this(null);
-    }
-
-    public void addOutput(PrintStream output) {
-        printers.add(output);
-    }
-
-    public void removeOutput(PrintStream output) {
-        printers.remove(output);
+        this(new OutputPrinter(Arrays.asList(DEFAULT_OUTPUT)));
     }
 
     @Override
