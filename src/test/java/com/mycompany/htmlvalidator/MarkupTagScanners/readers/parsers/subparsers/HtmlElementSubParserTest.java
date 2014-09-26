@@ -12,7 +12,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.enums.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
-public class HtmlElementParserTest {
+public class HtmlElementSubParserTest {
     private static final char CLOSING_TAG = MarkupTag.CLOSING_TAG.toChar();
     private static final char OPENING_TAG = MarkupTag.OPENING_TAG.toChar();
     private static final String COMMENT_OPENING = MarkupTagNames.COMMENT_TAG.getBeginName();
@@ -22,7 +22,7 @@ public class HtmlElementParserTest {
     private static final String WHITESPACE_CENTER_STR = "abcd efg";
     private static final String WHITESPACE_END_STR = "abcdefg ";
     
-    private HtmlElementParser parser = new HtmlElementParser();
+    private HtmlElementSubParser parser = new HtmlElementSubParser();
     private PushbackAndPositionReaderMock input;
     private LinkedList<Character> inputData;
     private HtmlData result;
