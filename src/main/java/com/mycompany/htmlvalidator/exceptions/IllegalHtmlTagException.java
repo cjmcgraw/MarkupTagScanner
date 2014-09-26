@@ -3,10 +3,6 @@ package com.mycompany.htmlvalidator.exceptions;
 import java.lang.Exception;
 
 public class IllegalHtmlTagException extends Exception {
-    
-    /**
-     * 
-     */
     private static final long serialVersionUID = 6277791430245190532L;
 
     public IllegalHtmlTagException() {
