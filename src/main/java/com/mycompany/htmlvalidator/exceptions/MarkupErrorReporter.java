@@ -36,6 +36,11 @@ public class MarkupErrorReporter implements ErrorReporter, Serializable{
     public Iterable<MarkupError> getErrors() {
         return this.markupErrors;
     }
+
+    @Override
+    public boolean hasErrors() {
+        return !this.markupErrors.isEmpty();
+    }
     
     @Override
     public int hashCode() {

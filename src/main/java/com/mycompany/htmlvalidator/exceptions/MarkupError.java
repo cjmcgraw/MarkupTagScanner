@@ -2,7 +2,7 @@ package com.mycompany.htmlvalidator.exceptions;
 
 public abstract class MarkupError extends RuntimeException{
     private static final long serialVersionUID = -5709970001272720858L;
-    private static final String MSG = "ERROR: %s";
+    public static final String MSG = "ERROR: %s";
     
     private String errorMsg; 
     
@@ -17,5 +17,9 @@ public abstract class MarkupError extends RuntimeException{
     
     public String getErrorMessage() {
         return this.errorMsg;
+    }
+
+    public String toString() {
+        return errorMsg;
     }
 }

@@ -56,6 +56,25 @@ public class HtmlErrorReporterTest {
         // Assert
         assertEquals(expData, data);
     }
+
+    @Test
+    public void testHasErrors_EmptyErrorData_ResultIsFalse() {
+        // Set up
+        setState();
+
+        // Test
+        assertFalse(reporter.hasErrors());
+    }
+
+    @Test
+    public void testHasErrors_NonEmptyErrorData_ResultIsTrue() {
+        // Set up
+        setState();
+        this.reporter.addError(FIRST_ERROR);
+
+        // Assert
+        assertTrue(reporter.hasErrors());
+    }
     
     @Test
     public void testAddError_DefaultEmptyList_AddError_ResultInDataMatches() {

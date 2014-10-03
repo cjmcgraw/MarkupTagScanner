@@ -71,6 +71,11 @@ public class MarkupErrorReporterMock implements ErrorReporter {
     }
 
     @Override
+    public boolean hasErrors() {
+        return !this.data.isEmpty();
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
