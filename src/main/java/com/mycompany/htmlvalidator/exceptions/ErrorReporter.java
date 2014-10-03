@@ -13,7 +13,9 @@ public interface ErrorReporter {
     public Iterator<MarkupError> errorIterator();
     
     public Iterable<MarkupError> getErrors();
-    
+
+    public boolean hasErrors();
+
     @Override
     public boolean equals(Object other);
     
