@@ -53,6 +53,11 @@ public class OutputPrinter implements Printer{
     }
 
     @Override
+    public void print(Object obj) {
+        print(obj.toString());
+    }
+
+    @Override
     public void println() {
         println("");
     }
@@ -60,6 +65,11 @@ public class OutputPrinter implements Printer{
     @Override
     public void println(String s) {
         printToAll(s + NEWLINE);
+    }
+
+    @Override
+    public void println(Object obj) {
+        println(obj.toString());
     }
 
     private void printToAll(String s) {

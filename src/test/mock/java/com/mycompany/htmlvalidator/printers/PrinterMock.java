@@ -39,6 +39,11 @@ public class PrinterMock implements Printer{
     }
 
     @Override
+    public void print(Object obj) {
+        print(obj.toString());
+    }
+
+    @Override
     public void println() {
         printerData.add(NEWLINE);
     }
@@ -46,6 +51,11 @@ public class PrinterMock implements Printer{
     @Override
     public void println(String s) {
         printerData.add(s + NEWLINE);
+    }
+
+    @Override
+    public void println(Object obj) {
+        println(obj.toString());
     }
 
     public List<String> getPrintData() {
