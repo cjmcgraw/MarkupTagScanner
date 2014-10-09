@@ -1,15 +1,15 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors;
 
 import java.awt.Point;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 
-public class MissingEnclosureParsingException extends NonFatalParsingException {
+public class MissingEnclosureParsingError extends NonFatalParsingError {
     private static final long serialVersionUID = -8566122934275099978L;
     private static final String defaultMsg = "MISSING EXPECTED ENCLOSURE! Enclosure improperly formed, " +
                                              "expected [ %s ] but that value was missing!";
     
-    public MissingEnclosureParsingException(Point position, char expChar, char errorChar, HtmlData result) {
+    public MissingEnclosureParsingError(Point position, char expChar, char errorChar, HtmlData result) {
         super(position, result, errorChar, String.format(defaultMsg, expChar));
     }
     

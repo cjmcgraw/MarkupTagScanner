@@ -3,14 +3,14 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.ParsingException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.ParsingError;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class HtmlTypeSubParserMock extends HtmlSubParser {
-    protected ParsingException exception;
+    protected ParsingError exception;
     protected HtmlData result;
     
-    protected HtmlTypeSubParserMock(ParsingException exception) {
+    protected HtmlTypeSubParserMock(ParsingError exception) {
         this.exception = exception;
     }
     

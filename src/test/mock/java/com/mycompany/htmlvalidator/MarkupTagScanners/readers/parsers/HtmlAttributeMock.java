@@ -4,8 +4,8 @@ import java.awt.Point;
 import java.util.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
-import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
+import com.mycompany.htmlvalidator.errors.*;
 
 @SuppressWarnings("serial")
 public class HtmlAttributeMock extends HtmlAttribute implements ErrorReporter {
@@ -14,8 +14,8 @@ public class HtmlAttributeMock extends HtmlAttribute implements ErrorReporter {
     private static List<MarkupError> generateMarkupErrors() {
         List<MarkupError> result = new ArrayList<MarkupError>();
         
-        result.add(new MissingCharacterComponentException(' ', new Point(0,0), "some data"));
-        result.add(new UnexpectedCharacterComponentException(' ', new Point(0, 0), "Some Data"));
+        result.add(new MissingCharacterComponentError(' ', new Point(0,0), "some data"));
+        result.add(new UnexpectedCharacterComponentError(' ', new Point(0, 0), "Some Data"));
         
         return result;
     }

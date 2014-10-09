@@ -1,9 +1,6 @@
-package com.mycompany.htmlvalidator.exceptions;
+package com.mycompany.htmlvalidator.errors;
 
 import java.util.*;
-
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
-import com.mycompany.htmlvalidator.exceptions.ErrorReporter;
 
 public class MarkupErrorReporterMock implements ErrorReporter {
     private ArrayList<MarkupError> data;

@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.scanners.readers;
 import java.io.*;
 import java.util.*;
 
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.*;
 
 public class HtmlDataGenerator {
     private static final String DEFAULT_VALID_STR_FILE = "valid-html-strs.txt";
@@ -61,16 +61,18 @@ public class HtmlDataGenerator {
             @Override
             protected ObjectStreamClass readClassDescriptor() throws ClassNotFoundException, IOException {
                 ObjectStreamClass desc = super.readClassDescriptor();
-                /*
+/*
                 if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlData"))
                     return ObjectStreamClass.lookup(HtmlData.class);
                 else if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.HtmlAttribute"))
                     return ObjectStreamClass.lookup(HtmlAttribute.class);
-                else if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.MissingEnclosureParsingException"))
-                    return ObjectStreamClass.lookup(com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.MissingEnclosureParsingException.class);
-                else if (desc.getName().equals("com.mycompany.htmlvalidator.scanners.readers.parsers.exceptions.UnclosedTagParsingException"))
-                    return ObjectStreamClass.lookup(com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.UnclosedTagParsingException.class);
-                */
+                else if (desc.getName().equals("com.mycompany.htmlvalidator.exceptions.MarkupErrorReporter"))
+                    return ObjectStreamClass.lookup(com.mycompany.htmlvalidator.errors.MarkupErrorReporter.class);
+                else if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.MissingEnclosureParsingException"))
+                    return ObjectStreamClass.lookup(MissingEnclosureParsingError.class);
+                else if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.UnclosedTagParsingException"))
+                    return ObjectStreamClass.lookup(UnclosedTagParsingError.class);
+*/
                 return desc;
             }
         };

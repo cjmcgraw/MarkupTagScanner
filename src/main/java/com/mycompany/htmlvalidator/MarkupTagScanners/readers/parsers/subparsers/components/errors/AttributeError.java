@@ -1,13 +1,13 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
+import com.mycompany.htmlvalidator.errors.MarkupError;
 
-public abstract class AttributeException extends MarkupError{
+public abstract class AttributeError extends MarkupError{
     private static final long serialVersionUID = 2298941335061905710L;
     protected static final String DEFAULT_ERROR_MSG = "Exception during attribute parsing -> %s";
     
-    protected AttributeException(String msg) {
+    protected AttributeError(String msg) {
         super(msg);
     }
     

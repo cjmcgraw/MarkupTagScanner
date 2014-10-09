@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers;
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
@@ -45,7 +45,7 @@ public class HtmlDataParser extends DataParser{
             this.parseTagData();
             this.readCloseTag();
             return this.getResult();
-        } catch (NonFatalParsingException e) {
+        } catch (NonFatalParsingError e) {
             HtmlData data = e.getHtmlData();
             data.getErrorReporter().addError(e);
             return data;
@@ -55,7 +55,7 @@ public class HtmlDataParser extends DataParser{
     private void parseTagData() throws IOException {
         try {
             this.parseTagDataInSegments();
-        } catch (UnexpectedCloseTagParsingException e) {}
+        } catch (UnexpectedCloseTagParsingError e) {}
     }
     
     private void parseTagDataInSegments() throws IOException {
@@ -73,7 +73,7 @@ public class HtmlDataParser extends DataParser{
         this.getResult().confirmOpeningTag();
     }
     
-    private ParsingException invalidOpeningTagRead() throws IOException {
+    private ParsingError invalidOpeningTagRead() throws IOException {
         if (!isClosingTag())
             this.unread();
         else
@@ -108,8 +108,8 @@ public class HtmlDataParser extends DataParser{
         this.getResult().confirmClosingTag();
     }
     
-    private ParsingException getMissingEnclosureParsingException(char missing, char found) {
-        return new MissingEnclosureParsingException(this.currentPosition(), missing, found, this.getResult());
+    private ParsingError getMissingEnclosureParsingException(char missing, char found) {
+        return new MissingEnclosureParsingError(this.currentPosition(), missing, found, this.getResult());
     }
     
     private void validateState() {

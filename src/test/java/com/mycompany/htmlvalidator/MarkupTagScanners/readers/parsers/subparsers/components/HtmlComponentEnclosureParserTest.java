@@ -8,8 +8,8 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.EnclosureTags;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosureParser {
@@ -54,7 +54,7 @@ public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosurePars
         assertEquals(expData, data);
     }
     
-    @Test(expected=MissingCharacterComponentException.class)
+    @Test(expected=MissingCharacterComponentError.class)
     public void testSetAndValidateOpening_SingleQuoteEnclosure_SetToInvalidOpening_ThrowsExpectedException() throws IOException {
         // Arrange
         EnclosureTags expData = EnclosureTags.SINGLE_QUOTE_ENCLOSURE;
@@ -63,7 +63,7 @@ public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosurePars
         this.setAndValidateOpening(expData.getOpening().toChar());
     }
     
-    @Test(expected=MissingCharacterComponentException.class)
+    @Test(expected=MissingCharacterComponentError.class)
     public void testSetAndValidateOpening_SomeChar_SetToInvalidOpening_ThrowsExpectedException() throws IOException {
         this.setAndValidateOpening(SOME_CHAR);
     }
@@ -100,7 +100,7 @@ public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosurePars
         assertEquals(expData, data);
     }
     
-    @Test(expected=MissingCharacterComponentException.class)
+    @Test(expected=MissingCharacterComponentError.class)
     public void testValidateClosing_WithValidEnclosure_InvalidClosing_ResultIsException() throws IOException {
         // Arrange
         this.enclosure = EnclosureTags.DOUBLE_QUOTE_ENCLOSURE;
@@ -239,7 +239,7 @@ public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosurePars
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputComponentException.class)
+    @Test(expected=EndOfInputComponentError.class)
     public void testRead_InvalidData() throws IOException {
         // Arrange
         this.setState(new PushbackAndPositionReaderMock(""));
@@ -259,7 +259,7 @@ public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosurePars
         // Apply
         try {
             this.read();
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = e.getData();
         }
         
@@ -280,7 +280,7 @@ public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosurePars
         // Apply
         try {
             this.read();
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = input.getRemainingData();
         }
         

@@ -5,11 +5,11 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.LinkedList;
 
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.EndOfInputAttributeError;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.EndOfInputAttributeException;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlCommentAttributeParserTest {
@@ -153,7 +153,7 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidHtmlComment_SingleLine_MissingFirstCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(DEFAULT_DATA + MISSING_FIRST_CLOSING);
@@ -173,7 +173,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try { 
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -192,7 +192,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -200,7 +200,7 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidHtmlComment_MultiLine_MissingFirstCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(MULTI_LINE_DATA + MISSING_FIRST_CLOSING);
@@ -220,7 +220,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try { 
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -239,7 +239,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -247,7 +247,7 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidHtmlComment_SingleLine_MissingFinalCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(DEFAULT_DATA + MISSING_FINAL_CLOSING);
@@ -267,7 +267,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -286,7 +286,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -294,7 +294,7 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidHtmlComment_MultiLine_MissingFinalCharOfClosingCommentTag() throws IOException {
         // Arrange
         this.setState(MULTI_LINE_DATA + MISSING_FINAL_CLOSING);
@@ -314,7 +314,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -333,7 +333,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -341,7 +341,7 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidHtmlComment_MissingClosingTag() throws IOException {
         // Arrange
         this.setState(DEFAULT_DATA + MarkupTagNames.COMMENT_TAG.getEndName());
@@ -361,7 +361,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try { 
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -380,7 +380,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -388,7 +388,7 @@ public class HtmlCommentAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidHtmlComment_EOFBeforeClosingTag() throws IOException {
         // Arrange
         this.setState(DEFAULT_DATA);
@@ -408,7 +408,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -427,7 +427,7 @@ public class HtmlCommentAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         

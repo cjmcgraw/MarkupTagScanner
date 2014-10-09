@@ -2,7 +2,7 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers;
 
 import java.io.*;
 
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
@@ -19,8 +19,8 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
         }
     }
     
-    protected EndOfInputParsingException generateEndOfInputParsingException() {
-        return new EndOfInputParsingException(this.currentPosition(), this.getResult());
+    protected EndOfInputParsingError generateEndOfInputParsingException() {
+        return new EndOfInputParsingError(this.currentPosition(), this.getResult());
     }
     
     public abstract HtmlData parse(PushbackAndPositionReader input) throws IOException;
@@ -36,12 +36,12 @@ public abstract class DataParser extends MarkupParser<HtmlData> {
     
     private void closeTagRead(char c) throws IOException {
         this.unread(c);
-        throw new UnexpectedCloseTagParsingException(this.currentPosition(), this.getResult());
+        throw new UnexpectedCloseTagParsingError(this.currentPosition(), this.getResult());
     }
     
     private void openTagRead(char c) throws IOException {
         this.unread(c);
-        throw new UnclosedTagParsingException(this.currentPosition(), this.getResult());
+        throw new UnclosedTagParsingError(this.currentPosition(), this.getResult());
     }
     
     @Override

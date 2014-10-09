@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
 
 import static org.junit.Assert.*;
 
@@ -6,7 +6,7 @@ import java.awt.Point;
 
 import org.junit.*;
 
-public class UnexpectedCharacterComponentExceptionTest {
+public class MissingCharacterComponentErrorTest {
     private static final char DEFAULT_MISSING = 'a';
     private static final Point DEFAULT_POSITION = new Point(123, 456);
     private static final String DEFAULT_DATA = "some data";
@@ -15,13 +15,13 @@ public class UnexpectedCharacterComponentExceptionTest {
     private static final Point OTHER_POSITION = new Point(654, 321);
     private static final String OTHER_DATA = "other data";
     
-    private UnexpectedCharacterComponentException error;
+    private MissingCharacterComponentError error;
     
     @Before
     public void setState() {
-        this.error = new UnexpectedCharacterComponentException(DEFAULT_MISSING,
-                                                               DEFAULT_POSITION,
-                                                               DEFAULT_DATA);
+        this.error = new MissingCharacterComponentError(DEFAULT_MISSING,
+                                                            DEFAULT_POSITION,
+                                                            DEFAULT_DATA);
     }
     
     @Test
@@ -43,7 +43,7 @@ public class UnexpectedCharacterComponentExceptionTest {
         boolean expData = true;
         boolean data;
         
-        UnexpectedCharacterComponentException other = this.error;
+        MissingCharacterComponentError other = this.error;
         
         // Apply
         data = this.symmetricEquals_Positive(other);
@@ -58,9 +58,9 @@ public class UnexpectedCharacterComponentExceptionTest {
         boolean expData = true;
         boolean data;
         
-        UnexpectedCharacterComponentException other = this.generateException(DEFAULT_MISSING,
-                                                                             DEFAULT_POSITION,
-                                                                             DEFAULT_DATA);
+        MissingCharacterComponentError other = this.generateException(DEFAULT_MISSING,
+                                                                          DEFAULT_POSITION,
+                                                                          DEFAULT_DATA);
         
         // Apply
         data = this.symmetricEquals_Positive(other);
@@ -75,7 +75,7 @@ public class UnexpectedCharacterComponentExceptionTest {
         boolean expData = false;
         boolean data;
         
-        UnexpectedCharacterComponentException other = this.generateException(OTHER_MISSING,
+        MissingCharacterComponentError other = this.generateException(OTHER_MISSING,
                                                                           DEFAULT_POSITION,
                                                                           DEFAULT_DATA);
         
@@ -92,7 +92,7 @@ public class UnexpectedCharacterComponentExceptionTest {
         boolean expData = false;
         boolean data;
         
-        UnexpectedCharacterComponentException other = this.generateException(DEFAULT_MISSING,
+        MissingCharacterComponentError other = this.generateException(DEFAULT_MISSING,
                                                                           OTHER_POSITION,
                                                                           DEFAULT_DATA);
         
@@ -109,9 +109,9 @@ public class UnexpectedCharacterComponentExceptionTest {
         boolean expData = false;
         boolean data;
         
-        UnexpectedCharacterComponentException other = this.generateException(DEFAULT_MISSING,
-                                                                             DEFAULT_POSITION,
-                                                                             OTHER_DATA);
+        MissingCharacterComponentError other = this.generateException(DEFAULT_MISSING,
+                                                                          DEFAULT_POSITION,
+                                                                          OTHER_DATA);
         
         // Apply
         data = this.symmetricEquals_Negative(other);
@@ -120,26 +120,26 @@ public class UnexpectedCharacterComponentExceptionTest {
         assertEquals(expData, data);
     }
     
-    private boolean symmetricEquals_Positive(UnexpectedCharacterComponentException other) {
+    private boolean symmetricEquals_Positive(MissingCharacterComponentError other) {
         return this.error.equals(other) &&
                other.equals(this.error) &&
-               this.error.equals((ComponentException) other) &&
-               other.equals((ComponentException) this.error) &&
+               this.error.equals((ComponentError) other) &&
+               other.equals((ComponentError) this.error) &&
                this.error.equals((Object) other) && 
                other.equals((Object) this.error);
     }
     
-    private boolean symmetricEquals_Negative(UnexpectedCharacterComponentException other) {
+    private boolean symmetricEquals_Negative(MissingCharacterComponentError other) {
         return this.error.equals(other) ||
                 other.equals(this.error) ||
-                this.error.equals((ComponentException) other) ||
-                other.equals((ComponentException) this.error) ||
+                this.error.equals((ComponentError) other) ||
+                other.equals((ComponentError) this.error) ||
                 this.error.equals((Object) other) || 
                 other.equals((Object) this.error);
     }
     
-    private UnexpectedCharacterComponentException generateException(char missing, Point position, String data) {
-        return new UnexpectedCharacterComponentException(missing, position, data);
+    private MissingCharacterComponentError generateException(char missing, Point position, String data) {
+        return new MissingCharacterComponentError(missing, position, data);
     }
     
     @After

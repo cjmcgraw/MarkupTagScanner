@@ -8,8 +8,8 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlQuoteEnclosureParserTest {
@@ -264,7 +264,7 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=MissingCharacterComponentException.class)
+    @Test(expected=MissingCharacterComponentError.class)
     public void testParse_InvalidValue_MissingStartQuote_ExpectedThrowsException() throws IOException {
         // Arrange
         this.setState(DEFAULT_REMAINING_DATA + MarkupTag.DOUBLE_QUOTE);
@@ -284,7 +284,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(input);
-        } catch (MissingCharacterComponentException e) {
+        } catch (MissingCharacterComponentError e) {
             data = this.input.getRemainingData();
         }
         
@@ -303,7 +303,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(input);
-        } catch (MissingCharacterComponentException e) {
+        } catch (MissingCharacterComponentError e) {
             data = e.getData();
         }
         
@@ -311,7 +311,7 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputComponentException.class)
+    @Test(expected=EndOfInputComponentError.class)
     public void testParse_InvalidValue_EmptyInput_ThrowsException() throws IOException {
         // Arrange
         this.setState("");
@@ -331,7 +331,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = e.getData();
         }
         
@@ -350,7 +350,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = this.input.getRemainingData();
         }
         
@@ -358,7 +358,7 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputComponentException.class)
+    @Test(expected=EndOfInputComponentError.class)
     public void testParse_InvalidValue_MissingFinalEnclosure_ThrowsException() throws IOException {
         // Arrange
         this.setState(MarkupTag.DOUBLE_QUOTE + FILLER_DATA);
@@ -378,7 +378,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try { 
             this.parser.parse(this.input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = e.getData();
         }
         
@@ -397,7 +397,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             data = this.parser.parse(this.input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = this.input.getRemainingData();
         }
         
@@ -405,7 +405,7 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputComponentException.class)
+    @Test(expected=EndOfInputComponentError.class)
     public void testParse_InvalidValue_DiffOpeningAndClosingEnclosures_OpenDoubleCloseSingle_ThrowsException() throws IOException {
         // Arrange
         this.setState(MarkupTag.DOUBLE_QUOTE + FILLER_DATA + MarkupTag.SINGLE_QUOTE + FILLER_DATA);
@@ -425,7 +425,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = e.getData();
         }
         
@@ -444,7 +444,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = this.input.getRemainingData();
         }
         
@@ -452,7 +452,7 @@ public class HtmlQuoteEnclosureParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputComponentException.class)
+    @Test(expected=EndOfInputComponentError.class)
     public void testParse_InvalidValue_DiffOpeningAndClosingEnclosures_OpenSingleCloseDouble_ThrowsException() throws IOException {
         // Arrange
         this.setState(MarkupTag.SINGLE_QUOTE + FILLER_DATA + MarkupTag.DOUBLE_QUOTE + FILLER_DATA);
@@ -472,7 +472,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = e.getData();
         }
         
@@ -491,7 +491,7 @@ public class HtmlQuoteEnclosureParserTest {
         // Apply
         try {
             this.parser.parse(input);
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             data = this.input.getRemainingData();
         }
         

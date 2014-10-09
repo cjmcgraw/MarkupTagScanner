@@ -1,8 +1,6 @@
-package com.mycompany.htmlvalidator.exceptions;
+package com.mycompany.htmlvalidator.errors;
 
 import java.util.*;
-
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
 
 public interface ErrorReporter {
     

@@ -10,7 +10,7 @@ import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlSingleAttributeParserTest {
@@ -42,8 +42,8 @@ public class HtmlSingleAttributeParserTest {
      
     private static final String DEFAULT_QUOTE_VALUE = "some quote value";
     
-    private static final ComponentException MISSING_CHAR_ERROR = new MissingCharacterComponentException(' ', new Point(0, 0), "some data");
-    private static final ComponentException UNEXPECTED_CHAR_ERROR = new UnexpectedCharacterComponentException(' ', new Point(0, 0), "some data");
+    private static final ComponentError MISSING_CHAR_ERROR = new MissingCharacterComponentError(' ', new Point(0, 0), "some data");
+    private static final ComponentError UNEXPECTED_CHAR_ERROR = new UnexpectedCharacterComponentError(' ', new Point(0, 0), "some data");
     
     private HtmlQuoteEnclosureParserMock enclosureParser;
     private PushbackAndPositionReaderMock input;
@@ -1689,7 +1689,7 @@ public class HtmlSingleAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidInput_NoName_NoValue_NoSpace_EOFImmediately() throws IOException {
         // Arrange
         this.setState("");
@@ -1708,7 +1708,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -1727,7 +1727,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -1735,7 +1735,7 @@ public class HtmlSingleAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidInput_WithName_NoValue_NoSpace_EOFAfterName() throws IOException {
         // Arrange
         this.setState("someName");
@@ -1755,7 +1755,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -1774,7 +1774,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -1782,11 +1782,11 @@ public class HtmlSingleAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidInput_WithName_NoValue_WithSpace_EOFAfterSpaceAfterName() throws IOException {
         // Arrange
         this.setState("someName  ");
-        this.consumer.setError(new EndOfInputComponentException(""));
+        this.consumer.setError(new EndOfInputComponentError(""));
         
         // Apply + Assert
         this.parser.parse(this.input);
@@ -1799,12 +1799,12 @@ public class HtmlSingleAttributeParserTest {
         HtmlAttribute data = null;
         
         this.setState("someName    ");
-        this.consumer.setError(new EndOfInputComponentException(""));
+        this.consumer.setError(new EndOfInputComponentError(""));
         
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -1812,7 +1812,7 @@ public class HtmlSingleAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidInput_WithName_WithValueSeparator_NoValue_EOFAfterValueSeparator() throws IOException {
         // Arrange
         this.setState("someName" + MarkupTag.ATTRIBUTE_VALUE_SEPARATOR);
@@ -1832,7 +1832,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -1851,7 +1851,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -1859,7 +1859,7 @@ public class HtmlSingleAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidInput_WithName_WithValueSeparator_WithValue_EOFAfterValue() throws IOException {
         // Arrange
         this.setState("someName=SomeValue");
@@ -1879,7 +1879,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         
@@ -1898,7 +1898,7 @@ public class HtmlSingleAttributeParserTest {
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = this.input.getRemainingData();
         }
         
@@ -1906,11 +1906,11 @@ public class HtmlSingleAttributeParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testParse_InvalidInput_WithName_WithValueSeparator_WithValueInEnclosure_EOFInsideEnclosure() throws IOException {
         // Arrange
         this.setState("someName=\"");
-        ComponentException err = new EndOfInputComponentException("\"someValue");
+        ComponentError err = new EndOfInputComponentError("\"someValue");
         this.enclosureParser.setError(err);
         
         // Apply + Assert
@@ -1925,13 +1925,13 @@ public class HtmlSingleAttributeParserTest {
         
         this.setState("someName=\"");
         
-        ComponentException err = new EndOfInputComponentException("\"someValue");
+        ComponentError err = new EndOfInputComponentError("\"someValue");
         this.enclosureParser.setError(err);
         
         // Apply
         try {
             this.parser.parse(this.input);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         

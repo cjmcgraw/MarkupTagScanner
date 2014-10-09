@@ -4,7 +4,7 @@
  * @version: 1.0
  */
 
-package com.mycompany.htmlvalidator.exceptions;
+package com.mycompany.htmlvalidator.errors;
 
 public class MarkupErrorMock extends MarkupError {
     public String toString;

@@ -9,7 +9,7 @@ package com.mycompany.htmlvalidator.MarkupTagScanners;
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.VoidTag;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.*;
-import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.errors.*;
 import org.junit.*;
 
 import java.util.*;

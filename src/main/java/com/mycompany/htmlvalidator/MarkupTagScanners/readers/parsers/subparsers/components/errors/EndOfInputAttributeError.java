@@ -1,14 +1,14 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 
-public class EndOfInputAttributeException extends AttributeException {
+public class EndOfInputAttributeError extends AttributeError {
     private static final long serialVersionUID = -1561021604836743910L;
     private static final String MSG = "End of input reached on attribute: %s";
     
     private HtmlAttribute attr;
     
-    public EndOfInputAttributeException(HtmlAttribute attr) {
+    public EndOfInputAttributeError(HtmlAttribute attr) {
         super(String.format(DEFAULT_ERROR_MSG, String.format(MSG, attr)));
         this.attr = attr;
     }

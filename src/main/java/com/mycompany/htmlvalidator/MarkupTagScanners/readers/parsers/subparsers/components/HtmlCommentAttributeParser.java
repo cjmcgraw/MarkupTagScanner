@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTagNames;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlCommentAttributeParser extends HtmlComponentAttributeParser {

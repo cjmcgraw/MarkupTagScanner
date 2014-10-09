@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers
 import java.io.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.InputParser;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.EndOfInputComponentException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.EndOfInputComponentError;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class Consumer extends InputParser<Integer>{
@@ -22,7 +22,7 @@ public abstract class Consumer extends InputParser<Integer>{
             this.counter++;
             return super.read();
         } catch (EOFException e) {
-            throw new EndOfInputComponentException("");
+            throw new EndOfInputComponentError("");
         }
     }
     

@@ -1,11 +1,11 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors;
 
 import java.awt.Point;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.errors.*;
 
-public class ParsingException extends MarkupError{
+public class ParsingError extends MarkupError{
     private static final long serialVersionUID = 7976665383247960546L;
     private static final String errorMsg = "Parsing Exception at [%s, %s] input = %s%n\t%s at %s";
     private static final int numOfMsgArgs = 5;
@@ -16,7 +16,7 @@ public class ParsingException extends MarkupError{
     private HtmlData htmlData;
     private String msg;
     
-    public ParsingException(Point position, HtmlData htmlData, char errorChar, String msg) {
+    public ParsingError(Point position, HtmlData htmlData, char errorChar, String msg) {
         super(String.format(errorMsg, position.x, position.y, htmlData, msg, errorChar));
         this.position = position;
         this.htmlData = htmlData;
@@ -45,7 +45,7 @@ public class ParsingException extends MarkupError{
     }
     
     public String toString() {
-        String errorMsg = ParsingException.errorMsg;
+        String errorMsg = ParsingError.errorMsg;
         Object[] msgArgs = this.parseMsgArgs();
         return String.format(errorMsg, msgArgs);
     }

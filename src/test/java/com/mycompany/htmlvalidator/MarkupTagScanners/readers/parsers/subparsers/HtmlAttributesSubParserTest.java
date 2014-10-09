@@ -11,9 +11,9 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.Html
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlAttributesSubParserTest {;
@@ -37,19 +37,19 @@ public class HtmlAttributesSubParserTest {;
     private static final String COMMENT_OPEN = MarkupTagNames.COMMENT_TAG.getBeginName();
     
     private static final HtmlAttribute ATTR_EOF_DATA = new HtmlAttribute("exceptionAttr", "some value");
-    private static final AttributeException DEFAULT_ATTR_EOFEXCEPTION = new EndOfInputAttributeException(ATTR_EOF_DATA);
+    private static final AttributeError DEFAULT_ATTR_EOFEXCEPTION = new EndOfInputAttributeError(ATTR_EOF_DATA);
     
     private static final String COMPONENT_EOF_DATA = "someExceptionData";
     private static final HtmlAttribute COMPONENT_EOF_ATTR = new HtmlAttribute("someExceptionData");
-    private static final ComponentException DEFAULT_COMPONENT_EOFEXCEPTION = new EndOfInputComponentException(COMPONENT_EOF_DATA);
+    private static final ComponentError DEFAULT_COMPONENT_EOFEXCEPTION = new EndOfInputComponentError(COMPONENT_EOF_DATA);
     
     private static final String COMPONENT_MISSINGCHAR_DATA = "someMissingCharData";
     private static final HtmlAttribute COMPONENT_MISSINGCHAR_ATTR = new HtmlAttribute(COMPONENT_MISSINGCHAR_DATA);
-    private static final ComponentException DEFAULT_COMPONENT_MISSINGCHAR_EXCEPTION = new MissingCharacterComponentException('c', null, COMPONENT_MISSINGCHAR_DATA);
+    private static final ComponentError DEFAULT_COMPONENT_MISSINGCHAR_EXCEPTION = new MissingCharacterComponentError('c', null, COMPONENT_MISSINGCHAR_DATA);
     
     private static final String COMPONENT_UNEXPECTEDCHAR_DATA = "someUnexpectedCharData";
     private static final HtmlAttribute COMPONENT_UNEXPECTEDCHAR_ATTR = new HtmlAttribute(COMPONENT_UNEXPECTEDCHAR_DATA);;
-    private static final ComponentException DEFAULT_COMPONENT_UNEXPECTEDCHAR_EXCEPTION = new UnexpectedCharacterComponentException('c', null, COMPONENT_UNEXPECTEDCHAR_DATA);
+    private static final ComponentError DEFAULT_COMPONENT_UNEXPECTEDCHAR_EXCEPTION = new UnexpectedCharacterComponentError('c', null, COMPONENT_UNEXPECTEDCHAR_DATA);
     
     private HtmlSingleAttributeParserMock attributeParser = new HtmlSingleAttributeParserMock(ATTR_DATA);
     private HtmlCommentAttributeParserMock commentParser = new HtmlCommentAttributeParserMock(CMNT_DATA);
@@ -562,7 +562,7 @@ public class HtmlAttributesSubParserTest {;
         this.parser.parse(this.input, null);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testParse_OpeningTag_BeforeFirstAttr_ThrowsExpectedException() {
         // Arrange
         this.setState(OPENING_TAG + " " + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE);
@@ -583,7 +583,7 @@ public class HtmlAttributesSubParserTest {;
     public void testParse_OpeningTag_BeforeFirstAttr_ExceptionResultMatchesStoredResult_ThrowsException() {
         // Set up
         HtmlData exp = new HtmlData();
-        new UnclosedTagParsingException(new Point(0,0), exp);
+        new UnclosedTagParsingError(new Point(0,0), exp);
         
         // Test
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(OPENING_TAG + STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE, exp);
@@ -598,7 +598,7 @@ public class HtmlAttributesSubParserTest {;
         this.testParse_ThrowsException_ResultContainsExpectedAttrs(str, attrs);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testParse_OpeningTag_InbetweenAttrs_ThrowsExpectedException() {
         // Arrange
         this.setState(STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE);
@@ -622,7 +622,7 @@ public class HtmlAttributesSubParserTest {;
         exp.updateAttributes(new HtmlAttribute(ATTR_DATA));
         exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
         
-        new UnclosedTagParsingException(new Point(0,0), exp);
+        new UnclosedTagParsingError(new Point(0,0), exp);
         
         // Test
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_STR + " " + SINGLE_QUOTE + " " + OPENING_TAG + " " + DOUBLE_QUOTE, exp);
@@ -637,7 +637,7 @@ public class HtmlAttributesSubParserTest {;
         this.testParse_ThrowsException_ResultContainsExpectedAttrs(str, attrs);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testParse_OpeningTag_AfterLastAttr_ThrowsExpectedException() {
         // Arrange
         this.setState(STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE +" " + OPENING_TAG);
@@ -662,7 +662,7 @@ public class HtmlAttributesSubParserTest {;
         exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
         exp.updateAttributes(new HtmlAttribute(QUOTE_DATA));
         
-        new UnclosedTagParsingException(new Point(0,0), exp);
+        new UnclosedTagParsingError(new Point(0,0), exp);
         
         // Test
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(STANDARD_STR + " " + SINGLE_QUOTE + " " + DOUBLE_QUOTE + OPENING_TAG, exp);
@@ -677,7 +677,7 @@ public class HtmlAttributesSubParserTest {;
         this.testParse_ThrowsException_ResultContainsExpectedAttrs(str, attrs);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_InvalidInput_EmptyInput_ThrowsExpection() {
         /* Test that given an empty input the HtmlAttributesSubParser throws
          * an EndOfInputParsingException.
@@ -721,7 +721,7 @@ public class HtmlAttributesSubParserTest {;
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult("", new HtmlData());
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_InvalidInput_EOFDuringAttributeParser_ThrowsException() {
         /* Test that when the "attributeParser" component encounters an EndOfInputAttributeException
          * that the EndOfInputParsingException is triggered.
@@ -810,7 +810,7 @@ public class HtmlAttributesSubParserTest {;
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(SINGLE_QUOTE + DOUBLE_QUOTE + STANDARD_STR, expected);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_InvalidInput_EOFDuringCommentParser_ThrowsException() {
         /* The purpose of this test case is to check when an EOF is found during
          * the parsing done by the component "commentParser" and it throws an
@@ -861,7 +861,7 @@ public class HtmlAttributesSubParserTest {;
         this.testParse_ThrowsException_ThrownExceptionMatchesStoredResult(state, expected);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_InvalidInput_EOFDuringEnclosureParser_ThrowsException() {
         /* The purpose of this test is to check when an EOF is found during the 
          * parsing done by the enclosure parser and it throws an error, the error
@@ -985,7 +985,7 @@ public class HtmlAttributesSubParserTest {;
         assertEquals(exp, data);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_InvalidInput_EOFDuringWhitespaceConsumer_ThrowsException() {
         /* This test case is used to ensure that when an EOF is encountered in the
          * whitespace consumer it repackages it and throws the EndOfInputParsingException
@@ -1014,7 +1014,7 @@ public class HtmlAttributesSubParserTest {;
         // Apply
         try {
             this.parse();
-        } catch (ParsingException e) {}
+        } catch (ParsingError e) {}
         
         // Assert
         assertEquals(remaining, this.input.getRemainingData());
@@ -1028,7 +1028,7 @@ public class HtmlAttributesSubParserTest {;
         // Apply
         try {
             this.parse();
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -1044,7 +1044,7 @@ public class HtmlAttributesSubParserTest {;
         // Apply
         try {
             this.parse();
-        } catch (ParsingException e) {}
+        } catch (ParsingError e) {}
         
         // Assert
         assertEquals(attrs, this.result.getAttributes());
@@ -1081,7 +1081,7 @@ public class HtmlAttributesSubParserTest {;
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException err) {
+        } catch (EndOfInputParsingError err) {
             data = err.getHtmlData();
         }
         
@@ -1104,7 +1104,7 @@ public class HtmlAttributesSubParserTest {;
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException err) {
+        } catch (EndOfInputParsingError err) {
             data = this.result;
         }
         
@@ -1121,19 +1121,19 @@ public class HtmlAttributesSubParserTest {;
         this.result.setName(MarkupTagNames.COMMENT_TAG.getBeginName());
     }
     
-    private void primeAttributeParserWithError(AttributeException err) {
+    private void primeAttributeParserWithError(AttributeError err) {
         this.attributeParser.setError(err);
     }
     
-    private void primeEnclosureParserWithError(ComponentException err) {
+    private void primeEnclosureParserWithError(ComponentError err) {
         this.enclosureParser.setError(err);
     }
     
-    private void primeCommentParserWithError(AttributeException err) {
+    private void primeCommentParserWithError(AttributeError err) {
         this.commentParser.setError(err);
     }
     
-    private void primeWhitespaceConsumerWithError(ComponentException err) {
+    private void primeWhitespaceConsumerWithError(ComponentError err) {
         this.whitespaceConsumer.setError(err);
     }
     

@@ -2,7 +2,7 @@ package com.mycompany.htmlvalidator.MarkupTagScanners;
 
 import java.io.Serializable;
 
-import com.mycompany.htmlvalidator.exceptions.ErrorReporter;
+import com.mycompany.htmlvalidator.errors.ErrorReporter;
 
 public interface Attribute extends Serializable{
     public static final String EMPTY_VALUE = "";

@@ -1,8 +1,8 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
 
 import java.awt.Point;
 
-public class MissingCharacterComponentException extends ComponentException {
+public class MissingCharacterComponentError extends ComponentError {
     private static final long serialVersionUID = -4066078864219639731L;
     private static final String MISSING_CHAR_MSG = "Missing Character! At position %s, expected ---> %s";
     
@@ -10,7 +10,7 @@ public class MissingCharacterComponentException extends ComponentException {
     private char missing;
     private Object data;
     
-    public MissingCharacterComponentException(char missing, Point position, Object data) {
+    public MissingCharacterComponentError(char missing, Point position, Object data) {
         super(String.format(DEFAULT_ERROR_MSG, String.format(MISSING_CHAR_MSG, position, missing)));
         this.missing = missing;
         this.position = position;
@@ -42,7 +42,7 @@ public class MissingCharacterComponentException extends ComponentException {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        MissingCharacterComponentException other = (MissingCharacterComponentException) obj;
+        MissingCharacterComponentError other = (MissingCharacterComponentError) obj;
         if (data == null) {
             if (other.data != null) return false;
         } else if (!data.equals(other.data)) return false;

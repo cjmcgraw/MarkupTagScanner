@@ -1,12 +1,12 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
 
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
+import com.mycompany.htmlvalidator.errors.MarkupError;
 
-public abstract class ComponentException extends MarkupError{
+public abstract class ComponentError extends MarkupError{
     private static final long serialVersionUID = 8968887910665038407L;
     protected static final String DEFAULT_ERROR_MSG = "Component Error in tag -> %s";
     
-    protected ComponentException(String msg) {
+    protected ComponentError(String msg) {
         super(msg);
     }
     

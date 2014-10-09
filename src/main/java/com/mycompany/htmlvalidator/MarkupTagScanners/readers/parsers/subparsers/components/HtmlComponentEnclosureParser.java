@@ -5,8 +5,8 @@ import java.util.Collection;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.MarkupParser;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 
 public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> {
     private final static String CLASS_NAME = "HtmlComponentEnclosureParser";
@@ -29,7 +29,7 @@ public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> 
         try {
             return super.read();
         } catch (EOFException e) {
-            throw new EndOfInputComponentException(this.getData());
+            throw new EndOfInputComponentError(this.getData());
         }
     }
     
@@ -49,7 +49,7 @@ public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> 
             char ch = getValidOpeningEnclosure();
             String data = getData();
             this.unread(c);
-            throw new MissingCharacterComponentException(ch, this.currentPosition(), data);
+            throw new MissingCharacterComponentError(ch, this.currentPosition(), data);
         }
         return true;
     }
@@ -67,7 +67,7 @@ public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> 
         if (tag == null || expectedTag != tag) {
             String data = getData();
             this.unread(c);
-            throw new MissingCharacterComponentException(c, this.currentPosition(), data);
+            throw new MissingCharacterComponentError(c, this.currentPosition(), data);
         }
         return expectedTag == tag;
     }

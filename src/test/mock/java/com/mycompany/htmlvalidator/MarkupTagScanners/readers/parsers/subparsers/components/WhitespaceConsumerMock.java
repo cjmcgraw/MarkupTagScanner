@@ -3,18 +3,18 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers
 import java.io.IOException;
 import java.util.*;
 
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.ComponentException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.ComponentError;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class WhitespaceConsumerMock extends Consumer {
     private List<String> receivedData;
-    private ComponentException error;
+    private ComponentError error;
     
     public WhitespaceConsumerMock() {
         this(null);
     }
     
-    public WhitespaceConsumerMock(ComponentException error) {
+    public WhitespaceConsumerMock(ComponentError error) {
         this.receivedData = new ArrayList<String>();
         this.error = error;
     }
@@ -23,11 +23,11 @@ public class WhitespaceConsumerMock extends Consumer {
         return this.receivedData;
     }
     
-    public ComponentException getError() {
+    public ComponentError getError() {
         return this.error;
     }
     
-    public void setError(ComponentException err) {
+    public void setError(ComponentError err) {
         this.error = err;
     }
     

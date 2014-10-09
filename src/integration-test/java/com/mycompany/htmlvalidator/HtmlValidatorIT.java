@@ -6,7 +6,7 @@ package com.mycompany.htmlvalidator;/*
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.VoidTag;
-import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.errors.*;
 import com.mycompany.htmlvalidator.printers.PrinterMock;
 
 import org.junit.*;

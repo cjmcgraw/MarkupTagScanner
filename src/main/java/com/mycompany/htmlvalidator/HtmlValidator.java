@@ -5,8 +5,7 @@ import java.io.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.*;
-import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.errors.*;
 import com.mycompany.htmlvalidator.printers.*;
 import com.mycompany.htmlvalidator.utilities.*;
 

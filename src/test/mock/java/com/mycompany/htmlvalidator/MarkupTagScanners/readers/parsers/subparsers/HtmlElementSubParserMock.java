@@ -1,11 +1,11 @@
 package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers;
 
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.ParsingException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.ParsingError;
 
 public class HtmlElementSubParserMock extends HtmlTypeSubParserMock {
     private String element;
     
-    public HtmlElementSubParserMock(ParsingException exception) {
+    public HtmlElementSubParserMock(ParsingError exception) {
         super(exception);
         this.element = "";
     }

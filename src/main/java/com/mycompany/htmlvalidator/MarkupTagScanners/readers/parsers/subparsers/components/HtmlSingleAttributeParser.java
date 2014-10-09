@@ -3,8 +3,8 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers
 import java.io.IOException;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
@@ -111,10 +111,10 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
         
         try {
             s.append(runQuoteEnclosureParser());
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             this.attributeValue = new StringBuilder(e.getData());
             throw this.generateEndOfInputAttributeException();
-        } catch (ComponentException e) {
+        } catch (ComponentError e) {
             s.append(e.getData());
             this.addError(e);
         }
@@ -146,9 +146,9 @@ public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {
     private void consumeWhitespace() throws IOException {
         try {
             this.runWhitespaceConsumer();
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             throw this.generateEndOfInputAttributeException();
-        } catch (ComponentException e) {
+        } catch (ComponentError e) {
             this.addError(e);
         }
     }

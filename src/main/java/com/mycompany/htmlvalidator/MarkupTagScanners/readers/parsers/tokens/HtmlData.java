@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.*;
-import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.errors.*;
 
 public class HtmlData implements Tag{
     private static final long serialVersionUID = -1778059172938272360L;

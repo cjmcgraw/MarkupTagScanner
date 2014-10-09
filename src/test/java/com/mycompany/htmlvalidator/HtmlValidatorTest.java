@@ -7,7 +7,7 @@
 package com.mycompany.htmlvalidator;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.*;
-import com.mycompany.htmlvalidator.exceptions.*;
+import com.mycompany.htmlvalidator.errors.*;
 import com.mycompany.htmlvalidator.printers.PrinterMock;
 import com.mycompany.htmlvalidator.utilities.*;
 import org.junit.*;

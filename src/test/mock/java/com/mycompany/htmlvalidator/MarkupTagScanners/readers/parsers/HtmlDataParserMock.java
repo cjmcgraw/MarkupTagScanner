@@ -3,7 +3,7 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers;
 import java.io.IOException;
 import java.util.List;
 
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.ParsingException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.ParsingError;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
@@ -13,7 +13,7 @@ public class HtmlDataParserMock extends DataParser {
     private char openChar;
     private char closeChar;
     
-    private ParsingException err;
+    private ParsingError err;
     
     public HtmlDataParserMock(List<HtmlData> data) {
         this.data = data;
@@ -21,11 +21,11 @@ public class HtmlDataParserMock extends DataParser {
         this.err = null;
     }
     
-    public void setException(ParsingException err) {
+    public void setException(ParsingError err) {
         this.err = err;
     }
     
-    public ParsingException getException() {
+    public ParsingError getException() {
         return err;
     }
     

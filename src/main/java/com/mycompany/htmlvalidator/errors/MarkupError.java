@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.exceptions;
+package com.mycompany.htmlvalidator.errors;
 
 public abstract class MarkupError extends RuntimeException{
     private static final long serialVersionUID = -5709970001272720858L;

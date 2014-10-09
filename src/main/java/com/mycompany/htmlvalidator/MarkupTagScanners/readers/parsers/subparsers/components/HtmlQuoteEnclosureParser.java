@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.EnclosureTags;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlQuoteEnclosureParser extends HtmlComponentEnclosureParser {

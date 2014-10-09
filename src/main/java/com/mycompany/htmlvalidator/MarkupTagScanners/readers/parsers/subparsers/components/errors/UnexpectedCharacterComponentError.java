@@ -1,8 +1,8 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
 
 import java.awt.Point;
 
-public class UnexpectedCharacterComponentException extends ComponentException {
+public class UnexpectedCharacterComponentError extends ComponentError {
     private static final long serialVersionUID = -5796386130383540454L;
     private static final String UNEXPECTED_CHAR_MSG = "Unexpected Character! At position %s didn't expect ---> %s";
     
@@ -10,7 +10,7 @@ public class UnexpectedCharacterComponentException extends ComponentException {
     private char unexpected;
     private Object data;
     
-    public UnexpectedCharacterComponentException(char unexpected, Point position, Object data) {
+    public UnexpectedCharacterComponentError(char unexpected, Point position, Object data) {
         super(String.format(DEFAULT_ERROR_MSG, String.format(UNEXPECTED_CHAR_MSG, position, unexpected)));
         this.position = position;
         this.unexpected = unexpected;
@@ -42,7 +42,7 @@ public class UnexpectedCharacterComponentException extends ComponentException {
         if (this == obj) return true;
         if (obj == null) return false;
         if (getClass() != obj.getClass()) return false;
-        UnexpectedCharacterComponentException other = (UnexpectedCharacterComponentException) obj;
+        UnexpectedCharacterComponentError other = (UnexpectedCharacterComponentError) obj;
         if (data == null) {
             if (other.data != null) return false;
         } else if (!data.equals(other.data)) return false;

@@ -9,7 +9,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.Html
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class DataParserTest extends DataParser {
@@ -54,7 +54,7 @@ public class DataParserTest extends DataParser {
         this.validateChar(MarkupTag.CLOSING_TAG.toChar());
     }
     
-    @Test(expected=UnexpectedCloseTagParsingException.class)
+    @Test(expected=UnexpectedCloseTagParsingError.class)
     public void testValidateChar_ClosingTag_ExpectedExceptionThrown() throws IOException {
         // Arrange
         this.input = this.inputData;
@@ -77,7 +77,7 @@ public class DataParserTest extends DataParser {
         
         try {
             this.validateChar(MarkupTag.CLOSING_TAG.toChar());
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -100,7 +100,7 @@ public class DataParserTest extends DataParser {
         this.validateChar(MarkupTag.OPENING_TAG.toChar());
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testValidateChar_OpeningTag_ExpectedExceptionThrown() throws IOException {
         // Arrange
         this.input = this.inputData;
@@ -123,7 +123,7 @@ public class DataParserTest extends DataParser {
         
         try {
             this.validateChar(MarkupTag.OPENING_TAG.toChar());
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -148,7 +148,7 @@ public class DataParserTest extends DataParser {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testRead_ValidState_EmptyInput_EOFException_ThrowsExpectedException() throws IOException {
         // Arrange
         this.input = this.inputData;
@@ -170,7 +170,7 @@ public class DataParserTest extends DataParser {
         // Apply
         try {
             this.read();
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
             data = e.getHtmlData();
         }
         

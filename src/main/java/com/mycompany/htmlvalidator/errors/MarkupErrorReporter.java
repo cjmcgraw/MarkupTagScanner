@@ -1,4 +1,4 @@
-package com.mycompany.htmlvalidator.exceptions;
+package com.mycompany.htmlvalidator.errors;
 
 import java.io.Serializable;
 import java.util.*;

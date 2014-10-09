@@ -4,11 +4,11 @@ import java.io.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.EndOfInputAttributeException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.EndOfInputAttributeError;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
+import com.mycompany.htmlvalidator.errors.MarkupError;
 
 public abstract class HtmlComponentAttributeParser extends MarkupParser<HtmlAttribute> {
     private static final String CLASS_NAME = "HtmlComponentAttributeParser";
@@ -35,10 +35,10 @@ public abstract class HtmlComponentAttributeParser extends MarkupParser<HtmlAttr
         }
     }
     
-    protected EndOfInputAttributeException generateEndOfInputAttributeException() {
+    protected EndOfInputAttributeError generateEndOfInputAttributeException() {
         this.attribute.setName(this.getAttributeName());
         this.attribute.setValue(this.getAttributeValue());
-        return new EndOfInputAttributeException(this.getAttribute());
+        return new EndOfInputAttributeError(this.getAttribute());
     }
     
     protected abstract String getAttributeName();

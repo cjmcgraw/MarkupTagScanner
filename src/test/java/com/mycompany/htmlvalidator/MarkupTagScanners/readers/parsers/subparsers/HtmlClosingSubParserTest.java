@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingSubParserTest {
@@ -91,7 +91,7 @@ public class HtmlClosingSubParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_WithEmptyData() throws IOException {
         // Arrange
         this.setState(new ArrayList<Character>());
@@ -111,7 +111,7 @@ public class HtmlClosingSubParserTest {
         // Apply
         try {
             this.parser.parse(this.input, this.result);
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -119,7 +119,7 @@ public class HtmlClosingSubParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=UnexpectedCloseTagParsingException.class)
+    @Test(expected=UnexpectedCloseTagParsingError.class)
     public void testParse_WithClosingAngleBracket() throws IOException {
         // Arrange
         this.setState(Arrays.asList(CLOSING_TAG, 'A', 'B', 'C'));
@@ -140,7 +140,7 @@ public class HtmlClosingSubParserTest {
         // Apply
         try {
             this.parser.parse(this.input, this.result);
-        } catch (UnexpectedCloseTagParsingException e) {
+        } catch (UnexpectedCloseTagParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -159,7 +159,7 @@ public class HtmlClosingSubParserTest {
         // Apply
         try {
             this.parser.parse(this.input, this.result);
-        } catch (UnexpectedCloseTagParsingException e) {}
+        } catch (UnexpectedCloseTagParsingError e) {}
         
         data = this.input.getRemainingData();
         
@@ -167,7 +167,7 @@ public class HtmlClosingSubParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testParse_WithOpeningAngleBracket() throws IOException {
         // Arrange
         this.setState(Arrays.asList(OPENING_TAG, 'A', 'B', 'C'));
@@ -187,7 +187,7 @@ public class HtmlClosingSubParserTest {
         // Apply
         try {
             this.parser.parse(this.input, this.result);
-        } catch (UnclosedTagParsingException e) {
+        } catch (UnclosedTagParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -206,7 +206,7 @@ public class HtmlClosingSubParserTest {
         // Apply
         try {
             this.parser.parse(this.input, this.result);
-        } catch (UnclosedTagParsingException e) {}
+        } catch (UnclosedTagParsingError e) {}
         
         data = this.input.getRemainingData();
         

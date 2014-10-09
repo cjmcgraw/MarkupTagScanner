@@ -10,13 +10,13 @@ import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.InvalidStateException;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.*;
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
+import com.mycompany.htmlvalidator.errors.MarkupError;
 
 public class HtmlComponentAttributeParserTest extends HtmlComponentAttributeParser {
-    private static final MarkupError SOME_ERROR = new MissingCharacterComponentException('O', new Point(123, 456), "some data");
+    private static final MarkupError SOME_ERROR = new MissingCharacterComponentError('O', new Point(123, 456), "some data");
     private static final char SOME_CHAR = 'X';
     
     private static final String DEFAULT_NAME = "some default attribute name";
@@ -142,7 +142,7 @@ public class HtmlComponentAttributeParserTest extends HtmlComponentAttributePars
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputAttributeException.class)
+    @Test(expected=EndOfInputAttributeError.class)
     public void testRead_WithEOFInput() throws IOException {
         // Arrange
         this.setState(new PushbackAndPositionReaderMock(""));
@@ -162,7 +162,7 @@ public class HtmlComponentAttributeParserTest extends HtmlComponentAttributePars
         // Apply
         try {
             this.read();
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             data = e.getAttribute();
         }
         

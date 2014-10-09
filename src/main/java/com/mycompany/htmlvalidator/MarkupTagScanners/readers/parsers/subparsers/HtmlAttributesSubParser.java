@@ -3,11 +3,11 @@ package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers
 import java.io.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTagNames;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlAttributesSubParser extends HtmlSubParser {
@@ -66,7 +66,7 @@ public class HtmlAttributesSubParser extends HtmlSubParser {
         try {
             attr = this.parseCommentAttribute();
             this.getResult().updateAttributes(attr);
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             attr = e.getAttribute();
             this.getResult().updateAttributes(attr);
             throw this.generateEndOfInputParsingException();
@@ -90,7 +90,7 @@ public class HtmlAttributesSubParser extends HtmlSubParser {
     private boolean isValidCharacter() throws IOException {
         try {
             return this.validateChar(this.getCurrChar());
-        } catch (UnexpectedCloseTagParsingException e) {
+        } catch (UnexpectedCloseTagParsingError e) {
             return false;
         }
     }
@@ -99,7 +99,7 @@ public class HtmlAttributesSubParser extends HtmlSubParser {
         try {
             this.validateState();
             this.whitespaceConsumer.parse(this.getInput());
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             throw this.generateEndOfInputParsingException();
         }
     }
@@ -132,7 +132,7 @@ public class HtmlAttributesSubParser extends HtmlSubParser {
         
         try {
             name = this.getEnclosureDataName();
-        } catch (ComponentException err) {
+        } catch (ComponentError err) {
             name = err.getData();
             result.addError(err);
         }
@@ -143,7 +143,7 @@ public class HtmlAttributesSubParser extends HtmlSubParser {
     private String getEnclosureDataName() throws IOException {
         try {
             return this.enclosureParser.parse(this.getInput());
-        } catch (EndOfInputComponentException e) {
+        } catch (EndOfInputComponentError e) {
             HtmlAttribute attr = new HtmlAttribute(e.getData());
             this.getResult().updateAttributes(attr);
             throw this.generateEndOfInputParsingException();
@@ -155,7 +155,7 @@ public class HtmlAttributesSubParser extends HtmlSubParser {
             this.validateState();
             this.unread();
             return this.attributeParser.parse(this.getInput());
-        } catch (EndOfInputAttributeException e) {
+        } catch (EndOfInputAttributeError e) {
             this.getResult().updateAttributes(e.getAttribute());
             throw this.generateEndOfInputParsingException();
         }

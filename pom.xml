@@ -34,6 +34,20 @@
                <encoding>UTF-8</encoding>
   			</configuration>
   		</plugin>
+
+        <plugin>
+            <!-- plugin for jar entry point -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.4</version>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>com.mycompany.htmlvalidator.</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
       
   		<plugin>
           <!-- used to add unit testing functionality to build -->

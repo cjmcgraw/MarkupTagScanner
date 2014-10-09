@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.Attribute;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
@@ -100,10 +100,10 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_ClosingParser_ThrowsExpectedException_EndOfInputParsingException()  {
         // Arrange
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -120,7 +120,7 @@ public class HtmlDataParserTest {
         
         HtmlData data = null;
         
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         this.closingParser.setData(expData.isClosing());
         
@@ -129,7 +129,7 @@ public class HtmlDataParserTest {
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException err) {
+        } catch (EndOfInputParsingError err) {
             data = err.getHtmlData();
         }
         
@@ -143,7 +143,7 @@ public class HtmlDataParserTest {
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
         
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
@@ -151,7 +151,7 @@ public class HtmlDataParserTest {
         try {
             this.parse();
             data = this.getRemainingData();
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = this.input.getRemainingData();
         }
         // Assert
@@ -161,7 +161,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_ClosingParser_ThrowsUnclosedTagParsingException_ExceptionIsCaught()  {
         // Arrange
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -178,7 +178,7 @@ public class HtmlDataParserTest {
         
         HtmlData data = null;
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         this.closingParser.setData(expData.isClosing());
         
@@ -198,7 +198,7 @@ public class HtmlDataParserTest {
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
@@ -217,7 +217,7 @@ public class HtmlDataParserTest {
         boolean expData = true;
         boolean data;
         
-        ParsingException exception = this.createException("UnexpectedClose");
+        ParsingError exception = this.createException("UnexpectedClose");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         this.closingParser.setData(expData);
         
@@ -237,7 +237,7 @@ public class HtmlDataParserTest {
         boolean expData = false;
         boolean data;
         
-        ParsingException exception = this.createException("UnexpectedClose");
+        ParsingError exception = this.createException("UnexpectedClose");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         this.closingParser.setData(expData);
         
@@ -257,7 +257,7 @@ public class HtmlDataParserTest {
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
         
-        ParsingException exception = this.createException("UnexpectedClose");
+        ParsingError exception = this.createException("UnexpectedClose");
         this.closingParser = new HtmlClosingSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -317,10 +317,10 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_ElementParser_ThrowsExpectedException_EndOfInputParsingException() {
         // Arrange
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.elementParser = new HtmlElementSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -337,7 +337,7 @@ public class HtmlDataParserTest {
         
         HtmlData data = null;
         
-        ParsingException exception =  this.createException("EndOfInput");
+        ParsingError exception =  this.createException("EndOfInput");
         this.elementParser = new HtmlElementSubParserMock(exception);
         this.elementParser.setElement(expData.getName());
          
@@ -346,7 +346,7 @@ public class HtmlDataParserTest {
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -360,14 +360,14 @@ public class HtmlDataParserTest {
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
         
-        ParsingException exception = new EndOfInputParsingException(new Point(0, 0), null);
+        ParsingError exception = new EndOfInputParsingError(new Point(0, 0), null);
         this.elementParser = new HtmlElementSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = this.getRemainingData();
         }
         
@@ -378,7 +378,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_ElementParser_ThrowsExpectedException_ExceptionIsCaught() {
         // Arrange
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.elementParser = new HtmlElementSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -395,7 +395,7 @@ public class HtmlDataParserTest {
         
         HtmlData data;
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.elementParser = new HtmlElementSubParserMock(exception);
         this.elementParser.setElement(expData.getName());
         
@@ -416,7 +416,7 @@ public class HtmlDataParserTest {
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.elementParser = new HtmlElementSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
@@ -434,7 +434,7 @@ public class HtmlDataParserTest {
         String expData = DEFAULT_ELEMENT;
         String data;
         
-        ParsingException exception =  this.createException("UnexpectedClose");
+        ParsingError exception =  this.createException("UnexpectedClose");
         
         this.elementParser = new HtmlElementSubParserMock(exception);
         
@@ -456,7 +456,7 @@ public class HtmlDataParserTest {
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
         
-        ParsingException exception =  this.createException("UnexpectedClose");
+        ParsingError exception =  this.createException("UnexpectedClose");
         this.elementParser = new HtmlElementSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -501,10 +501,10 @@ public class HtmlDataParserTest {
         assertEquals(expData, data);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_AttributeParser_ThrowsExpectedException_EndOfInputParsingException()  {
         // Arrange
-        ParsingException exception =  this.createException("EndOfInput");
+        ParsingError exception =  this.createException("EndOfInput");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
@@ -520,7 +520,7 @@ public class HtmlDataParserTest {
         
         HtmlData data = null;
         
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.attributeParser.setData(DEFAULT_ATTR);
         this.setState(DEFAULT_INPUT);
@@ -528,7 +528,7 @@ public class HtmlDataParserTest {
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -543,14 +543,14 @@ public class HtmlDataParserTest {
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
         
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = this.getRemainingData();
         }
         
@@ -561,7 +561,7 @@ public class HtmlDataParserTest {
     @Test
     public void testParse_AttributeParser_UnclosedTagParsingException_ExceptionIsCaught()  {
         //Arrange
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
@@ -577,7 +577,7 @@ public class HtmlDataParserTest {
         
         HtmlData data = null;
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.attributeParser.setData(DEFAULT_ATTR);
         
@@ -598,7 +598,7 @@ public class HtmlDataParserTest {
         String expData = INTERRUPT_EXP_REMAINING_INPUT;
         String data = "";
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
@@ -616,7 +616,7 @@ public class HtmlDataParserTest {
         List<Attribute> expData = DEFAULT_ATTR;
         Iterable<Attribute> data;
         
-        ParsingException exception = this.createException("UnexpectedClose");
+        ParsingError exception = this.createException("UnexpectedClose");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.attributeParser.setData(expData);
         this.setState(DEFAULT_INPUT);
@@ -635,7 +635,7 @@ public class HtmlDataParserTest {
         String expData = DEFAULT_EXP_REMAINING_INPUT;
         String data;
         
-        ParsingException exception = this.createException("UnexpectedClose");
+        ParsingError exception = this.createException("UnexpectedClose");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         this.setState(DEFAULT_INPUT);
         
@@ -696,7 +696,7 @@ public class HtmlDataParserTest {
         boolean expData = true;
         boolean data = !expData;
         
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -704,7 +704,7 @@ public class HtmlDataParserTest {
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = e.getHtmlData().hasOpeningBracket();
         }
         
@@ -718,7 +718,7 @@ public class HtmlDataParserTest {
         boolean expData = false;
         boolean data = !expData;
         
-        ParsingException exception = this.createException("EndOfInput");
+        ParsingError exception = this.createException("EndOfInput");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -726,7 +726,7 @@ public class HtmlDataParserTest {
         // Apply
         try {
             this.parse();
-        } catch (EndOfInputParsingException e) {
+        } catch (EndOfInputParsingError e) {
             data = e.getHtmlData().hasClosingBracket();
         }
         
@@ -740,7 +740,7 @@ public class HtmlDataParserTest {
         boolean expData = true;
         boolean data = !expData;
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -759,7 +759,7 @@ public class HtmlDataParserTest {
         boolean expData = false;
         boolean data = !expData;
         
-        ParsingException exception = this.createException("UnclosedTag");
+        ParsingError exception = this.createException("UnclosedTag");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -778,7 +778,7 @@ public class HtmlDataParserTest {
         boolean expData = true;
         boolean data;
         
-        ParsingException exception = this.createException("UnexpectedClose");
+        ParsingError exception = this.createException("UnexpectedClose");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -796,7 +796,7 @@ public class HtmlDataParserTest {
         boolean expData = true;
         boolean data;
         
-        ParsingException exception = this.createException("UnexpectedClose");
+        ParsingError exception = this.createException("UnexpectedClose");
         this.attributeParser = new HtmlAttributeSubParserMock(exception);
         
         this.setState(DEFAULT_INPUT);
@@ -961,7 +961,7 @@ public class HtmlDataParserTest {
         return data;
     }
     
-    private ParsingException createException(String name) {
+    private ParsingError createException(String name) {
         switch (name.toLowerCase()) {
             case "endofinput"       :   return this.createEndOfInputException();
             case "unexpectedclose"  :   return this.createUnexpectedCloseTagException();
@@ -971,19 +971,19 @@ public class HtmlDataParserTest {
         return null;
     }
     
-    private ParsingException createEndOfInputException() {
-        return new EndOfInputParsingException(new Point(0,0), new HtmlData());
+    private ParsingError createEndOfInputException() {
+        return new EndOfInputParsingError(new Point(0,0), new HtmlData());
     }
     
-    private ParsingException createUnexpectedCloseTagException() {
-        return new UnexpectedCloseTagParsingException(new Point(0,0), new HtmlData());
+    private ParsingError createUnexpectedCloseTagException() {
+        return new UnexpectedCloseTagParsingError(new Point(0,0), new HtmlData());
     }
     
-    private ParsingException createUnclosedTagException() {
-        return new UnclosedTagParsingException(new Point(0,0), new HtmlData());
+    private ParsingError createUnclosedTagException() {
+        return new UnclosedTagParsingError(new Point(0,0), new HtmlData());
     }
     
-    private ParsingException createMissingEnclosureTagException() {
-        return new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', new HtmlData());
+    private ParsingError createMissingEnclosureTagException() {
+        return new MissingEnclosureParsingError(new Point(0,0), ' ', ' ', new HtmlData());
     }
 }

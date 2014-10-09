@@ -9,7 +9,7 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.Html
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlElementSubParserTest {
@@ -239,7 +239,7 @@ public class HtmlElementSubParserTest {
         assertEquals(expData, this.input.getRemainingData());
     }
     
-    @Test(expected=UnexpectedCloseTagParsingException.class)
+    @Test(expected=UnexpectedCloseTagParsingError.class)
     public void testParse_WithInvalidElementName_StrStartsWithClosingTag_ThrowsExpectedException() throws IOException {
         // Test
         this.testParse_InvalidElementName_UnexpectedTag_ThrowsException(WHITESPACE_START_STR, CLOSING_TAG);
@@ -262,7 +262,7 @@ public class HtmlElementSubParserTest {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_START_STR, CLOSING_TAG);
     }
     
-    @Test(expected=UnexpectedCloseTagParsingException.class)
+    @Test(expected=UnexpectedCloseTagParsingError.class)
     public void testParse_WithInvalidElementName_StrCenterClosingTag_ThrowsExpectedException() throws IOException {
         // Test
         this.testParse_InvalidElementName_UnexpectedTag_ThrowsException(WHITESPACE_CENTER_STR, CLOSING_TAG);
@@ -285,7 +285,7 @@ public class HtmlElementSubParserTest {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_CENTER_STR, CLOSING_TAG);
     }
     
-    @Test(expected=UnexpectedCloseTagParsingException.class)
+    @Test(expected=UnexpectedCloseTagParsingError.class)
     public void testParse_WithInvalidElementName_StrEndsWithClosingTag_ThrowsExpectedException() throws IOException {
         // Test
         this.testParse_InvalidElementName_UnexpectedTag_ThrowsException(WHITESPACE_END_STR, CLOSING_TAG);
@@ -308,7 +308,7 @@ public class HtmlElementSubParserTest {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_END_STR, CLOSING_TAG);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testParse_WithInvalidElementName_StrStartsWithOpeningTag_ThrowsExpectedException() throws IOException {
         // Test
         this.testParse_InvalidElementName_UnexpectedTag_ThrowsException(WHITESPACE_START_STR, OPENING_TAG);
@@ -331,7 +331,7 @@ public class HtmlElementSubParserTest {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_START_STR, OPENING_TAG);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testParse_WithInvalidElementName_StrCenterOpeningTag_ThrowsExpectedException() throws IOException {
         // Test
         this.testParse_InvalidElementName_UnexpectedTag_ThrowsException(WHITESPACE_CENTER_STR, OPENING_TAG);
@@ -354,7 +354,7 @@ public class HtmlElementSubParserTest {
         this.testParse_InvalidElement_UnexpectedTag_ConsumesOnlyExpectedInput_ErrorTagRemains(WHITESPACE_CENTER_STR, OPENING_TAG);
     }
     
-    @Test(expected=UnclosedTagParsingException.class)
+    @Test(expected=UnclosedTagParsingError.class)
     public void testParse_WithInvalidElementName_StrEndsWithOpeningTag_ThrowsExpectedException() throws IOException {
         // Test
         this.testParse_InvalidElementName_UnexpectedTag_ThrowsException(WHITESPACE_END_STR, OPENING_TAG);
@@ -397,7 +397,7 @@ public class HtmlElementSubParserTest {
         // Apply 
         try {
             this.parser.parse(this.input, this.result);
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
             data = this.result.getName();
         }
         
@@ -415,7 +415,7 @@ public class HtmlElementSubParserTest {
         // Apply
         try {
             this.parser.parse(this.input, this.result);
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
             data = e.getHtmlData();
         }
         
@@ -432,14 +432,14 @@ public class HtmlElementSubParserTest {
         // Apply
         try {
             this.parser.parse(this.input, this.result);
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
         }
         
         // Assert
         assertEquals(expData, this.input.getRemainingData());
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_WithInvalidInput_EmptyInput_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("");
@@ -448,7 +448,7 @@ public class HtmlElementSubParserTest {
         this.parser.parse(this.input, this.result);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testParse_WithInvalidInput_NoWhitespaceInInput_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("abcdefghijklmnopqrstuvwxyz");

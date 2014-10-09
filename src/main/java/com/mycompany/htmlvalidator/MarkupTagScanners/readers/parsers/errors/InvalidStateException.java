@@ -1,6 +1,6 @@
-package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions;
+package com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors;
 
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
+import com.mycompany.htmlvalidator.errors.MarkupError;
 
 public class InvalidStateException extends MarkupError {
     private static final long serialVersionUID = 7342202150355963466L;

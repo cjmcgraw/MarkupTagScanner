@@ -4,19 +4,19 @@ import java.io.IOException;
 import java.util.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.EnclosureTags;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.ComponentException;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.ComponentError;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class HtmlQuoteEnclosureParserMock extends HtmlComponentEnclosureParser {
     private List<String> receivedData;
-    private ComponentException error;
+    private ComponentError error;
     private String result;
     
     public HtmlQuoteEnclosureParserMock(String result) {
         this(result, null);
     }
     
-    public HtmlQuoteEnclosureParserMock(String result, ComponentException error) {
+    public HtmlQuoteEnclosureParserMock(String result, ComponentError error) {
         this.receivedData = new ArrayList<>();
         this.result = result;
         this.error = error;
@@ -36,11 +36,11 @@ public class HtmlQuoteEnclosureParserMock extends HtmlComponentEnclosureParser {
         return this.receivedData;
     }
     
-    public ComponentException getError() {
+    public ComponentError getError() {
         return this.error;
     }
     
-    public void setError(ComponentException err) {
+    public void setError(ComponentError err) {
         this.error = err;
     }
     

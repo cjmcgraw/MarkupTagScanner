@@ -8,7 +8,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 
 public class HtmlAttributeTest {
     public static final String DEFAULT_NAME = "some name";
@@ -16,11 +16,11 @@ public class HtmlAttributeTest {
     public static final String EMPTY_VALUE = HtmlAttribute.DEFAULT_EMPTY_VALUES;
     public static final String WHITESPACE = String.format("    \t\t    \t\t %n%n  \t \t ");
     
-    public static final ComponentException FIRST_ERROR = new MissingCharacterComponentException('a', new Point(0, 0), "some data");
-    public static final ComponentException SECOND_ERROR = new UnexpectedCharacterComponentException('a', new Point(1, 1), "other data");
-    public static final ComponentException THIRD_ERROR = new MissingCharacterComponentException('z', new Point(2, 2), "last data");
+    public static final ComponentError FIRST_ERROR = new MissingCharacterComponentError('a', new Point(0, 0), "some data");
+    public static final ComponentError SECOND_ERROR = new UnexpectedCharacterComponentError('a', new Point(1, 1), "other data");
+    public static final ComponentError THIRD_ERROR = new MissingCharacterComponentError('z', new Point(2, 2), "last data");
     
-    public static final List<ComponentException> ERRORS = Arrays.asList(FIRST_ERROR, SECOND_ERROR, THIRD_ERROR);
+    public static final List<ComponentError> ERRORS = Arrays.asList(FIRST_ERROR, SECOND_ERROR, THIRD_ERROR);
     
     private HtmlAttribute attribute;
     

@@ -6,9 +6,9 @@
 
 package com.mycompany.htmlvalidator.MarkupTagScanners;
 
-import com.mycompany.htmlvalidator.exceptions.ErrorReporter;
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
-import com.mycompany.htmlvalidator.exceptions.MarkupErrorReporter;
+import com.mycompany.htmlvalidator.errors.ErrorReporter;
+import com.mycompany.htmlvalidator.errors.MarkupError;
+import com.mycompany.htmlvalidator.errors.MarkupErrorReporter;
 
 import java.util.*;
 

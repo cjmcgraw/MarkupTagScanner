@@ -12,13 +12,13 @@ import org.junit.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.Tag;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
-import com.mycompany.htmlvalidator.exceptions.MarkupError;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
+import com.mycompany.htmlvalidator.errors.MarkupError;
 
 public class HtmlReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");
-    private static final MarkupError UNCLOSED_TAG_ERROR = new UnclosedTagParsingException(new Point(0,0), new HtmlData());
-    private static final MarkupError MISSING_ENCLOSURE_ERROR = new MissingEnclosureParsingException(new Point(0,0), ' ', ' ', new HtmlData());
+    private static final MarkupError UNCLOSED_TAG_ERROR = new UnclosedTagParsingError(new Point(0,0), new HtmlData());
+    private static final MarkupError MISSING_ENCLOSURE_ERROR = new MissingEnclosureParsingError(new Point(0,0), ' ', ' ', new HtmlData());
     private static final HtmlAttribute CLOSING_ATTR = new HtmlAttribute("/");
     
     private static final HtmlAttribute[] DEFAULT_FLAGS = {new HtmlAttribute("flag1"), 
@@ -917,7 +917,7 @@ public class HtmlReaderIT {
         assertTrue(i > 0);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTag");
@@ -933,7 +933,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithMissingClosingTag", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagHasAttrIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithAttrFlag flag");
@@ -952,7 +952,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithMissingClosingTagWithAttrFlag flag1", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagHasTwoAttrsIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithTwoAttrFlags flag1 flag2");
@@ -973,7 +973,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagMultiAttrsIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithMultiAttrFlags flag1 flag2 flag3");
@@ -995,7 +995,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagAttrAndValIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithAttrAndVal attr1=val1");
@@ -1015,7 +1015,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithTwoAttrAndValsIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithTwoAttrsAndVals attr1=val1 attr2=val2");
@@ -1036,7 +1036,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithMultiAttrsWithValsIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithMultiAttrsAndVals attr1=val1 attr2=val2 attr3=val3");
@@ -1058,7 +1058,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithAttrAndValsInSingleQuotesIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithAttrAndValueInSingleQuotes attr='val'");
@@ -1078,7 +1078,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithTwoAttrsAndValsInSingleQuotesIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithTwoAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2'");
@@ -1099,7 +1099,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithMultiAttrsAndValsInSingleQuotesIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithMultiAttrsAndValuesInSingleQuotes attr1='val1' attr2='val2' attr3='val3'");
@@ -1121,7 +1121,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithAttrAndValsInDoubleQuotesIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithAttrAndValueInDoubleQuotes attr=\"val\"");
@@ -1141,7 +1141,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithTwoAttrsAndValsInDoubleQuotesIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithTwoAttrsAndValuesInDoubleQuotes attr1=\"val1\" attr2=\"val2\"");
@@ -1162,7 +1162,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithMultiAttrsAndValsInDoubleQuotesIsMissingClosingBracket_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithMissingClosingTagWithMultiAttrsAndValuesInDoubleQuotes attr1=\"val1\" attr2=\"val2\" attr3=\"val3\"");
@@ -1184,7 +1184,7 @@ public class HtmlReaderIT {
                 exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithEOFAfterClosingTag_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("</");
@@ -1203,7 +1203,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("</", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithEOFInCommentTag_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<!--some comment data");
@@ -1222,7 +1222,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<!--some comment data", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithEOFInSingleQuoteAttr_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithEOFInSingleQuoteAttr 'someAttr");
@@ -1241,7 +1241,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithEOFInSingleQuoteAttr 'someAttr", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithEOFInDoubleQuoteAttr_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithEOFInDoubleQuoteAttr \"someAttr");
@@ -1260,7 +1260,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithEOFInDoubleQuoteAttr \"someAttr", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWitEOFAfterSingleAttrAtEquals_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithEOFWithAttrWithVal attr1=");
@@ -1279,7 +1279,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithEOFWithAttrWithVal attr1=", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithEOFAfterTwoAttrAtEquals_ThrowsExpectedException() throws IOException {
         //Arrange
         this.setState("<tagWithEOFWithTwoAttrsWithVals attr1=val1 attr2=");
@@ -1299,7 +1299,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithEOFWithTwoAttrsWithVals attr1=val1 attr2=", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWithEOFAfterThreeAttrAtEquals_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithEOFWithThreeAttrsWithVals attr1=val1 attr2=val2 attr3=");
@@ -1320,7 +1320,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithEOFWithThreeAttrsWithVals attr1=val1 attr2=val2 attr3=", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWitEOFAfterSingleAttrWithValInSingleQuotes_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithEOFWithAttrWithVal attr='someVal");
@@ -1339,7 +1339,7 @@ public class HtmlReaderIT {
         testReadInvalidTagAndDataMatches_ThrowsException("<tagWithEOFWithAttrWithVal attr='someVal", exp);
     }
     
-    @Test(expected=EndOfInputParsingException.class)
+    @Test(expected=EndOfInputParsingError.class)
     public void testNext_InvalidTag_TagWitEOFAfterSingleAttrWithValInDoubleQuotes_ThrowsExpectedException() throws IOException {
         // Arrange
         this.setState("<tagWithEOFWithAttrWithVal attr=\"someVal");
@@ -1618,13 +1618,13 @@ public class HtmlReaderIT {
         assertTrue(i > 0);
     }
 
-    /*
+/*
     @Test
     public void SANITY_CHECK() throws IOException {
         // Sanity Check can be performed here
         HtmlDataGenerator.updateSerializedFiles();
-    }
-    */
+    }*/
+
 
     private HtmlData generateEmptyData(boolean hasOpening, boolean hasClosing) {
         HtmlData result = new HtmlData();
@@ -1667,7 +1667,7 @@ public class HtmlReaderIT {
         // Apply
         try {
             this.reader.next();
-        } catch (ParsingException e) {
+        } catch (ParsingError e) {
             data = e.getHtmlData();
         }
         // Assert

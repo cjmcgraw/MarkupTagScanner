@@ -5,7 +5,7 @@ import java.util.*;
 
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.*;
-import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.exceptions.*;
+import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.htmlvalidator.MarkupTagScanners.readers.utilities.*;
 
@@ -14,7 +14,7 @@ public class HtmlReader implements MarkupReader{
     private boolean emptyReader;
     private DataParser parser;
     
-    private ParsingException incomingException;
+    private ParsingError incomingException;
     
     private HtmlData currData;
     private boolean hasData;
@@ -86,9 +86,9 @@ public class HtmlReader implements MarkupReader{
             this.readNextData();
         } catch (IOException e) {
             throw new NoSuchElementException(" An error occurred in reading the input! No such element found");
-        } catch (FatalParsingException e) {
+        } catch (FatalParsingError e) {
             this.incomingException = e;
-        } catch (NonFatalParsingException e) {
+        } catch (NonFatalParsingError e) {
             this.updateState(e.getHtmlData());
         }
     }
