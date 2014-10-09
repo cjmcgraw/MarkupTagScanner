@@ -1,7 +1,8 @@
 package com.mycompany.htmlvalidator.MarkupTagScanners.enums;
 
 public enum MarkupTagNames {   
-    COMMENT_TAG     ("!--", "--");
+    COMMENT_TAG     ("!--", "--"),
+    ENTITY_TAG      ("!");
     
     private static final String EMPTY_NAME = "";
     
@@ -40,5 +41,10 @@ public enum MarkupTagNames {
     
     public boolean hasEndName() {
         return !this.endName.equals(EMPTY_NAME);
+    }
+
+    public static boolean contains(String s) {
+        return s.equals(COMMENT_TAG.getBeginName()) ||
+               s.startsWith(ENTITY_TAG.getBeginName());
     }
 }
