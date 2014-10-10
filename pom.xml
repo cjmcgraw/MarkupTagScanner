@@ -35,7 +35,7 @@
             <configuration>
                 <archive>
                     <manifest>
-                        <mainClass>com.mycompany.htmlvalidator.MarkupValidatorMain</mainClass>
+                        <mainClass>com.mycompany.markupvalidator.MarkupValidatorMain</mainClass>
                     </manifest>
                 </archive>
                 <descriptorRefs>
@@ -61,12 +61,12 @@
             <configuration>
                 <archive>
                     <manifest>
-                        <mainClass>com.mycompany.htmlvalidator.MarkupValidatorMain</mainClass>
+                        <mainClass>com.mycompany.markupvalidator.MarkupValidatorMain</mainClass>
                     </manifest>
                 </archive>
             </configuration>
         </plugin>
-    
+
   		<plugin>
             <!-- plugin adding compiler requirements -->
   			<groupId>org.apache.maven.plugins</groupId>
