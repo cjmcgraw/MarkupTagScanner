@@ -156,8 +156,6 @@ public class HtmlValidatorTest {
         List<String> exp = new ArrayList<>();
         List<Tag> data = Arrays.asList(tags);
 
-        data.stream().forEach(x -> exp.add(this.indentation + formatLine(x)));
-
         // Apply
         validator.validate(data);
 
@@ -280,7 +278,6 @@ public class HtmlValidatorTest {
             MarkupError err = generateError("err" + i);
             tag.getErrorReporter().addError(err);
             data.add(tag);
-            exp.add(this.indentation + formatLine(tag));
             exp.add(formatLine(err));
             exp.add(formatLine());
         }
@@ -405,8 +402,6 @@ public class HtmlValidatorTest {
         for (TagMock tag : tags) {
             tag.isClosing = true;
             data.add(tag);
-
-            exp.add(this.indentation + formatLine(tag));
             exp.add(formatLine(errMsg));
         }
 
@@ -541,7 +536,6 @@ public class HtmlValidatorTest {
 
             data.add(tag);
 
-            exp.add(this.indentation + formatLine(tag));
             exp.add(formatLine(err));
             exp.add(formatLine());
             exp.add(formatLine(errMsg));
@@ -613,7 +607,6 @@ public class HtmlValidatorTest {
         for (TagMock tag : tags) {
             tag.isSelfClosing = true;
             data.add(tag);
-            exp.add(this.indentation + formatLine(tag));
         }
 
         // Apply
@@ -679,7 +672,6 @@ public class HtmlValidatorTest {
             tag.getErrorReporter().addError(err);
 
             data.add(tag);
-            exp.add(this.indentation + formatLine(tag));
             exp.add(formatLine(err));
             exp.add(formatLine());
         }
@@ -820,7 +812,6 @@ public class HtmlValidatorTest {
                 closingTag.isClosing = true;
 
                 data.add(closingTag);
-                exp.add(formatLine(closingTag));
             } else {
                 exp.add(formatLine(String.format(HtmlValidator.UNCLOSED_TAG_MSG, tag)));
             }

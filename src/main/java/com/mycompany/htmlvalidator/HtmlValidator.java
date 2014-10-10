@@ -20,10 +20,9 @@ public class HtmlValidator implements MarkupValidator {
     public static final String DEFAULT_TAG_STACK_NAME = "HTML";
 
 
-    private TagStackFactory tagStackFactory;
-
-    private TagStack tagStack;
-    private Printer printer;
+    protected TagStackFactory tagStackFactory;
+    protected TagStack tagStack;
+    protected Printer printer;
 
     public HtmlValidator() {
         this(new OutputPrinter(Arrays.asList(DEFAULT_OUTPUT)));
@@ -68,9 +67,7 @@ public class HtmlValidator implements MarkupValidator {
         printRemainingTags();
     }
 
-    private void printTagData(Tag tag) {
-        String indentation = getIndentation(validClosingTag(tag) ? 1 : 0);
-        printer.println(indentation + tag);
+    protected void printTagData(Tag tag) {
         printTagErrorData(tag);
     }
 
@@ -136,15 +133,6 @@ public class HtmlValidator implements MarkupValidator {
         printTagErrorData(tag);
     }
 
-    private String getIndentation() {
-        return tagStack.indentation();
-    }
-
-    private String getIndentation(int truncValue) {
-        String indentation =  getIndentation();
-        return (indentation.length() > truncValue) ? indentation.substring(truncValue) : "";
-    }
-
     private void pushOntoTagStack(Tag tag) {
         tagStack.push(tag);
     }
@@ -173,11 +161,7 @@ public class HtmlValidator implements MarkupValidator {
         printer.println(UNEXPECTED_CLOSE_TAG);
     }
 
-    private boolean validClosingTag(Tag tag) {
-        return !tagStack.empty() && isOppositeTag(tagStack.peek(), tag);
-    }
-
-    private boolean isOppositeTag(Tag tag1, Tag tag2) {
+    protected boolean isOppositeTag(Tag tag1, Tag tag2) {
         return tag1.getName().equals(tag2.getName()) &&
                !tag1.isClosing() && tag2.isClosing();
     }

@@ -8,14 +8,13 @@ import com.mycompany.htmlvalidator.MarkupTagScanners.*;
 import com.mycompany.htmlvalidator.MarkupTagScanners.enums.VoidTag;
 import com.mycompany.htmlvalidator.errors.*;
 import com.mycompany.htmlvalidator.printers.PrinterMock;
-
 import org.junit.*;
+
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class HtmlValidatorIT {
-    public static final String[] INDENTATION_LEVELS = {"", "\t", "\t\t"};
     public static final String LINE_FRMT = "%s%n";
     public static final String UNCLOSED_FRMT = String.format(LINE_FRMT, HtmlValidator.UNCLOSED_TAG_MSG);
 
@@ -64,9 +63,6 @@ public class HtmlValidatorIT {
         List<String> exp = new ArrayList<>();
         List<Tag> data = Arrays.asList(tags);
 
-        for (int i = 0; i < tags.length; i++)
-            exp.add(INDENTATION_LEVELS[i % 3] + String.format(LINE_FRMT, tags[i]));
-
         // Apply
         validator.validate(data.iterator());
 
@@ -102,8 +98,6 @@ public class HtmlValidatorIT {
         for (int i = tags.length - 1; i >= 0; i--) {
             TagMock tag = tags[i].copy();
             tag.isClosing = true;
-
-            exp.add(INDENTATION_LEVELS[i % 3] + String.format(LINE_FRMT, tag));
             data.add(tag);
         }
 
@@ -139,9 +133,7 @@ public class HtmlValidatorIT {
         List<Tag> data = new ArrayList<>();
 
         Tag tag = generateTag("errorTag");
-
         data.add(tag);
-        exp.add(String.format(LINE_FRMT, tag));
 
         for (MarkupError err : errs) {
             exp.add(String.format(LINE_FRMT, err.toString()));
@@ -183,9 +175,6 @@ public class HtmlValidatorIT {
         TagMock closingTag = openingTag.copy();
         closingTag.isClosing = true;
 
-        exp.add(String.format(LINE_FRMT, openingTag));
-        exp.add(String.format(LINE_FRMT, closingTag));
-
         for (MarkupError err : errs) {
             exp.add(String.format(LINE_FRMT, err.toString()));
             closingTag.getErrorReporter().addError(err);
@@ -203,92 +192,39 @@ public class HtmlValidatorIT {
 
     }
 
-    @Test
-    public void testValidate_OpeningTagFollowedByNonMatchingClosingTag_PrinterContainsExpected() {
-        // Arrange
-        String exp = String.format(LINE_FRMT, HtmlValidator.NON_MATCHING_ERROR_MSG);
-
-        List<Tag> data = new ArrayList<>();
-
-        TagMock openingTag = generateTag("tag1");
-        TagMock closingTag = generateTag("tag2");
-        closingTag.isClosing = true;
-
-        data.add(openingTag);
-        data.add(closingTag);
-
-        // Apply
-        validator.validate(data.iterator());
-
-        // Assert
-        assertEquals(String.format(exp, openingTag),
-                     printer.getPrintData().get(2));
-    }
-
-    @Test
-    public void testValidate_SingleSelfClosingTag_IndentationLevelRemainsSame_PrinterContainsExpected() {
+   @Test
+    public void testValidate_HasUnclosedTags_SingleTag_PrinterContainsExpected() {
         // Test
-        testValidate_SelfClosingTags_IndentationLevelRemainsSame(generateTag("tag1"));
+       testValidate_HasUnclosedTags_PrinterContainsExpected(generateTag("tag1"));
     }
 
     @Test
-    public void testValidate_DoubleSelfClosingTags_IndentationLevelRemainsSame_PrinterContainsExpected() {
+    public void testValidate_HasUnclosedTags_TwoTags_PrinterContainsExpected() {
         // Test
-        testValidate_SelfClosingTags_IndentationLevelRemainsSame(generateTag("tag1"), generateTag("tag2"));
+        testValidate_HasUnclosedTags_PrinterContainsExpected(generateTag("tag1"), generateTag("tag2"));
     }
 
     @Test
-    public void testValidate_TripleSelfClosingTags_IndentationLevelRemainsSame_PrinterContainsExpected() {
+    public void testValidate_HasUnclosedTags_ThreeTags_PrinterContainsExpected() {
         // Test
-        testValidate_SelfClosingTags_IndentationLevelRemainsSame(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
+        testValidate_HasUnclosedTags_PrinterContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
     }
 
-    private void testValidate_SelfClosingTags_IndentationLevelRemainsSame(TagMock... tags) {
+    private void testValidate_HasUnclosedTags_PrinterContainsExpected(TagMock... tags) {
         // Arrange
         List<String> exp = new ArrayList<>();
         List<Tag> data = new ArrayList<>();
 
-        data.add(generateTag("openingTag"));
-        exp.add(String.format(LINE_FRMT, "openingTag"));
-
-
-        for (TagMock tag : tags) {
-            tag.isSelfClosing = true;
-
-            data.add(tag);
-            exp.add(String.format(LINE_FRMT, INDENTATION_LEVELS[1] + tag.toString()));
+        for (int i = tags.length - 1; i >= 0; i--) {
+            data.add(tags[tags.length - 1 - i]);
+            exp.add(String.format(UNCLOSED_FRMT, tags[i]));
         }
 
         // Apply
-        validator.validate(data.iterator());
+        validator.validate(data);
 
         // Assert
-        testPrinterDataBeginsWithExpected(exp);
-
-    }
-
-    @Test
-    public void testValidate_NonSelfClosing_ContainsSelfClosingName_IndentationRemainsSame_PrinterContainsExpected() {
-        //Arrange
-        List<String> exp = new ArrayList<>();
-        List<Tag> data = new ArrayList<>();
-
-        data.add(generateTag("openingTag"));
-        exp.add(String.format(LINE_FRMT, "openingTag"));
-
-        for (VoidTag voidTag : VoidTag.values()){
-            TagMock tag = generateTag(voidTag.getName());
-            tag.name = voidTag.getName();
-
-            exp.add(String.format(LINE_FRMT, INDENTATION_LEVELS[1] + voidTag.getName()));
-            data.add(tag);
-        }
-
-        // Apply
-        validator.validate(data.iterator());
-
-        // Assert
-        testPrinterDataBeginsWithExpected(exp);
+        assertEquals(exp, printer.getPrintData());
     }
 
     private void testPrinterDataBeginsWithExpected(List<String> exp) {
