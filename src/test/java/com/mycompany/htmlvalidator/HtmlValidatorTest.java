@@ -24,8 +24,6 @@ public class HtmlValidatorTest {
     private TagStackMock tagStack;
     private PrinterMock printer;
 
-    private String indentation;
-
 
     @Before
     public void setUp() {
@@ -34,8 +32,6 @@ public class HtmlValidatorTest {
 
         TagStackFactory factory = new TagStackFactoryMock(tagStack);
         this.validator = new HtmlValidator(printer, factory);
-
-        this.indentation = tagStack.indentation;
     }
 
     @After
@@ -43,7 +39,6 @@ public class HtmlValidatorTest {
         this.printer = null;
         this.tagStack = null;
         this.validator = null;
-        this.indentation = "";
     }
 
     @Test
@@ -62,33 +57,6 @@ public class HtmlValidatorTest {
     public void testValidate_ThreeTags_OpeningTag_NoIndentation_PrinterDataContainsExpected() {
         // Test
         testValidate_StandardTag_PrinterContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-    }
-
-    @Test
-    public void testValidate_SingleTag_openingTag_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_StandardTag_PrinterContainsExpected(generateTag("tag1"));
-    }
-
-    @Test
-    public void testValidate_TwoTags_OpeningTag_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_StandardTag_PrinterContainsExpected(generateTag("tag1"), generateTag("tag2"));
-    }
-
-    @Test
-    public void testValidate_ThreeTags_OpeningTag_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_StandardTag_PrinterContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag2"));
     }
 
     @Test
@@ -113,39 +81,6 @@ public class HtmlValidatorTest {
     public void testValidate_ThreeTags_ClosingTag_NoIndentation_PrinterDataContainsExpected() {
         // Set up
         TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-
-        // Test
-        testValidate_StandardTag_PrinterContainsExpected(closingTags);
-    }
-
-    @Test
-    public void testValidate_SingleTag_ClosingTag_WithIndentation_PrinterDataContainsExpected() {
-        // Set Up
-        TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"));
-
-        configureIndentationForClosing(FILLER);
-
-        // Test
-        testValidate_StandardTag_PrinterContainsExpected(closingTags);
-    }
-
-    @Test
-    public void testValidate_TwoTags_ClosingTag_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"), generateTag("tag2"));
-
-        configureIndentationForClosing(FILLER);
-
-        // Test
-        testValidate_StandardTag_PrinterContainsExpected(closingTags);
-    }
-
-    @Test
-    public void testValidate_ThreeTags_ClosingTag_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-
-        configureIndentationForClosing(FILLER);
 
         // Test
         testValidate_StandardTag_PrinterContainsExpected(closingTags);
@@ -182,33 +117,6 @@ public class HtmlValidatorTest {
     }
 
     @Test
-    public void testValidate_SingleTag_OpeningTag_WithIndentation_WithErrors_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ErrorTag_PrinterContainsExpected(generateTag("tag1"));
-    }
-
-    @Test
-    public void testValidate_TwoTags_OpeningTag_WithIndentation_WithErrors_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ErrorTag_PrinterContainsExpected(generateTag("tag1"), generateTag("tag2"));
-    }
-
-    @Test
-    public void testValidate_ThreeTags_OpeningTag_WithIndentation_WithErrors_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ErrorTag_PrinterContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-    }
-
-    @Test
     public void testValidate_SingleTag_ClosingTag_NoIndentation_WithErrors_PrinterDataContainsExpected() {
         // Set up
         TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"));
@@ -230,39 +138,6 @@ public class HtmlValidatorTest {
     public void testValidate_ThreeTags_ClosingTag_NoIndentation_WithErrors_PrinterDataContainsExpected() {
         // Set up
         TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-
-        // Test
-        testValidate_ErrorTag_PrinterContainsExpected(closingTags);
-    }
-
-    @Test
-    public void testValidate_SingleTag_ClosingTag_WithIndentation_WithErrors_PrinterDataContainsExpected() {
-        // Set up
-        TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"));
-
-        configureIndentationForClosing(FILLER);
-
-        // Test
-        testValidate_ErrorTag_PrinterContainsExpected(closingTags);
-    }
-
-    @Test
-    public void testValidate_TwoTags_ClosingTag_WithIndentation_WithErrors_PrinterDataContainsExpected() {
-        // Set up
-        TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"), generateTag("tag2"));
-
-        configureIndentationForClosing(FILLER);
-
-        // Test
-        testValidate_ErrorTag_PrinterContainsExpected(closingTags);
-    }
-
-    @Test
-    public void testValidate_ThreeTags_ClosingTag_WithIndentation_WithErrors_PrinterDataContainsExpected() {
-        // Set up
-        TagMock[] closingTags = createClosingTagsAndSetUpTagStack(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-
-        configureIndentationForClosing(FILLER);
 
         // Test
         testValidate_ErrorTag_PrinterContainsExpected(closingTags);
@@ -307,33 +182,6 @@ public class HtmlValidatorTest {
         testValidate_ClosingTag_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
     }
 
-    @Test
-    public void testValidate_SingleTag_ClosingTag_EmptyStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"));
-    }
-
-    @Test
-    public void testValidate_TwoTags_ClosingTag_EmptyStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"));
-    }
-
-    @Test
-    public void testValidate_ThreeTags_ClosingTag_EmptyStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-    }
-
     private void testValidate_ClosingTag_EmptyStack_PrinterDataContainsExpected(TagMock... tags) {
         // Test
         testValidate_ClosingTag_NoOpeningTag_PrinterDataContainsExpected(HtmlValidator.UNEXPECTED_CLOSE_TAG, tags);
@@ -353,33 +201,6 @@ public class HtmlValidatorTest {
 
     @Test
     public void testValidate_ThreeTags_ClosingTag_NonMatchingOpeningTagOnStack_NoIndentation_PrinterDataContainsExpected() {
-        // Test
-        testValidate_ClosingTag_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-    }
-
-    @Test
-    public void testValidate_SingleTag_ClosingTag_NonMatchingOpeningTagOnStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"));
-    }
-
-    @Test
-    public void testValidate_TwoTags_ClosingTag_NonMatchingOpeningTagOnStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"), generateTag("tag2"));
-    }
-
-    @Test
-    public void testValidate_ThreeTags_ClosingTag_NonMatchingOpeningTagOnStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
         // Test
         testValidate_ClosingTag_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
     }
@@ -435,33 +256,6 @@ public class HtmlValidatorTest {
         testValidate_ClosingTag_WithErrors_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
     }
 
-    @Test
-    public void testValidate_SingleTag_ClosingTag_WithErrors_EmptyStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_WithErrors_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"));
-    }
-
-    @Test
-    public void testValidate_TwoTags_ClosingTag_WithErrors_EmptyStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_WithErrors_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"));
-    }
-
-    @Test
-    public void testValidate_ThreeTags_ClosingTag_WithErrors_EmptyStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_WithErrors_EmptyStack_PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-    }
-
     private void testValidate_ClosingTag_WithErrors_EmptyStack_PrinterDataContainsExpected(TagMock... tags) {
         // Test
         testValidate_ClosingTag_WithErrors_NoOpeningTag_PrinterDataContainsExpected(HtmlValidator.UNEXPECTED_CLOSE_TAG, tags);
@@ -481,33 +275,6 @@ public class HtmlValidatorTest {
 
     @Test
     public void testValidate_ThreeTags_ClosingTag_WithErrors_NonMatchingOpeningTagOnStack_NoIndentation_PrinterDataContainsExpected() {
-        // Test
-        testValidate_ClosingTag_WithErrors_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-    }
-
-    @Test
-    public void testValidate_SingleTag_ClosingTag_WithErrors_NonMatchingOpeningTagOnStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_WithErrors_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"));
-    }
-
-    @Test
-    public void testValidate_TwoTags_ClosingTag_WithErrors_NonMatchingOpeningTagOnStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ClosingTag_WithErrors_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"), generateTag("tag2"));
-    }
-
-    @Test
-    public void testValidate_ThreeTags_ClosingTag_WithErrors_NonMatchingOpeningTagOnStack_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
         // Test
         testValidate_ClosingTag_WithErrors_NonMatchingOpeningTag_printerDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
     }
@@ -572,33 +339,6 @@ public class HtmlValidatorTest {
         testValidate_SelfClosingTag_PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
     }
 
-    @Test
-    public void testValidate_SingleTag_SelfClosing_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_SingleTag_SelfClosing_NoIndentation_PrinterDataContainsExpected();
-    }
-
-    @Test
-    public void testValidate_TwoTags_SelfClosing_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_TwoTags_SelfClosing_NoIndentation_PrinterDataContainsExpected();
-    }
-
-    @Test
-    public void testValidate_MultiTags_SelfClosing_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ThreeTags_SelfClosing_NoIndentation_PrinterDataContainsExpected();
-    }
-
     private void testValidate_SelfClosingTag_PrinterDataContainsExpected(TagMock... tags) {
         // Arrange
         List<String> exp = new ArrayList<>();
@@ -632,33 +372,6 @@ public class HtmlValidatorTest {
     public void testValidate_ThreeTags_SelfClosing_WithErrors_NoIndentation_PrinterDataContainsExpected() {
         // Test
         testValidate_SelfClosingTag_WithErrors__PrinterDataContainsExpected(generateTag("tag1"), generateTag("tag2"), generateTag("tag3"));
-    }
-
-    @Test
-    public void testValidate_SingleTag_SelfClosing_WithErrors_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_SingleTag_SelfClosing_NoIndentation_PrinterDataContainsExpected();
-    }
-
-    @Test
-    public void testValidate_TwoTags_SelfClosing_WithErrors_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_TwoTags_SelfClosing_WithErrors_NoIndentation_PrinterDataContainsExpected();
-    }
-
-    @Test
-    public void testValidate_ThreeTags_SelfClosing_WithErrors_WithIndentation_PrinterDataContainsExpected() {
-        // Set up
-        configureIndentation(FILLER);
-
-        // Test
-        testValidate_ThreeTags_SelfClosing_NoIndentation_PrinterDataContainsExpected();
     }
 
     private void testValidate_SelfClosingTag_WithErrors__PrinterDataContainsExpected(TagMock... tags) {
@@ -887,20 +600,6 @@ public class HtmlValidatorTest {
 
         for (Tag tag : tags)
             dataToPop.add(tag);
-    }
-
-    private void configureIndentation(String data) {
-        this.indentation = data;
-        tagStack.indentation = data;
-    }
-
-    private void configureIndentationForClosing(String data) {
-        // Closing tags are expected to consume the first character
-        // of the current indentation level. This means that in order
-        // for the given data to match we need to append an additional
-        // character that will be consumed.
-        configureIndentation("X" + data);
-        this.indentation = data;
     }
 
     private String formatLine() {
