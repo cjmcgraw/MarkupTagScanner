@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.function.Function;
 
 public class CLIArgumentParser implements ArgumentParser {
-    public static String CLI_ARG_SYNTAX = "{-h | -x} {-f <file> | -u <url>} [-v] [-t]";
+    public static String CLI_ARG_SYNTAX = "{-h} {-f <file> | -u <url>} [-v] [-t]";
     public static String CLI_MSG = "Required flags are both format (i,e. '-h' for HTML)," +
                                    "and input source for markup to be parsed (i,e. '-u www.google.com' " +
                                    "to parse the html at www.google.com)";
