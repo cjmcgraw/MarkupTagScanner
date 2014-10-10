@@ -1,8 +1,8 @@
 package com.mycompany.markupvalidator.MarkupTagScanners;
 
-import java.io.Serializable;
-
 import com.mycompany.markupvalidator.errors.ErrorReporter;
+
+import java.io.Serializable;
 
 public interface Tag extends Serializable{
     public abstract boolean hasOpeningBracket();

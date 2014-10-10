@@ -1,10 +1,9 @@
 package com.mycompany.markupvalidator.scanners.readers;
 
+import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
+
 import java.io.*;
 import java.util.*;
-
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.*;
 
 public class HtmlDataGenerator {
     private static final String DEFAULT_VALID_STR_FILE = "valid-html-strs.txt";
@@ -62,7 +61,7 @@ public class HtmlDataGenerator {
             @Override
             protected ObjectStreamClass readClassDescriptor() throws ClassNotFoundException, IOException {
                 ObjectStreamClass desc = super.readClassDescriptor();
-
+                /*
                 if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData"))
                     return ObjectStreamClass.lookup(HtmlData.class);
                 else if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute"))
@@ -73,7 +72,7 @@ public class HtmlDataGenerator {
                     return ObjectStreamClass.lookup(MissingEnclosureParsingError.class);
                 else if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.UnclosedTagParsingError"))
                     return ObjectStreamClass.lookup(UnclosedTagParsingError.class);
-
+                */
                 return desc;
             }
         };
