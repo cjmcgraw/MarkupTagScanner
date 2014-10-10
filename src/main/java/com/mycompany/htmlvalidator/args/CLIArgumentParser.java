@@ -4,7 +4,7 @@
  * @version: 1.0
  */
 
-package com.mycompany.htmlvalidator;
+package com.mycompany.htmlvalidator.args;
 
 import org.apache.commons.cli.*;
 
