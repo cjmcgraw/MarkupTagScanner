@@ -5,7 +5,4 @@ import java.util.Iterator;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.Tag;
 
-public interface MarkupReader extends Iterator<Tag>, Closeable{
-
-    public int currentLineNumber();
-}
+public interface MarkupReader extends Iterator<Tag>, Closeable{}

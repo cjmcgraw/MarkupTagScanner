@@ -30,11 +30,6 @@ public class HtmlScanner implements MarkupScanner {
     }
 
     @Override
-    public int currentLineNumber() {
-        return reader.currentLineNumber();
-    }
-
-    @Override
     public void close() throws IOException {
         reader.close();
     }

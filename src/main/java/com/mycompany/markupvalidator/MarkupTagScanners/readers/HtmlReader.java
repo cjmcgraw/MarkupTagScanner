@@ -55,11 +55,6 @@ public class HtmlReader implements MarkupReader{
         this.reader = input;
         this.getNextData();
     }
-
-    @Override
-    public int currentLineNumber() {
-        return reader.getPosition().y;
-    }
     
     @Override
     public void close() throws IOException {

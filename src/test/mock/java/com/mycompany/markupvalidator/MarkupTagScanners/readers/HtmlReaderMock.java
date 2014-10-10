@@ -41,9 +41,4 @@ public class HtmlReaderMock implements MarkupReader {
     public void close() throws IOException {
         this.closed = true;
     }
-
-    @Override
-    public int currentLineNumber() {
-        return 0;
-    }
 }
