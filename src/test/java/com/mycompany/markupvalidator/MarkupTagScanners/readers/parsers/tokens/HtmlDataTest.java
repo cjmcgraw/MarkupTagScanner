@@ -2,7 +2,9 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens;
 
 import static org.junit.Assert.*;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import org.junit.*;
 
@@ -410,7 +412,8 @@ public class HtmlDataTest {
         // Test
         this.testUpdateAttributes_MixedValidAndInvalid(allAttrs, validAttrs);
     }
-    
+
+    @Test
     public void testUpdateAttributes_ListOfAttributes_SingleEmptyAttribute_ListShouldBeUnchanged() {
         // Set up
         List<Attribute> attrs = new ArrayList<>();
@@ -484,12 +487,14 @@ public class HtmlDataTest {
         // Assert
         assertEquals(expValue, this.data.isClosing());
     }
-    
+
+    @Test
     public void testSetIsClosing_SetToTrue_ImplicitlyTestIsClosing() {
         // Test
         this.testSetIsClosing(true);
     }
-    
+
+    @Test
     public void testSetIsClosing_SetToFalse_ImplicitlyTestIsClosing() {
         // Test
         this.testSetIsClosing(false);
@@ -873,7 +878,19 @@ public class HtmlDataTest {
         // Assert
         assertEquals(true, this.data.isSelfClosing());
     }
-    
+
+    @Test
+    public void testLocation_LocationMatchesExpectedResult() {
+        // Arrange
+        Point exp = new Point(-1, 1);
+        Point result;
+
+        this.data.setLocation(exp);
+
+        // Apply + Assert
+        assertEquals(exp, this.data.location());
+    }
+
     @Test
     public void testToString() {
         // Test
