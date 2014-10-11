@@ -265,7 +265,8 @@ public class HtmlAttributesSubParserTest {;
         // Test
         this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_STR + " " + STANDARD_STR + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
-    
+
+    @Test
     public void testParse_PairAttr_OneStndOneQuote_ResultContainsExpectedAttrs() {
         // Set up
         List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR);
@@ -286,7 +287,8 @@ public class HtmlAttributesSubParserTest {;
         // Test
         this.testParse_ExpectedInputMatchesRemainingInput(STANDARD_STR + " " + SINGLE_QUOTE + " "+ CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
-    
+
+    @Test
     public void testParse_PairAttr_OneStndOneDoubleQuote_ResultContainsExpectedAttrs() {
         // Set up
         List<HtmlAttribute> attrs = this.generateAttrList(STND_ATTR, QUOTE_ATTR);
@@ -422,6 +424,7 @@ public class HtmlAttributesSubParserTest {;
         this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + STANDARD_STR + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
     
+    @Test
     public void testParse_MultiAttr_AllDiff_Double_Standard_Single_ResultContainsExpectedAttrs() {
         // Set up
         List<HtmlAttribute> attrs = this.generateAttrList(QUOTE_ATTR, STND_ATTR, QUOTE_ATTR);
