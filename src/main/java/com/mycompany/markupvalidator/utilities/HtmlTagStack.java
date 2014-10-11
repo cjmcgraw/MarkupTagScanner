@@ -12,7 +12,7 @@ import com.mycompany.markupvalidator.MarkupTagScanners.Tag;
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTagNames;
 
 public class HtmlTagStack implements TagStack{
-    public static final String INDENTATION = "\t";
+    public static final String INDENTATION = " ";
 
     private StringBuilder indentationTracker;
     private Stack<Tag> tagStack;

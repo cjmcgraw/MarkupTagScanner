@@ -9,13 +9,16 @@ import com.mycompany.markupvalidator.MarkupTagScanners.enums.VoidTag;
 import com.mycompany.markupvalidator.errors.*;
 import com.mycompany.markupvalidator.printers.PrinterMock;
 
+import com.mycompany.markupvalidator.utilities.HtmlTagStack;
 import org.junit.*;
 import java.util.*;
 
 import static org.junit.Assert.*;
 
 public class VerboseHtmlValidatorIT {
-    public static final String[] INDENTATION_LEVELS = {"", "\t", "\t\t"};
+    public static final String[] INDENTATION_LEVELS = {"",
+                                                       HtmlTagStack.INDENTATION,
+                                                       HtmlTagStack.INDENTATION + HtmlTagStack.INDENTATION};
     public static final String LINE_FRMT = "%s%n";
     public static final String UNCLOSED_FRMT = String.format(LINE_FRMT, HtmlValidator.UNCLOSED_TAG_MSG);
 
