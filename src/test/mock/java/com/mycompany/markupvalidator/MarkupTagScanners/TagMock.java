@@ -10,7 +10,9 @@ import com.mycompany.markupvalidator.errors.ErrorReporter;
 import com.mycompany.markupvalidator.errors.MarkupError;
 import com.mycompany.markupvalidator.errors.MarkupErrorReporter;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 public class TagMock implements Tag{
     public ErrorReporter reporter;
@@ -21,6 +23,7 @@ public class TagMock implements Tag{
     public boolean isClosing;
     public String name;
     public String toString;
+    public Point location;
 
     public TagMock() {
         this("");
@@ -54,6 +57,11 @@ public class TagMock implements Tag{
 
     @Override
     public boolean isSelfClosing() {return isSelfClosing;}
+
+    @Override
+    public Point location() {
+        return this.location;
+    }
 
     @Override
     public ErrorReporter getErrorReporter() {return reporter;}

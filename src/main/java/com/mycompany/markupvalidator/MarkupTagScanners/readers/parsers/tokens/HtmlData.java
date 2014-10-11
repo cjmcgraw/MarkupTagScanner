@@ -1,5 +1,6 @@
 package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +25,7 @@ public class HtmlData implements Tag{
     private boolean selfClosing;
     private boolean isClosing;
     private StringBuilder name;
+    private Point location;
     
     public HtmlData() {
         this("", false, false, false, false, new ArrayList<Attribute>());
@@ -115,7 +117,16 @@ public class HtmlData implements Tag{
     public boolean isSelfClosing() {
         return this.selfClosing;
     }
-    
+
+    @Override
+    public Point location() {
+        return this.location;
+    }
+
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
     public void setIsClosing(boolean isClosing) {
         this.isClosing = isClosing;
     }
