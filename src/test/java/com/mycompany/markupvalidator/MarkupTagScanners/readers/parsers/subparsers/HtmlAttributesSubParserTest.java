@@ -423,7 +423,7 @@ public class HtmlAttributesSubParserTest {;
         // Test
         this.testParse_ExpectedInputMatchesRemainingInput(SINGLE_QUOTE + " " + DOUBLE_QUOTE + " " + STANDARD_STR + " " + CLOSING_TAG + "abcdefghijklmnopqrstuvwxyz");
     }
-    
+
     @Test
     public void testParse_MultiAttr_AllDiff_Double_Standard_Single_ResultContainsExpectedAttrs() {
         // Set up

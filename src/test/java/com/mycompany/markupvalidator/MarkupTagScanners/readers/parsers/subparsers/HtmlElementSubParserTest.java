@@ -142,7 +142,8 @@ public class HtmlElementSubParserTest {
         // Test
         this.testParse_ValidElement_ConsumesElementNameFromInput("abcdefg" + COMMENT_OPENING + "hijlmnopqrstuvwxyz ");
     }
-    
+
+    @Test
     public void testParse_WithValidElementName_CommentNameAtEndOfStr_ReturnsHtmlDataWithExpectedName() throws IOException {
         // Test
         this.testParse_ValidElement_ReturnedDataNameMatches("abcdefghijlmnopqrstuvwxyz" + COMMENT_OPENING + " ");

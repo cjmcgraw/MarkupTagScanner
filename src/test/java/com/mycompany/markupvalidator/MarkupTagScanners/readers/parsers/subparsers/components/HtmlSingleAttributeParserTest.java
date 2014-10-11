@@ -135,7 +135,8 @@ public class HtmlSingleAttributeParserTest {
         // Assert
         assertEquals(expData, data);
     }
-    
+
+    @Test
     public void testParse_OnlyClosingAttr_HasSpaceAfterClosingAttr_ReturnedAttributeMatches() throws IOException {
         // Arrange
         HtmlAttribute expData = new HtmlAttribute(CLOSING_ATTR);
@@ -543,10 +544,11 @@ public class HtmlSingleAttributeParserTest {
         // Assert
         assertEquals(expData, data);
     }
-    
+
+    @Test
     public void testParse_SingleAttribute_HasValue_FollowedImmediateByClosingAttr_ReturnedAttributeMatches() throws IOException {
         // Arrange
-        HtmlAttribute expData = new HtmlAttribute("some");
+        HtmlAttribute expData = new HtmlAttribute("some", "value");
         HtmlAttribute data;
         
         this.setState(DATA_WITH_VAL_AND_CLOSING_ATTR);
