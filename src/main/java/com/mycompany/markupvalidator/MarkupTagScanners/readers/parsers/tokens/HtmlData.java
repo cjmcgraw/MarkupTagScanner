@@ -40,6 +40,7 @@ public class HtmlData implements Tag{
         this.hasClosingTag = hasClosing;
         this.selfClosing = selfClosing;
         this.isClosing = isClosing;
+        this.location = null;
         
         this.reporter = new MarkupErrorReporter();
     }
@@ -172,9 +173,9 @@ public class HtmlData implements Tag{
         result = prime * result + (hasOpeningTag ? 1231 : 1237);
         result = prime * result + (isClosing ? 1231 : 1237);
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result
-                + ((reporter == null) ? 0 : reporter.hashCode());
+        result = prime * result + ((reporter == null) ? 0 : reporter.hashCode());
         result = prime * result + (selfClosing ? 1231 : 1237);
+        result = prime * result + ((location == null) ? 0 : location.hashCode());
         return result;
     }
 
@@ -209,6 +210,8 @@ public class HtmlData implements Tag{
         } else if (!reporter.equals(other.reporter))
             return false;
         if (selfClosing != other.selfClosing)
+            return false;
+        if (location != other.location)
             return false;
         return true;
     }
