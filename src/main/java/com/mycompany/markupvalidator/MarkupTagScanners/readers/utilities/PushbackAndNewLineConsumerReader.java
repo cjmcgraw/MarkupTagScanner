@@ -78,7 +78,7 @@ public class PushbackAndNewLineConsumerReader implements PushbackAndPositionRead
     
     public Point getPosition() {
         int lineNum = this.getLineNumber();
-        return new Point(this.rowCounter, lineNum);
+        return new Point(this.rowCounter, lineNum + 1);
     }
 
     @Override

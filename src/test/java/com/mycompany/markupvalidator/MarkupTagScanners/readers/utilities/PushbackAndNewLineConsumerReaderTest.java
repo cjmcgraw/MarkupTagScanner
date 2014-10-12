@@ -18,6 +18,8 @@ public class PushbackAndNewLineConsumerReaderTest {
     private static final String[] defaultPhrases = {"someString", "some other data", "    the last bit of data   \t"};
     private static final String defaultData = defaultPhrases[0] + newLine + defaultPhrases[1] + newLine + newLine + newLine + defaultPhrases[2] + newLine;
     private static final String expectedSentence = defaultPhrases[0] + defaultPhrases[1] + defaultPhrases[2];
+
+    private static final int FIRST_LINE = 1;
     
     private PushbackAndNewLineConsumerReader reader;
     
@@ -340,11 +342,54 @@ public class PushbackAndNewLineConsumerReaderTest {
         // Assert
         assertEquals(expData, data);
     }
+
+    @Test
+    public void testGetPosition_FirstPhrase_NoNewLines_ExpectedValueMatchesY() throws IOException {
+        // Arrange
+        int expData = FIRST_LINE;
+        int data;
+
+        // Apply
+        this.readData(0, defaultPhrases[0].length());
+        data = this.reader.getPosition().y;
+
+        // Assert
+        assertEquals(expData, data);
+    }
+
+    @Test
+    public void testGetPosition_TwoPhrases_WithNewLines_ExpectedValueMatchesY() throws IOException {
+        // Arrange
+        int expData = FIRST_LINE + 1;
+        int data;
+
+
+        // Apply
+        this.readData(0, defaultPhrases[0].length() + defaultPhrases[1].length());
+        data = this.reader.getPosition().y;
+
+        // Assert
+        assertEquals(expData, data);
+    }
+
+    @Test
+    public void testGetPosition_ThreePhrases_WithNewLines_ExpectedValueMatchesY() throws IOException {
+        // Arrange
+        int expData = FIRST_LINE + 1 + 3;
+        int data;
+
+        // Apply
+        this.readData(0, defaultPhrases[0].length() + defaultPhrases[1].length() + defaultPhrases[0].length());
+        data = this.reader.getPosition().y;
+
+        // Assert
+        assertEquals(expData, data);
+    }
     
     @Test
     public void testGetPosition_EndOfFirstPhraseToSecondPhrase_OneNewLine_XIsReset() throws IOException {
         // Arrange
-        Point expData = new Point(defaultPhrases[1].length(), 1);
+        Point expData = new Point(defaultPhrases[1].length(), FIRST_LINE + 1);
         Point data;
         
         // Apply
@@ -358,7 +403,7 @@ public class PushbackAndNewLineConsumerReaderTest {
     @Test
     public void testGetPosition_EndOfSecondPhraseToThirdPhrase_FourNewLines_XIsReset() throws IOException {
         // Arrange
-        Point expData = new Point(defaultPhrases[2].length(), 1 + 3);
+        Point expData = new Point(defaultPhrases[2].length(), FIRST_LINE + 1 + 3);
         Point data;
         
         // Apply
