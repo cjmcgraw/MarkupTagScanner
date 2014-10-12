@@ -1,5 +1,6 @@
 package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers;
 
+import java.awt.*;
 import java.io.IOException;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
@@ -37,6 +38,11 @@ public class HtmlDataParser extends DataParser{
         HtmlData result = this.parseTag();
         this.clearState();
         return result;
+    }
+
+    protected void setState(PushbackAndPositionReader input) {
+        super.setState(input);
+        this.getResult().setLocation(getInput().getPosition());
     }
     
     private HtmlData parseTag() throws IOException {

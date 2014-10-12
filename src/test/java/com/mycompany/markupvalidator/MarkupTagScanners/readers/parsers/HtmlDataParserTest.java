@@ -45,6 +45,7 @@ public class HtmlDataParserTest {
     
     private PushbackAndPositionReaderMock input;
     private HtmlDataParser parser;
+    private Point location = new Point(123, -456);
     
     @Before
     public void setUp() {
@@ -269,7 +270,18 @@ public class HtmlDataParserTest {
         // Assert
         assertEquals(expData, data);
     }
-    
+
+    @Test
+    public void testParse_InputParser_LocationMatchesExpected() {
+        // Arrange
+        Point exp = new Point(-1, 1);
+
+        this.input.setPosition(exp);
+
+        // Apply + Assert
+        assertEquals(exp, this.parse().location());
+    }
+
     @Test
     public void testParse_ElementParser_ResultIsDefaultString()  {
         // Arrange
@@ -570,7 +582,7 @@ public class HtmlDataParserTest {
     }
     
     @Test
-    public void testParse_AttributeParser_UnclosedTagParsingExceptionCaugt_ResultMatchesExpected() {
+    public void testParse_AttributeParser_UnclosedTagParsingExceptionCaugth_ResultMatchesExpected() {
         // Arrange
         HtmlData expData = this.createDataFromException();
         expData.setAttributes(DEFAULT_ATTR);
@@ -653,6 +665,7 @@ public class HtmlDataParserTest {
         HtmlData expData = new HtmlData();
         expData.confirmOpeningTag();
         expData.confirmClosingTag();
+        expData.setLocation(this.location);
         HtmlData data;
         
         // Apply
@@ -903,6 +916,7 @@ public class HtmlDataParserTest {
     public void setState(List<Character> data) {
         this.parser = new HtmlDataParser(this.closingParser, this.elementParser, this.attributeParser);
         this.input = new PushbackAndPositionReaderMock(new LinkedList<>(data));
+        this.input.setPosition(this.location);
     }
     
     @Test(expected=InvalidStateException.class)
@@ -955,9 +969,14 @@ public class HtmlDataParserTest {
     }
     
     private HtmlData createDataFromException() {
-        HtmlData data = new HtmlData();
+        HtmlData data = createData();
         data.confirmOpeningTag();
-        
+        return data;
+    }
+
+    private HtmlData createData() {
+        HtmlData data = new HtmlData();
+        data.setLocation(this.location);
         return data;
     }
     
@@ -972,18 +991,18 @@ public class HtmlDataParserTest {
     }
     
     private ParsingError createEndOfInputException() {
-        return new EndOfInputParsingError(new Point(0,0), new HtmlData());
+        return new EndOfInputParsingError(this.location, createData());
     }
     
     private ParsingError createUnexpectedCloseTagException() {
-        return new UnexpectedCloseTagParsingError(new Point(0,0), new HtmlData());
+        return new UnexpectedCloseTagParsingError(this.location, createData());
     }
     
     private ParsingError createUnclosedTagException() {
-        return new UnclosedTagParsingError(new Point(0,0), new HtmlData());
+        return new UnclosedTagParsingError(this.location, createData());
     }
     
     private ParsingError createMissingEnclosureTagException() {
-        return new MissingEnclosureParsingError(new Point(0,0), ' ', ' ', new HtmlData());
+        return new MissingEnclosureParsingError(this.location, ' ', ' ', createData());
     }
 }

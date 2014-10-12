@@ -40,7 +40,7 @@ public class HtmlData implements Tag{
         this.hasClosingTag = hasClosing;
         this.selfClosing = selfClosing;
         this.isClosing = isClosing;
-        this.location = null;
+        this.location = new Point(0, 0);
         
         this.reporter = new MarkupErrorReporter();
     }
@@ -211,7 +211,10 @@ public class HtmlData implements Tag{
             return false;
         if (selfClosing != other.selfClosing)
             return false;
-        if (location != other.location)
+        if (location == null)
+            if (other.location != null)
+                return false;
+        if (!location.equals(other.location))
             return false;
         return true;
     }

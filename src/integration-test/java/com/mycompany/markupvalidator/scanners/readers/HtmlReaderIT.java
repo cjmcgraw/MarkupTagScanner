@@ -1429,6 +1429,8 @@ public class HtmlReaderIT {
         // Set up
         HtmlData exp = generateEmptyData(false, true);
         exp.getErrorReporter().addError(MISSING_ENCLOSURE_ERROR);
+
+        exp.setLocation(new Point(s.length(), 1));
         
         // Test
         testReadTagAndDataMatches(s, exp);
@@ -1623,13 +1625,14 @@ public class HtmlReaderIT {
     public void SANITY_CHECK() throws IOException {
         // Sanity Check can be performed here
         HtmlDataGenerator.updateSerializedFiles();
-    }*/
-
+    }
+*/
 
     private HtmlData generateEmptyData(boolean hasOpening, boolean hasClosing) {
         HtmlData result = new HtmlData();
         if(hasOpening) result.confirmOpeningTag();
         if(hasClosing) result.confirmClosingTag();
+        result.setLocation(new Point(1, 1));
         return result;
     }
     
@@ -1644,6 +1647,7 @@ public class HtmlReaderIT {
         
         for (HtmlAttribute attr : attrs)
             data.updateAttributes(attr);
+
         return data;
     }
     
