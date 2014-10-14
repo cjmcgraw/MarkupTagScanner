@@ -17,7 +17,7 @@ public abstract class Formatter {
 
     public static final String NEWLINE = String.format("%n");
 
-    public StringBuilder builder;
+    private StringBuilder builder;
 
     protected void setState(Object s) {
         this.builder = new StringBuilder(s.toString());
@@ -64,6 +64,6 @@ public abstract class Formatter {
 
     private void validateState() {
         if (builder == null)
-            throw new InvalidStateException("Formatter", "format");
+            throw new InvalidStateException("Formatter", "builder");
     }
 }
