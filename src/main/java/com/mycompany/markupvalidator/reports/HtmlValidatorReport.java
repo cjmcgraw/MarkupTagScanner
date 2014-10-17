@@ -13,7 +13,7 @@ import com.mycompany.markupvalidator.formatters.Formatter;
 import java.util.*;
 
 public class HtmlValidatorReport implements ReportGenerator {
-    private Formatter reportFormatter = new ReportFormatter();
+    private Formatter<Report> reportFormatter = new ReportFormatter();
 
     private Queue<Tag> validationErrors;
     private Queue<Tag> parsingErrors;
@@ -73,6 +73,7 @@ public class HtmlValidatorReport implements ReportGenerator {
 
     @Override
     public String toString() {
-        return reportFormatter.format(this);
+        FormatData<Report> formatData = new FormatData<>(this);
+        return reportFormatter.format(formatData);
     }
 }

@@ -1,44 +1,39 @@
 package com.mycompany.markupvalidator;
 
+import java.awt.*;
 import java.util.*;
-import java.io.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;
 import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.formatters.*;
 import com.mycompany.markupvalidator.printers.*;
+import com.mycompany.markupvalidator.reports.*;
 import com.mycompany.markupvalidator.utilities.*;
 
 public class HtmlValidator implements MarkupValidator {
     public static final String DEFAULT_ERR_MSG = MarkupError.MSG;
-
-    public static final String NON_MATCHING_ERROR_MSG = String.format(DEFAULT_ERR_MSG, "Closing Tag doesn't match opening tag [ %s ]");
-    public static final String UNEXPECTED_CLOSE_TAG = String.format(DEFAULT_ERR_MSG, "Unexpected closing tag. No available opening tags to compare to!");
+    public static final String NON_MATCHING_ERROR_MSG =
+            String.format(DEFAULT_ERR_MSG, "Closing Tag doesn't match opening tag [ %s ]");
+    public static final String UNEXPECTED_CLOSE_TAG =
+            String.format(DEFAULT_ERR_MSG, "Unexpected closing tag. No available opening tags to compare to!");
     public static final String UNCLOSED_TAG_MSG = String.format(DEFAULT_ERR_MSG, "UNCLOSED TAG: %s");
 
-    public static final PrintStream DEFAULT_OUTPUT = System.out;
-    public static final String DEFAULT_TAG_STACK_NAME = "HTML";
+    private TagStackFactory tagStackFactory;
+    private TagLineFormatter formatter;
+    private ReportGenerator report;
+    private TagStack tagStack;
+    private Printer printer;
 
-
-    protected TagStackFactory tagStackFactory;
-    protected TagStack tagStack;
-    protected Printer printer;
-
-    public HtmlValidator() {
-        this(new OutputPrinter(Arrays.asList(DEFAULT_OUTPUT)));
-    }
-
-    public HtmlValidator(Printer printer) {
-        this(printer, new TagStackFactory());
-    }
-
-    public HtmlValidator(Printer printer, TagStackFactory tagStackFactory) {
-        this.printer = printer;
+    public HtmlValidator(Printer printer, TagStackFactory tagStackFactory, TagLineFormatter formatter) {
         this.tagStackFactory = tagStackFactory;
+        this.formatter = formatter;
+        this.printer = printer;
     }
 
     private void setState() {
-        this.tagStack = tagStackFactory.create(DEFAULT_TAG_STACK_NAME);
+        this.tagStack = tagStackFactory.create("html");
+        this.report = new HtmlValidatorReport();
     }
 
     private void clearState() {
@@ -57,31 +52,34 @@ public class HtmlValidator implements MarkupValidator {
         validate(data.iterator());
     }
 
+    @Override
+    public Report getReport() {
+        return report;
+    }
+
     private void validateTags(Iterator<Tag> tags) {
         while (tags.hasNext()) {
             Tag tag = tags.next();
-            printTagData(tag);
+            interpretTagData(tag);
             validateTagStack(tag);
         }
 
         printRemainingTags();
+        printReport();
     }
 
-    protected void printTagData(Tag tag) {
-        printTagErrorData(tag);
+    protected void interpretTagData(Tag tag) {
+        updateReport(tag);
+        printf(tag);
     }
 
-    private void printTagErrorData(Tag tag) {
-        ErrorReporter reporter = tag.getErrorReporter();
-
-        if (reporter.hasErrors())
-            printErrorData(tag.getErrorReporter());
+    private void updateReport(Tag tag) {
+        if (tag.getErrorReporter().hasErrors())
+            updateReportWithParsingErrorTag(tag);
     }
 
-    private void printErrorData(ErrorReporter reporter) {
-        for (MarkupError err : reporter.getErrors())
-            printer.println(err);
-        printer.println();
+    private void updateReportWithParsingErrorTag(Tag tag) {
+        report.addParsingError(tag);
     }
 
     private void validateTagStack(Tag tag) {
@@ -118,47 +116,78 @@ public class HtmlValidator implements MarkupValidator {
 
         if (isOppositeTag(previousTag, tag))
             tagStack.pop();
-        else
+        else {
             printNonMatchingError(previousTag);
+            updateReportWithValidationErrorTag(tag);
+        }
     }
 
     private void printRemainingTags() {
         while(!tagStack.empty()) {
-            printUnclosedTag(tagStack.pop());
+            Tag tag = tagStack.pop();
+            updateReportWithValidationErrorTag(tag);
+            printUnclosedTag(tag);
         }
+    }
+
+    private void updateReportWithValidationErrorTag(Tag tag) {
+        report.addValidationError(tag);
     }
 
     private void printUnclosedTag(Tag tag) {
         printUnclosedTagError(tag);
-        printTagErrorData(tag);
+        printf(tag);
+    }
+
+    private void printReport() {
+        print(report);
     }
 
     private void pushOntoTagStack(Tag tag) {
         tagStack.push(tag);
     }
 
-    private void printDefaultError(String msg) {
-        printer.println(String.format(DEFAULT_ERR_MSG, msg));
-    }
-
-    private void printNonMatchingError(String msg) {
-        printer.println(String.format(NON_MATCHING_ERROR_MSG, msg));
-    }
-
     private void printNonMatchingError(Tag tag) {
-        printNonMatchingError(tag.toString());
-    }
-
-    private void printUnclosedTagError(String msg) {
-        printer.println(String.format(UNCLOSED_TAG_MSG, msg));
+        String msg = String.format(NON_MATCHING_ERROR_MSG, tag);
+        printf(tag.location(), msg);
     }
 
     private void printUnclosedTagError(Tag tag) {
-        printUnclosedTagError(tag.toString());
+        String msg = String.format(UNCLOSED_TAG_MSG, tag);
+        printf(tag.location(), msg);
     }
 
     private void printUnexpectedCloseTagError() {
-        printer.println(UNEXPECTED_CLOSE_TAG);
+        println(UNEXPECTED_CLOSE_TAG);
+    }
+
+    protected String format(Point location, String msg) {
+        return formatter.format(location, msg);
+    }
+
+    protected String format(FormatData<Tag> data) {
+        return formatter.format(data);
+    }
+
+    protected void printf(Point location, String msg) {
+        print(this.format(location, msg));
+    }
+
+    protected void printf(FormatData<Tag> data) {
+        print(this.format(data));
+    }
+
+    protected void printf(Tag tag) {
+        FormatData<Tag> data = new FormatData<>(tagStack.indentation(), tag);
+        printf(data);
+    }
+
+    protected void print(Object obj) {
+        printer.print(obj);
+    }
+
+    protected void println(Object obj) {
+        printer.println(obj);
     }
 
     protected boolean isOppositeTag(Tag tag1, Tag tag2) {
