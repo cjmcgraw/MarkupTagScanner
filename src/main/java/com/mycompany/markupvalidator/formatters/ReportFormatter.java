@@ -12,7 +12,7 @@ import com.mycompany.markupvalidator.reports.Report;
 
 import java.awt.*;
 
-public class ReportFormatter extends Formatter {
+public class ReportFormatter extends Formatter<Report> {
     public static final String BODY_FORMAT_SECTION_1 = "Total Errors:%n%n" +
                                                        "\t%-20s:  %-4d%n" +
                                                        "\t%-20s:  %-4d%n";
@@ -50,8 +50,8 @@ public class ReportFormatter extends Formatter {
     }
 
     @Override
-    public String format(Object obj) {
-        setState((Report) obj);
+    public String format(FormatData<Report> formatData) {
+        setState(formatData.data());
         String result = formatReport();
         clearState();
         return result;
@@ -126,10 +126,6 @@ public class ReportFormatter extends Formatter {
         }
 
         return result.toString();
-    }
-
-    private String formatLocation(Point location) {
-        return String.format(LOCATION_FORMAT, location.x, location.y);
     }
 
     private void createFooter() {

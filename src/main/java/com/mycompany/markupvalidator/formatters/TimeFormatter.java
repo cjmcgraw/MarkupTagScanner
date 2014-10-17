@@ -6,15 +6,15 @@
 
 package com.mycompany.markupvalidator.formatters;
 
-public class TimeFormatter extends Formatter{
+public class TimeFormatter extends Formatter<Double> {
     public static final String TIME_FORMAT = "It took %01d minutes and %.4f seconds to execute!";
     public static final double NS_DENOMINATOR = Math.pow(10, 9);
 
     private double ns;
 
-    protected void setState(double ns) {
+    protected void setState(FormatData<Double> formatData) {
         super.setState();
-        this.ns = ns;
+        this.ns = formatData.data();
     }
 
     protected void clearState() {
@@ -22,8 +22,8 @@ public class TimeFormatter extends Formatter{
         this.ns = 0.0;
     }
 
-    public String format(Object obj) {
-        setState((double) obj);
+    public String format(FormatData<Double> formatData) {
+        this.setState(formatData);
         String result = generateTimeFormat();
         clearState();
         return result;

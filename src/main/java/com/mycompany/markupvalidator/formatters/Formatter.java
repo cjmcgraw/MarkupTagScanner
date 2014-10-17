@@ -6,16 +6,36 @@
 
 package com.mycompany.markupvalidator.formatters;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 
-public abstract class Formatter {
+import java.awt.*;
+
+public abstract class Formatter<T> {
     public static final String BORDER_HASH      = "#############################################";
     public static final String BORDER_EQUALS    = "=============================================";
     public static final String BORDER_DASH      = "---------------------------------------------";
 
-    public static final String LOCATION_FORMAT  = "[%-4d, %-4d]";
+    public static final String LOCATION_FORMAT  = "[%-4d, %-4d] :\t";
 
     public static final String NEWLINE = String.format("%n");
+    public static final String SIMPLE_INDENTATION = ".";
+    public static final String INDENTATION = "\t";
+
+    public static String formatLocation(Point location) {
+        return String.format(LOCATION_FORMAT, location.x, location.y);
+    }
+
+    public static String formatLocation() {
+        return String.format(LOCATION_FORMAT, "", "");
+    }
+
+    public static String indent(String indentation, String msg) {
+        return indentation + msg.replace(NEWLINE, NEWLINE + indentation);
+    }
+
+    public static String indent(String indentation, Object obj) {
+        return indentation + obj.toString().replace(NEWLINE, NEWLINE + indentation);
+    }
 
     private StringBuilder builder;
 
@@ -31,7 +51,7 @@ public abstract class Formatter {
         this.builder = null;
     }
 
-    public abstract String format(Object obj);
+    public abstract String format(FormatData<T> formatData);
 
     protected void write(Object s) {
         getBuilder().append(s.toString());
