@@ -8,6 +8,7 @@ import java.util.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;

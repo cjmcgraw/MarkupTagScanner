@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;

@@ -3,7 +3,7 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers;
 import java.awt.Point;
 import java.io.*;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class InputParser<T> {

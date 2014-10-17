@@ -4,7 +4,7 @@ import java.io.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.*;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.EndOfInputAttributeError;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;

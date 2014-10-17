@@ -9,6 +9,7 @@ import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.Ht
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 
 public class HtmlAttributesSubParser extends HtmlSubParser {
     private static final String CLASS_NAME = "HtmlAttributeParser";

@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 import org.junit.*;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class InputParserTest extends InputParser<Boolean>{

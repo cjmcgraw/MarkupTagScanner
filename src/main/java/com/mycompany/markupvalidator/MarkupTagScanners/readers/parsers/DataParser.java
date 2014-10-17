@@ -5,6 +5,7 @@ import java.io.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 
 public abstract class DataParser extends MarkupParser<HtmlData> {
     private static final String CLASS_NAME = "DataParser";

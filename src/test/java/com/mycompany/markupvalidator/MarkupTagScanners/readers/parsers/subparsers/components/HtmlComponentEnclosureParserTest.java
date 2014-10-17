@@ -8,7 +8,7 @@ import java.util.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.EnclosureTags;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.*;
 

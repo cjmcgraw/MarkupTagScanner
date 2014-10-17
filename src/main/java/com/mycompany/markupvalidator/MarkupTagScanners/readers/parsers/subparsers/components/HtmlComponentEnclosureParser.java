@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.MarkupParser;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.InvalidStateException;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 
 public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> {

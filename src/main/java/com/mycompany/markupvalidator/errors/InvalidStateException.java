@@ -1,4 +1,4 @@
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors;
+package com.mycompany.markupvalidator.errors;
 
 import com.mycompany.markupvalidator.errors.MarkupError;
 
