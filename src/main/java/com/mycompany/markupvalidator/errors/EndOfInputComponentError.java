@@ -13,7 +13,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
+package com.mycompany.markupvalidator.errors;
 
 public class EndOfInputComponentError extends ComponentError {
     private static final long serialVersionUID = 5802533142904660152L;

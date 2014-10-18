@@ -19,7 +19,6 @@ import java.awt.Point;
 import java.util.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.errors.*;
 
 @SuppressWarnings("serial")

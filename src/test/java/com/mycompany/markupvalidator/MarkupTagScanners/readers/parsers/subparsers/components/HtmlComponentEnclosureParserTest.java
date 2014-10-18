@@ -20,11 +20,10 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.*;
 
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.EnclosureTags;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class HtmlComponentEnclosureParserTest extends HtmlComponentEnclosureParser {

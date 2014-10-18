@@ -23,13 +23,13 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlClosingSubParserTest {

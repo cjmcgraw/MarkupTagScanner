@@ -18,8 +18,7 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparse
 import java.io.IOException;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
+import com.mycompany.markupvalidator.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlSingleAttributeParser extends HtmlComponentAttributeParser {

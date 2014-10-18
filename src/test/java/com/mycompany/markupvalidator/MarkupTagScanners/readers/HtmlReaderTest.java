@@ -22,11 +22,11 @@ import java.io.*;
 import java.util.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.*;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 

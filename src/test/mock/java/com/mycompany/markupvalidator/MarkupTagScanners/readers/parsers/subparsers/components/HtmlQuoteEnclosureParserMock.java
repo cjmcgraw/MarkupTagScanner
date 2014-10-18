@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.EnclosureTags;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.ComponentError;
+import com.mycompany.markupvalidator.errors.ComponentError;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class HtmlQuoteEnclosureParserMock extends HtmlComponentEnclosureParser {

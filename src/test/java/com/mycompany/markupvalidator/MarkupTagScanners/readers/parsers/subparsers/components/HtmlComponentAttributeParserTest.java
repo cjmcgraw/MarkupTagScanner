@@ -21,14 +21,12 @@ import java.awt.Point;
 import java.io.IOException;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.*;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.*;
-import com.mycompany.markupvalidator.errors.MarkupError;
 
 public class HtmlComponentAttributeParserTest extends HtmlComponentAttributeParser {
     private static final MarkupError SOME_ERROR = new MissingCharacterComponentError('O', new Point(123, 456), "some data");

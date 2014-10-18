@@ -13,27 +13,29 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers;
+package com.mycompany.markupvalidator.errors;
 
-import com.mycompany.markupvalidator.errors.ParsingError;
+import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 
-public class HtmlClosingSubParserMock extends HtmlTypeSubParserMock {
-    private boolean data;
+public class EndOfInputAttributeError extends AttributeError {
+    private static final long serialVersionUID = -1561021604836743910L;
+    private static final String MSG = "End of input reached on attribute: %s";
     
-    public HtmlClosingSubParserMock(ParsingError exception) {
-        super(exception);
-    }
+    private HtmlAttribute attr;
     
-    public boolean getData() {
-        return this.data;
-    }
-    
-    public void setData(boolean data) {
-        this.data = data;
+    public EndOfInputAttributeError(HtmlAttribute attr) {
+        super(String.format(DEFAULT_ERROR_MSG, String.format(MSG, attr)));
+        this.attr = attr;
     }
 
     @Override
-    protected void updateResult() {
-        this.result.setIsClosing(data);
+    public HtmlAttribute getAttribute() {
+        return this.attr;
     }
+
+    @Override
+    public String getErrorMessage() {
+        return String.format(DEFAULT_ERROR_MSG, String.format(MSG, this.attr));
+    }
+    
 }

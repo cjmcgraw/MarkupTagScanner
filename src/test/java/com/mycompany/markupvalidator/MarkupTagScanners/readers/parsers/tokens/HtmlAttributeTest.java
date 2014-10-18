@@ -20,10 +20,10 @@ import static org.junit.Assert.*;
 import java.awt.Point;
 import java.util.*;
 
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 
 public class HtmlAttributeTest {
     public static final String DEFAULT_NAME = "some name";

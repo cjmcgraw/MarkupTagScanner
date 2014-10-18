@@ -21,11 +21,11 @@ import java.awt.Point;
 import java.io.*;
 import java.util.LinkedList;
 
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlSingleAttributeParserTest {

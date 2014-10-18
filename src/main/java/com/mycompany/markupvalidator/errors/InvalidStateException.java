@@ -15,10 +15,26 @@
  */
 package com.mycompany.markupvalidator.errors;
 
+/**
+ *  The base exception for when a classes fields or data is
+ *  in a non-valid state.
+ *  <p>
+ *  This exception is used to convey information about what
+ *  field/data was not valid.
+ */
 public class InvalidStateException extends MarkupError {
     private static final long serialVersionUID = 7342202150355963466L;
     private static final String MSG = "Error: State has not been set on <%s>. Cannot perform this operation without <%s> set! Invalid State!!";
-    
+
+    /**
+     * Constructs an <tt>InvalidStateException</tt> with
+     * the given classname and field names.
+     *
+     * @param className the class that the invalid state
+     *                  occurred in.
+     *
+     * @param fieldName the invalid field or data.
+     */
     public InvalidStateException(String className, String fieldName) {
         super(String.format(MSG, className, fieldName));
     }

@@ -22,8 +22,6 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
-
 public class HtmlErrorReporterTest {
     private static final MarkupError FIRST_ERROR = new MissingCharacterComponentError(' ', new Point(0, 0), "some data");
     private static final MarkupError SECOND_ERROR = new UnexpectedCharacterComponentError(' ', new Point(0, 0), "some data");

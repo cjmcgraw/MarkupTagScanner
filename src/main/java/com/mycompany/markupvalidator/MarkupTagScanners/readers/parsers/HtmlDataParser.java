@@ -18,11 +18,10 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers;
 import java.io.IOException;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
+import com.mycompany.markupvalidator.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
 
 public class HtmlDataParser extends DataParser{
     private static final String CLASS_NAME = "HtmlDataParser";

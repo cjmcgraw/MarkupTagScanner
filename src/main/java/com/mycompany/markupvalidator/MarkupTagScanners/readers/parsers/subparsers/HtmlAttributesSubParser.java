@@ -18,13 +18,11 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparse
 import java.io.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTagNames;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
+import com.mycompany.markupvalidator.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.*;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
 
 public class HtmlAttributesSubParser extends HtmlSubParser {
     private static final String CLASS_NAME = "HtmlAttributeParser";

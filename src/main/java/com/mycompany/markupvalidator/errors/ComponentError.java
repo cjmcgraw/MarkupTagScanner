@@ -13,18 +13,24 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors;
+package com.mycompany.markupvalidator.errors;
 
-import java.awt.Point;
+import com.mycompany.markupvalidator.errors.MarkupError;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-
-public class EndOfInputParsingError extends FatalParsingError {
-    private static final long serialVersionUID = 3805654602226525591L;
-    private static final String defaultMsg = " END OF INPUT DETECTED. Cannot finish parsing tag";
-    private static final char endOfInput = (char) -1;
+public abstract class ComponentError extends MarkupError{
+    private static final long serialVersionUID = 8968887910665038407L;
+    protected static final String DEFAULT_ERROR_MSG = "Component Error in tag -> %s";
     
-    public EndOfInputParsingError(Point position, HtmlData result) {
-        super(position, result, endOfInput, defaultMsg);
+    protected ComponentError(String msg) {
+        super(msg);
     }
+    
+    public abstract String getErrorMessage();
+    
+    public abstract String getData();
+    
+    public String toString() {
+        return this.getErrorMessage();
+    }
+    
 }

@@ -26,13 +26,12 @@ import java.util.List;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.Attribute;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 

@@ -22,7 +22,7 @@ import java.util.*;
 
 import org.junit.*;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.EndOfInputComponentError;
+import com.mycompany.markupvalidator.errors.EndOfInputComponentError;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class WhitespaceConsumerTest {

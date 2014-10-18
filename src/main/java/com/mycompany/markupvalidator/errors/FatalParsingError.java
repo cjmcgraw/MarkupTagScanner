@@ -13,18 +13,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors;
+package com.mycompany.markupvalidator.errors;
 
 import java.awt.Point;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 
-public class UnexpectedCloseTagParsingError extends NonFatalParsingError {
-    private static final long serialVersionUID = 5703077562778043822L;
-    private static final String defaultMsg = "UNEXPECTED CLOSE TAG! Close tag at invalid location!";
+public class FatalParsingError extends ParsingError {
+    private static final long serialVersionUID = -661240324028796574L;
 
-    public UnexpectedCloseTagParsingError(Point position, HtmlData result) {
-        super(position, result, MarkupTag.CLOSING_TAG.toChar(), defaultMsg);
+    public FatalParsingError(Point position, HtmlData htmlData,
+                             char errorChar, String msg) {
+        super(position, htmlData, errorChar, msg);
     }
+    
 }

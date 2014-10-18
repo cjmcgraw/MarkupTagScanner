@@ -13,12 +13,11 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors;
+package com.mycompany.markupvalidator.errors;
 
 import java.awt.Point;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.markupvalidator.errors.*;
 
 public class ParsingError extends MarkupError{
     private static final long serialVersionUID = 7976665383247960546L;

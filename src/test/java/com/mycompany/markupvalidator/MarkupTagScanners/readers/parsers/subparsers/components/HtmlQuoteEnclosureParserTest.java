@@ -20,11 +20,10 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.*;
 
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReaderMock;
 
 public class HtmlQuoteEnclosureParserTest {

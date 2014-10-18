@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import java.io.*;
 import java.util.LinkedList;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors.EndOfInputAttributeError;
+import com.mycompany.markupvalidator.errors.EndOfInputAttributeError;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;

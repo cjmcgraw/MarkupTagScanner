@@ -13,17 +13,22 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors;
+package com.mycompany.markupvalidator.errors;
 
 import java.awt.Point;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 
-public class NonFatalParsingError extends ParsingError {
-    private static final long serialVersionUID = 249335334748494657L;
-
-    public NonFatalParsingError(Point position, HtmlData htmlData, char errorChar, String msg) {
-        super(position, htmlData, errorChar, msg);
+public class MissingEnclosureParsingError extends NonFatalParsingError {
+    private static final long serialVersionUID = -8566122934275099978L;
+    private static final String defaultMsg = "MISSING EXPECTED ENCLOSURE! Enclosure improperly formed, " +
+                                             "expected [ %s ] but that value was missing!";
+    
+    public MissingEnclosureParsingError(Point position, char expChar, char errorChar, HtmlData result) {
+        super(position, result, errorChar, String.format(defaultMsg, expChar));
     }
     
+    public boolean equals(Object other) {
+        return getClass() == other.getClass();
+    }
 }

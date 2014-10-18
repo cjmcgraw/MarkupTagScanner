@@ -21,11 +21,10 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.*;
 
 public class DataParserTest extends DataParser {

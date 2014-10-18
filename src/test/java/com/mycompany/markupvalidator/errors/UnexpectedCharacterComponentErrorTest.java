@@ -13,15 +13,16 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.errors;
+package com.mycompany.markupvalidator.errors;
 
 import static org.junit.Assert.*;
 
 import java.awt.Point;
 
+import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
-public class MissingCharacterComponentErrorTest {
+public class UnexpectedCharacterComponentErrorTest {
     private static final char DEFAULT_MISSING = 'a';
     private static final Point DEFAULT_POSITION = new Point(123, 456);
     private static final String DEFAULT_DATA = "some data";
@@ -30,13 +31,13 @@ public class MissingCharacterComponentErrorTest {
     private static final Point OTHER_POSITION = new Point(654, 321);
     private static final String OTHER_DATA = "other data";
     
-    private MissingCharacterComponentError error;
+    private UnexpectedCharacterComponentError error;
     
     @Before
     public void setState() {
-        this.error = new MissingCharacterComponentError(DEFAULT_MISSING,
-                                                            DEFAULT_POSITION,
-                                                            DEFAULT_DATA);
+        this.error = new UnexpectedCharacterComponentError(DEFAULT_MISSING,
+                                                               DEFAULT_POSITION,
+                                                               DEFAULT_DATA);
     }
     
     @Test
@@ -58,7 +59,7 @@ public class MissingCharacterComponentErrorTest {
         boolean expData = true;
         boolean data;
         
-        MissingCharacterComponentError other = this.error;
+        UnexpectedCharacterComponentError other = this.error;
         
         // Apply
         data = this.symmetricEquals_Positive(other);
@@ -73,9 +74,9 @@ public class MissingCharacterComponentErrorTest {
         boolean expData = true;
         boolean data;
         
-        MissingCharacterComponentError other = this.generateException(DEFAULT_MISSING,
-                                                                          DEFAULT_POSITION,
-                                                                          DEFAULT_DATA);
+        UnexpectedCharacterComponentError other = this.generateException(DEFAULT_MISSING,
+                                                                             DEFAULT_POSITION,
+                                                                             DEFAULT_DATA);
         
         // Apply
         data = this.symmetricEquals_Positive(other);
@@ -90,7 +91,7 @@ public class MissingCharacterComponentErrorTest {
         boolean expData = false;
         boolean data;
         
-        MissingCharacterComponentError other = this.generateException(OTHER_MISSING,
+        UnexpectedCharacterComponentError other = this.generateException(OTHER_MISSING,
                                                                           DEFAULT_POSITION,
                                                                           DEFAULT_DATA);
         
@@ -107,7 +108,7 @@ public class MissingCharacterComponentErrorTest {
         boolean expData = false;
         boolean data;
         
-        MissingCharacterComponentError other = this.generateException(DEFAULT_MISSING,
+        UnexpectedCharacterComponentError other = this.generateException(DEFAULT_MISSING,
                                                                           OTHER_POSITION,
                                                                           DEFAULT_DATA);
         
@@ -124,9 +125,9 @@ public class MissingCharacterComponentErrorTest {
         boolean expData = false;
         boolean data;
         
-        MissingCharacterComponentError other = this.generateException(DEFAULT_MISSING,
-                                                                          DEFAULT_POSITION,
-                                                                          OTHER_DATA);
+        UnexpectedCharacterComponentError other = this.generateException(DEFAULT_MISSING,
+                                                                             DEFAULT_POSITION,
+                                                                             OTHER_DATA);
         
         // Apply
         data = this.symmetricEquals_Negative(other);
@@ -135,7 +136,7 @@ public class MissingCharacterComponentErrorTest {
         assertEquals(expData, data);
     }
     
-    private boolean symmetricEquals_Positive(MissingCharacterComponentError other) {
+    private boolean symmetricEquals_Positive(UnexpectedCharacterComponentError other) {
         return this.error.equals(other) &&
                other.equals(this.error) &&
                this.error.equals((ComponentError) other) &&
@@ -144,7 +145,7 @@ public class MissingCharacterComponentErrorTest {
                other.equals((Object) this.error);
     }
     
-    private boolean symmetricEquals_Negative(MissingCharacterComponentError other) {
+    private boolean symmetricEquals_Negative(UnexpectedCharacterComponentError other) {
         return this.error.equals(other) ||
                 other.equals(this.error) ||
                 this.error.equals((ComponentError) other) ||
@@ -153,8 +154,8 @@ public class MissingCharacterComponentErrorTest {
                 other.equals((Object) this.error);
     }
     
-    private MissingCharacterComponentError generateException(char missing, Point position, String data) {
-        return new MissingCharacterComponentError(missing, position, data);
+    private UnexpectedCharacterComponentError generateException(char missing, Point position, String data) {
+        return new UnexpectedCharacterComponentError(missing, position, data);
     }
     
     @After

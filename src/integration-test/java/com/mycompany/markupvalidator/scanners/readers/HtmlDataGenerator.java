@@ -15,7 +15,8 @@
  */
 package com.mycompany.markupvalidator.scanners.readers;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
+import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.*;
+import com.mycompany.markupvalidator.errors.*;
 
 import java.io.*;
 import java.util.*;
@@ -83,9 +84,9 @@ public class HtmlDataGenerator {
                     return ObjectStreamClass.lookup(HtmlAttribute.class);
                 else if (desc.getName().equals("com.mycompany.htmlvalidator.errors.MarkupErrorReporter"))
                     return ObjectStreamClass.lookup(com.mycompany.markupvalidator.errors.MarkupErrorReporter.class);
-                else if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.MissingEnclosureParsingError"))
+                if (desc.getName().equals("com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.MissingEnclosureParsingError"))
                     return ObjectStreamClass.lookup(MissingEnclosureParsingError.class);
-                else if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.errors.UnclosedTagParsingError"))
+                else if (desc.getName().equals("com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.UnclosedTagParsingError"))
                     return ObjectStreamClass.lookup(UnclosedTagParsingError.class);
                 */
                 return desc;
