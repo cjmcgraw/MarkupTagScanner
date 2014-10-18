@@ -18,7 +18,7 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparse
 import java.io.IOException;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.markupvalidator.errors.AttributeError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.AttributeError;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public class HtmlCommentAttributeParserMock extends HtmlCommentAttributeParser {

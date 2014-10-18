@@ -18,7 +18,7 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparse
 import java.io.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTagNames;
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers.components.*;

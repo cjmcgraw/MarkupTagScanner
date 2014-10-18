@@ -13,7 +13,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.scanners.readers;
+package com.mycompany.markupvalidator.MarkupTagScanners.readers;
 
 import static org.junit.Assert.*;
 
@@ -21,13 +21,12 @@ import java.awt.Point;
 import java.io.*;
 import java.util.*;
 
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.Tag;
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.*;
 
 public class HtmlReaderIT {
     private static final String W = String.format("%n\t %n%n%n%n \t\t\t\t    %n%n\t ");

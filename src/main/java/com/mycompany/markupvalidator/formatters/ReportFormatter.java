@@ -17,7 +17,7 @@
 package com.mycompany.markupvalidator.formatters;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.Tag;
-import com.mycompany.markupvalidator.errors.MarkupError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.MarkupError;
 import com.mycompany.markupvalidator.reports.Report;
 
 public class ReportFormatter extends Formatter<Report> {

@@ -13,27 +13,29 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
-public class EndOfInputComponentError extends ComponentError {
-    private static final long serialVersionUID = 5802533142904660152L;
-    private static final String MSG = "End of input detected after after [%s]";
+import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
+
+public class EndOfInputAttributeError extends AttributeError {
+    private static final long serialVersionUID = -1561021604836743910L;
+    private static final String MSG = "End of input reached on attribute: %s";
     
-    private String data;
+    private HtmlAttribute attr;
     
-    public EndOfInputComponentError(String data) {
-        super(String.format(DEFAULT_ERROR_MSG, String.format(MSG, data)));
-        this.data = data;
+    public EndOfInputAttributeError(HtmlAttribute attr) {
+        super(String.format(DEFAULT_ERROR_MSG, String.format(MSG, attr)));
+        this.attr = attr;
     }
-    
+
+    @Override
+    public HtmlAttribute getAttribute() {
+        return this.attr;
+    }
+
     @Override
     public String getErrorMessage() {
-        return String.format(MSG, data);
-    }
-    
-    @Override
-    public String getData() {
-        return data;
+        return String.format(DEFAULT_ERROR_MSG, String.format(MSG, this.attr));
     }
     
 }

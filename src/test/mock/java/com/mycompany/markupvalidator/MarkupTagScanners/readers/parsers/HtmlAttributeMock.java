@@ -18,8 +18,8 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers;
 import java.awt.Point;
 import java.util.*;
 
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.markupvalidator.errors.*;
 
 @SuppressWarnings("serial")
 public class HtmlAttributeMock extends HtmlAttribute implements ErrorReporter {

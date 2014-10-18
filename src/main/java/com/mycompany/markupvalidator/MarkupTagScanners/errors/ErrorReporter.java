@@ -13,22 +13,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.MarkupTagScanners;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
-import java.io.Serializable;
+import java.util.*;
 
-import com.mycompany.markupvalidator.MarkupTagScanners.errors.ErrorReporter;
+public interface ErrorReporter {
+    
+    public void addError(MarkupError err);
+    
+    public void addErrors(Iterable<? extends MarkupError> other);
+    
+    public Iterator<MarkupError> errorIterator();
+    
+    public Iterable<MarkupError> getErrors();
 
-public interface Attribute extends Serializable{
-    public static final String EMPTY_VALUE = "";
+    public boolean hasErrors();
+
+    @Override
+    public boolean equals(Object other);
     
-    public String getName();
-    
-    public String getValue();
-    
-    public boolean isFlag();
-    
-    public boolean isEmpty();
-    
-    public ErrorReporter getErrorReporter();
+    @Override
+    public int hashCode();
 }

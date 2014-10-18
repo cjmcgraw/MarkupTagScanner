@@ -13,7 +13,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
 import java.awt.Point;
 

@@ -20,7 +20,7 @@ import java.util.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.MarkupError;
 import com.mycompany.markupvalidator.formatters.*;
 import com.mycompany.markupvalidator.printers.*;
 import com.mycompany.markupvalidator.reports.*;

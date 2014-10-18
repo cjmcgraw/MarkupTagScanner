@@ -19,11 +19,11 @@ import java.io.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.*;
-import com.mycompany.markupvalidator.errors.InvalidStateException;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.InvalidStateException;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
-import com.mycompany.markupvalidator.errors.EndOfInputAttributeError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.EndOfInputAttributeError;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
-import com.mycompany.markupvalidator.errors.MarkupError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.MarkupError;
 
 public abstract class HtmlComponentAttributeParser extends MarkupParser<HtmlAttribute> {
     private static final String CLASS_NAME = "HtmlComponentAttributeParser";

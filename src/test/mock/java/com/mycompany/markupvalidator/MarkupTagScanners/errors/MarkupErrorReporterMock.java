@@ -13,7 +13,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
 import java.util.*;
 
@@ -49,7 +49,7 @@ public class MarkupErrorReporterMock implements ErrorReporter {
     public void setData(Collection<? extends MarkupError> data) {
         this.data = new ArrayList<>();
         
-        for(MarkupError err : data) 
+        for(MarkupError err : data)
             this.data.add(err);
     }
     

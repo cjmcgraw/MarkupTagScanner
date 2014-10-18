@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

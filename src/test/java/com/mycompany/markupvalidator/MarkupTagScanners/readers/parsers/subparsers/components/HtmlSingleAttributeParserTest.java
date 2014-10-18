@@ -21,7 +21,7 @@ import java.awt.Point;
 import java.io.*;
 import java.util.LinkedList;
 
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;

@@ -13,13 +13,13 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
 import static org.junit.Assert.*;
 
 import java.awt.Point;
 
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import org.junit.*;
 
 public class UnexpectedCharacterComponentErrorTest {

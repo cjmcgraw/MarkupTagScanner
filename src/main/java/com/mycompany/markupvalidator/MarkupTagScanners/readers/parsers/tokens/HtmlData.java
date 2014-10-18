@@ -22,7 +22,7 @@ import java.util.List;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 
 public class HtmlData implements Tag{
     private static final long serialVersionUID = -1778059172938272360L;

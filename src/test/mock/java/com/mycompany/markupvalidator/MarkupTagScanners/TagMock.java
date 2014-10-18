@@ -16,9 +16,9 @@
 
 package com.mycompany.markupvalidator.MarkupTagScanners;
 
-import com.mycompany.markupvalidator.errors.ErrorReporter;
-import com.mycompany.markupvalidator.errors.MarkupError;
-import com.mycompany.markupvalidator.errors.MarkupErrorReporter;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.ErrorReporter;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.MarkupError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.MarkupErrorReporter;
 
 import java.awt.*;
 import java.util.*;

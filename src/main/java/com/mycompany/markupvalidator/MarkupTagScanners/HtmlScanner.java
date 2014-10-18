@@ -17,8 +17,8 @@
 package com.mycompany.markupvalidator.MarkupTagScanners;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.*;
-import com.mycompany.markupvalidator.errors.*;
 
 import java.io.*;
 

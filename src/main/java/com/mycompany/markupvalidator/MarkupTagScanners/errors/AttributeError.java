@@ -13,28 +13,23 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
-public abstract class MarkupError extends RuntimeException{
-    private static final long serialVersionUID = -5709970001272720858L;
-    public static final String MSG = "ERROR: %s";
-    
-    private String errorMsg; 
-    
-    public MarkupError(String msg) {
-        super(String.format(MSG, msg));
-        this.errorMsg = this.getMessage();
-    }
-    
-    protected void logError(ErrorReporter reporter) {
-        reporter.addError(this);
-    }
-    
-    public String getErrorMessage() {
-        return this.errorMsg;
-    }
+import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 
+public abstract class AttributeError extends MarkupError{
+    private static final long serialVersionUID = 2298941335061905710L;
+    protected static final String DEFAULT_ERROR_MSG = "Exception during attribute parsing -> %s";
+    
+    protected AttributeError(String msg) {
+        super(msg);
+    }
+    
+    public abstract HtmlAttribute getAttribute();
+    
+    public abstract String getErrorMessage();
+    
     public String toString() {
-        return errorMsg;
+        return getErrorMessage();
     }
 }

@@ -17,7 +17,7 @@
 package com.mycompany.markupvalidator.formatters;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.Tag;
-import com.mycompany.markupvalidator.errors.MarkupError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.MarkupError;
 
 public class TagErrorsFormatter extends TagLineFormatter {
 

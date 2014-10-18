@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.Attribute;
-import com.mycompany.markupvalidator.errors.ParsingError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.ParsingError;
 
 public class HtmlAttributeSubParserMock extends HtmlTypeSubParserMock {
     private List<Attribute> data;

@@ -15,7 +15,7 @@
  */
 package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparsers;
 
-import com.mycompany.markupvalidator.errors.ParsingError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.ParsingError;
 
 public class HtmlClosingSubParserMock extends HtmlTypeSubParserMock {
     private boolean data;

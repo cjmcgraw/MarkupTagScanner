@@ -16,7 +16,7 @@
 
 package com.mycompany.markupvalidator.formatters;
 
-import com.mycompany.markupvalidator.errors.InvalidStateException;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.InvalidStateException;
 
 import java.awt.*;
 

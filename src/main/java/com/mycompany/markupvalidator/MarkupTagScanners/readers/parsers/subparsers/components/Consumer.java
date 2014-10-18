@@ -18,7 +18,7 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.subparse
 import java.io.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.InputParser;
-import com.mycompany.markupvalidator.errors.EndOfInputComponentError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.EndOfInputComponentError;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 
 public abstract class Consumer extends InputParser<Integer>{

@@ -13,18 +13,28 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
-import java.awt.Point;
-
-import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-
-public class FatalParsingError extends ParsingError {
-    private static final long serialVersionUID = -661240324028796574L;
-
-    public FatalParsingError(Point position, HtmlData htmlData,
-                             char errorChar, String msg) {
-        super(position, htmlData, errorChar, msg);
+public abstract class MarkupError extends RuntimeException{
+    private static final long serialVersionUID = -5709970001272720858L;
+    public static final String MSG = "ERROR: %s";
+    
+    private String errorMsg; 
+    
+    public MarkupError(String msg) {
+        super(String.format(MSG, msg));
+        this.errorMsg = this.getMessage();
     }
     
+    protected void logError(ErrorReporter reporter) {
+        reporter.addError(this);
+    }
+    
+    public String getErrorMessage() {
+        return this.errorMsg;
+    }
+
+    public String toString() {
+        return errorMsg;
+    }
 }

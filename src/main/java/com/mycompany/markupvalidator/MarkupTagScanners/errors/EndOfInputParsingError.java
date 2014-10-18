@@ -13,18 +13,18 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
-package com.mycompany.markupvalidator.errors;
+import java.awt.Point;
 
-public class MarkupErrorMock extends MarkupError {
-    public String toString;
+import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 
-    public MarkupErrorMock(String toString) {
-        super("");
-        toString = toString;
-    }
-
-    public String toString() {
-        return (toString != null) ? toString : super.toString();
+public class EndOfInputParsingError extends FatalParsingError {
+    private static final long serialVersionUID = 3805654602226525591L;
+    private static final String defaultMsg = " END OF INPUT DETECTED. Cannot finish parsing tag";
+    private static final char endOfInput = (char) -1;
+    
+    public EndOfInputParsingError(Point position, HtmlData result) {
+        super(position, result, endOfInput, defaultMsg);
     }
 }

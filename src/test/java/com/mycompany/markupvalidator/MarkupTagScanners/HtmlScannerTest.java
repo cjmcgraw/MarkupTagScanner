@@ -17,9 +17,9 @@
 package com.mycompany.markupvalidator.MarkupTagScanners;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.VoidTag;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.*;
-import com.mycompany.markupvalidator.errors.*;
 import org.junit.*;
 
 import java.util.*;

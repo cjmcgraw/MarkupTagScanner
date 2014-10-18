@@ -19,8 +19,8 @@ import java.io.*;
 import java.util.Collection;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.MarkupParser;
-import com.mycompany.markupvalidator.errors.*;
 
 public abstract class HtmlComponentEnclosureParser extends MarkupParser<String> {
     private final static String CLASS_NAME = "HtmlComponentEnclosureParser";

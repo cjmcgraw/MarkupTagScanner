@@ -13,10 +13,10 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.scanners.readers;
+package com.mycompany.markupvalidator.MarkupTagScanners.readers;
 
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.*;
-import com.mycompany.markupvalidator.errors.*;
 
 import java.io.*;
 import java.util.*;
@@ -77,18 +77,18 @@ public class HtmlDataGenerator {
             @Override
             protected ObjectStreamClass readClassDescriptor() throws ClassNotFoundException, IOException {
                 ObjectStreamClass desc = super.readClassDescriptor();
-                /*
+
                 if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData"))
                     return ObjectStreamClass.lookup(HtmlData.class);
                 else if (desc.getName().equals("com.mycompany.htmlvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute"))
                     return ObjectStreamClass.lookup(HtmlAttribute.class);
-                else if (desc.getName().equals("com.mycompany.htmlvalidator.errors.MarkupErrorReporter"))
-                    return ObjectStreamClass.lookup(com.mycompany.markupvalidator.errors.MarkupErrorReporter.class);
-                if (desc.getName().equals("com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.MissingEnclosureParsingError"))
+                else if (desc.getName().equals("com.mycompany.markupvalidator.errors.MarkupErrorReporter"))
+                    return ObjectStreamClass.lookup(MarkupErrorReporter.class);
+                if (desc.getName().equals("com.mycompany.markupvalidator.errors.MissingEnclosureParsingError"))
                     return ObjectStreamClass.lookup(MissingEnclosureParsingError.class);
-                else if (desc.getName().equals("com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.errors.UnclosedTagParsingError"))
+                else if (desc.getName().equals("com.mycompany.markupvalidator.errors.UnclosedTagParsingError"))
                     return ObjectStreamClass.lookup(UnclosedTagParsingError.class);
-                */
+
                 return desc;
             }
         };

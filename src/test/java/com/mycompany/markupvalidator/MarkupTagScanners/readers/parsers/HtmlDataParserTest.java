@@ -24,9 +24,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlAttribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
-import com.mycompany.markupvalidator.errors.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

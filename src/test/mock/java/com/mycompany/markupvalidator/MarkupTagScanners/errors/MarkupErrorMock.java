@@ -13,25 +13,20 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
 
-import java.util.*;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
-public interface ErrorReporter {
-    
-    public void addError(MarkupError err);
-    
-    public void addErrors(Iterable<? extends MarkupError> other);
-    
-    public Iterator<MarkupError> errorIterator();
-    
-    public Iterable<MarkupError> getErrors();
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.MarkupError;
 
-    public boolean hasErrors();
+public class MarkupErrorMock extends MarkupError {
+    public String toString;
 
-    @Override
-    public boolean equals(Object other);
-    
-    @Override
-    public int hashCode();
+    public MarkupErrorMock(String toString) {
+        super("");
+        toString = toString;
+    }
+
+    public String toString() {
+        return (toString != null) ? toString : super.toString();
+    }
 }

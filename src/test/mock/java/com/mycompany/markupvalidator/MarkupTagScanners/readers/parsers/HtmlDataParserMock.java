@@ -18,7 +18,7 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers;
 import java.io.IOException;
 import java.util.List;
 
-import com.mycompany.markupvalidator.errors.ParsingError;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.ParsingError;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens.HtmlData;
 import com.mycompany.markupvalidator.MarkupTagScanners.readers.utilities.PushbackAndPositionReader;
 

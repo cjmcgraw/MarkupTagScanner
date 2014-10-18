@@ -17,7 +17,7 @@ package com.mycompany.markupvalidator.MarkupTagScanners.readers.parsers.tokens;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.Attribute;
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 
 public class HtmlAttribute extends MarkupErrorReporter implements Attribute{
     private static final long serialVersionUID = 8687072175358271927L;

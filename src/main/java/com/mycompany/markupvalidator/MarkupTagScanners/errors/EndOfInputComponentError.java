@@ -13,24 +13,27 @@
  *  You should have received a copy of the GNU General Public License
  *  along with MarkupValidator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.mycompany.markupvalidator.errors;
+package com.mycompany.markupvalidator.MarkupTagScanners.errors;
 
-import com.mycompany.markupvalidator.errors.MarkupError;
-
-public abstract class ComponentError extends MarkupError{
-    private static final long serialVersionUID = 8968887910665038407L;
-    protected static final String DEFAULT_ERROR_MSG = "Component Error in tag -> %s";
+public class EndOfInputComponentError extends ComponentError {
+    private static final long serialVersionUID = 5802533142904660152L;
+    private static final String MSG = "End of input detected after after [%s]";
     
-    protected ComponentError(String msg) {
-        super(msg);
+    private String data;
+    
+    public EndOfInputComponentError(String data) {
+        super(String.format(DEFAULT_ERROR_MSG, String.format(MSG, data)));
+        this.data = data;
     }
     
-    public abstract String getErrorMessage();
+    @Override
+    public String getErrorMessage() {
+        return String.format(MSG, data);
+    }
     
-    public abstract String getData();
-    
-    public String toString() {
-        return this.getErrorMessage();
+    @Override
+    public String getData() {
+        return data;
     }
     
 }

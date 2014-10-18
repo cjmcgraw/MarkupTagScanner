@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 import java.awt.Point;
 import java.util.*;
 
-import com.mycompany.markupvalidator.errors.*;
+import com.mycompany.markupvalidator.MarkupTagScanners.errors.*;
 import org.junit.*;
 
 import com.mycompany.markupvalidator.MarkupTagScanners.enums.MarkupTag;
